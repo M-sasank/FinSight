@@ -40,6 +40,9 @@ async def health_check():
 @app.post("/chat")
 async def chat_completion(type: str, user_query: str, conversation_id: str = None):
     # possible types: chat, newbie
+    print("Type: ", type)
+    print("User query: ", user_query)
+    print("Conversation ID: ", conversation_id)
     try:
         # Generate a new conversation ID if none provided
         if conversation_id is None:
