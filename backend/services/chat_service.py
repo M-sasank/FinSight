@@ -65,6 +65,16 @@ class ChatService:
         """)
         self.conn.commit()
 
+    def clear_database(self):
+        """Clear all data from the database."""
+        try:
+            self.conn.execute("DELETE FROM messages")
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Error clearing database:", e)
+            return False
+
     def _get_conversation_history(self, conversation_id: str, type: str) -> List[Dict[str, str]]:
         """Retrieve conversation history from database."""
         cursor = self.conn.execute(
