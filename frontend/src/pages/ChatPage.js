@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function ChatPage({ navigateTo, currentTheme, setCurrentTheme }) {
+function ChatPage({ currentTheme, setCurrentTheme }) {
+  const navigate = useNavigate();
   const initialChatMessages = () => [ // Function to get initial messages
     {
       id: 'chatmsg-initial-1',
@@ -14,7 +16,26 @@ function ChatPage({ navigateTo, currentTheme, setCurrentTheme }) {
   const [input, setInput] = useState('');
   const [conversationId, setConversationId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
   const messagesEndRef = useRef(null);
+
+  // Fetch chat history when component mounts
+  useEffect(() => {
+    fetchChatHistory();
+  }, []);
+
+  const fetchChatHistory = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/chat/history');
+      if (response.ok) {
+        const data = await response.json();
+        setChatHistory(data.history || []);
+      }
+    } catch (error) {
+      console.error('Error fetching chat history:', error);
+    }
+  };
 
   useEffect(() => {
     setMessages(initialChatMessages());
@@ -49,7 +70,9 @@ function ChatPage({ navigateTo, currentTheme, setCurrentTheme }) {
       try {
         // Map frontend theme to backend type
         const backendType = currentTheme === 'newtimer' ? 'newbie' : 'chat';
-        
+        // console.log("Backend type: ", backendType)
+        // console.log("Conversation ID: ", conversationId)
+        // console.log("Text: ", text)
         const response = await fetch(`http://localhost:8000/chat?type=${backendType}&user_query=${encodeURIComponent(text)}${conversationId ? `&conversation_id=${conversationId}` : ''}`, {
           method: 'POST',
           headers: {
@@ -66,6 +89,13 @@ function ChatPage({ navigateTo, currentTheme, setCurrentTheme }) {
         // Update conversation ID if this is a new conversation
         if (!conversationId) {
           setConversationId(data.conversation_id);
+          // Add new chat to history
+          setChatHistory(prev => [...prev, {
+            id: data.conversation_id,
+            title: text.substring(0, 30) + (text.length > 30 ? '...' : ''),
+            timestamp: new Date().toISOString(),
+            type: backendType
+          }]);
         }
 
         // Add bot response to messages
@@ -102,6 +132,32 @@ function ChatPage({ navigateTo, currentTheme, setCurrentTheme }) {
     document.querySelector('.chat-input input').focus();
   };
 
+  const handleThemeChange = (e) => {
+    setCurrentTheme(e.target.value);
+  };
+
+  const handleChatSelect = async (chatId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/chat/${chatId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data.messages);
+        setConversationId(chatId);
+        setSelectedChat(chatId);
+        
+        // Find the chat in history to get its type
+        const selectedChatData = chatHistory.find(chat => chat.id === chatId);
+        if (selectedChatData) {
+          // Map backend type to frontend theme
+          const newTheme = selectedChatData.type === 'newbie' ? 'newtimer' : 'veteran';
+          setCurrentTheme(newTheme);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading chat:', error);
+    }
+  };
+
   const renderMessageContent = (message) => {
     if (message.type === 'insight-card') {
       return (
@@ -124,66 +180,91 @@ function ChatPage({ navigateTo, currentTheme, setCurrentTheme }) {
   return (
     <div className={`chat-page-container page-theme-${currentTheme}`}>
         <div className="chat-page-header">
-            <button onClick={() => navigateTo('landing')} className="chat-nav-button home-button">
-                <span role="img" aria-label="Home">🏠</span> Go to Home Page
-            </button>
             <div className="profile-selector">
                 <span className="selector-label">User Profile:</span>
-                <div className="profile-buttons-group">
-                    <button
-                        onClick={() => setCurrentTheme('newtimer')}
-                        className={`profile-button ${currentTheme === 'newtimer' ? 'active' : ''}`}
-                    >
-                        Newtimer
-                    </button>
-                    <button
-                        onClick={() => setCurrentTheme('veteran')}
-                        className={`profile-button ${currentTheme === 'veteran' ? 'active' : ''}`}
-                    >
-                        Veteran
-                    </button>
-                </div>
+                <select 
+                    value={currentTheme} 
+                    onChange={handleThemeChange}
+                    className="profile-dropdown"
+                >
+                    <option value="newtimer">Newtimer</option>
+                    <option value="veteran">Veteran</option>
+                </select>
             </div>
         </div>
-        <div className="chat-container">
-            <div className="chat-messages">
-                {messages.map((message) => (
-                <div key={message.id} className={`message ${message.sender}`}>
-                    {renderMessageContent(message)}
-                </div>
-                ))}
-                <div ref={messagesEndRef} />
-            </div>
-
-            {messages.length <= 2 && (
-                <div className="suggestion-area">
-                <p className="suggestion-area-title">Try asking:</p>
-                <div className="suggestion-chips-container">
-                    {suggestionPrompts.map((prompt, index) => (
-                    <button
-                        key={index}
-                        className="suggestion-chip"
-                        onClick={() => handleSuggestionClick(prompt.query)}
+        <div className="chat-layout">
+            <div className="chat-sidebar">
+                <div className="sidebar-header">
+                    <h3>Chat History</h3>
+                    <button 
+                        className="new-chat-button"
+                        onClick={() => {
+                            setMessages(initialChatMessages());
+                            setConversationId(null);
+                            setSelectedChat(null);
+                        }}
                     >
-                        {prompt.text}
+                        New Chat
                     </button>
+                </div>
+                <div className="chat-history-list">
+                    {chatHistory.map((chat) => (
+                        <div
+                            key={chat.id}
+                            className={`chat-history-item ${selectedChat === chat.id ? 'selected' : ''}`}
+                            onClick={() => handleChatSelect(chat.id)}
+                        >
+                            <div className="chat-history-title">{chat.title}</div>
+                            <div className="chat-history-meta">
+                                <span className="chat-type">{chat.type}</span>
+                                <span className="chat-date">
+                                    {new Date(chat.timestamp).toLocaleDateString()}
+                                </span>
+                            </div>
+                        </div>
                     ))}
                 </div>
+            </div>
+            <div className="chat-main">
+                <div className="chat-messages">
+                    {messages.map((message) => (
+                    <div key={message.id} className={`message ${message.sender}`}>
+                        {renderMessageContent(message)}
+                    </div>
+                    ))}
+                    <div ref={messagesEndRef} />
                 </div>
-            )}
 
-            <div className="chat-input">
-                <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder={isLoading ? "Processing..." : "Ask FinSight..."}
-                disabled={isLoading}
-                />
-                <button onClick={handleSendMessage} disabled={isLoading}>
-                    {isLoading ? "Sending..." : "Send"}
-                </button>
+                {messages.length <= 2 && (
+                    <div className="suggestion-area">
+                    <p className="suggestion-area-title">Try asking:</p>
+                    <div className="suggestion-chips-container">
+                        {suggestionPrompts.map((prompt, index) => (
+                        <button
+                            key={index}
+                            className="suggestion-chip"
+                            onClick={() => handleSuggestionClick(prompt.query)}
+                        >
+                            {prompt.text}
+                        </button>
+                        ))}
+                    </div>
+                    </div>
+                )}
+
+                <div className="chat-input">
+                    <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder={isLoading ? "Processing..." : "Ask FinSight..."}
+                    disabled={isLoading}
+                    />
+                    <button onClick={handleSendMessage} disabled={isLoading}>
+                        {isLoading ? "Sending..." : "Send"}
+                    </button>
+                </div>
             </div>
         </div>
     </div>

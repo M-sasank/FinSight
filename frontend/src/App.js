@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css'; // Ensure your App.css is linked
 import ChatPage from './pages/ChatPage';
+import NavBar from './components/NavBar';
 
 // --- Main App Component ---
 function App() {
@@ -25,11 +26,12 @@ function App() {
   return (
     <Router>
       <div className={`App app-theme-${currentTheme}`}>
-        {renderHeader()}
+        <NavBar />
         <main className="App-main-content">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} />
+            <Route path="/news" element={<NewsPage />} />
             <Route path="/insights" element={<InsightsPage />} />
           </Routes>
         </main>
@@ -110,6 +112,20 @@ function InsightsPage() {
             <div className="placeholder-card">Spending Trends Line Graph</div>
             <div className="placeholder-card">Key Metric: Savings Rate</div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// --- News Page Component ---
+function NewsPage() {
+  return (
+    <div className="news-page">
+      <div className="news-header">
+        <h2>Financial News</h2>
+      </div>
+      <div className="news-content">
+        <p>News content coming soon...</p>
       </div>
     </div>
   );
