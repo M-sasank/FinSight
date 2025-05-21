@@ -34,9 +34,16 @@ async def health_check():
 @app.post("/chat")
 async def chat_completion(request: ChatRequest):
     try:
+        api_key = os.getenv("PERPLEXITY_API_KEY")
+        if not api_key:
+            raise HTTPException(
+                status_code=500,
+                detail="PERPLEXITY_API_KEY environment variable is not set. Please set it in your .env file."
+            )
+
         # Initialize OpenAI client with Perplexity AI
         client = OpenAI(
-            api_key=os.getenv("PERPLEXITY_API_KEY"),
+            api_key=api_key,
             base_url="https://api.perplexity.ai"
         )
 
