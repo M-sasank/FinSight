@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
-import os
 from dotenv import load_dotenv
 from models import Message, ChatRequest
+from services.chat_service import ChatService
+import uuid
 
 # Load environment variables
 load_dotenv()
@@ -11,7 +11,7 @@ load_dotenv()
 app = FastAPI(
     title="Perplexity Hack API",
     description="Backend API for the Perplexity Hack project",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # Configure CORS
@@ -23,41 +23,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize services
+chat_service = ChatService()
+
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to Perplexity Hack API"}
+
 
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
 
+
 @app.post("/chat")
-async def chat_completion(request: ChatRequest):
+async def chat_completion(type: str, user_query: str, conversation_id: str = None):
+    # possible types: chat, newbie
     try:
-        # Initialize OpenAI client with Perplexity AI
-        client = OpenAI(
-            api_key=os.getenv("PERPLEXITY_API_KEY"),
-            base_url="https://api.perplexity.ai"
+        # Generate a new conversation ID if none provided
+        if conversation_id is None:
+            conversation_id = str(uuid.uuid4())
+
+        # Extract user content from the last message
+        response = chat_service.process_chat_request(
+            type, user_query, False, conversation_id
         )
-
-        # Convert Pydantic model to dict for the API
-        messages = [msg.model_dump() for msg in request.messages]
-
-        if request.stream:
-            # Handle streaming response
-            response_stream = client.chat.completions.create(
-                model="sonar-pro",
-                messages=messages,
-                stream=True
-            )
-            return {"type": "stream", "data": response_stream}
-        else:
-            # Handle non-streaming response
-            response = client.chat.completions.create(
-                model="sonar-pro",
-                messages=messages
-            )
-            return {"type": "completion", "data": response}
-
+        return {
+            "conversation_id": conversation_id,
+            "response": response,
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) 
+        raise HTTPException(status_code=500, detail=str(e))
