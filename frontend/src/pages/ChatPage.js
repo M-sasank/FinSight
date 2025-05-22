@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 function ChatPage({ currentTheme, setCurrentTheme }) {
-  const initialChatMessages = useCallback(() => [ // Function to get initial messages
+  const initialChatMessages = useCallback(() => [ 
     {
       id: 'chatmsg-initial-1',
       text: `Welcome to FinSight Chat! You are currently in "${currentTheme}" mode. I'm ready to help with stock analysis, market news, and sentiment. How can I assist you today?`,
@@ -18,7 +18,6 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
   const [selectedChat, setSelectedChat] = useState(null);
   const messagesEndRef = useRef(null);
 
-  // Fetch chat history when component mounts
   useEffect(() => {
     fetchChatHistory();
   }, []);
@@ -38,8 +37,8 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
   useEffect(() => {
     setMessages(initialChatMessages());
     setInput('');
-    setConversationId(null); // Reset conversation ID when theme changes
-  }, [currentTheme, initialChatMessages]); // Added initialChatMessages to dependencies
+    setConversationId(null); 
+  }, [currentTheme, initialChatMessages]); 
 
   const suggestionPrompts = [
     { text: "Analyze MSFT stock", query: "Tell me about Microsoft (MSFT) stock" },
@@ -143,10 +142,8 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
         setConversationId(chatId);
         setSelectedChat(chatId);
         
-        // Find the chat in history to get its type
         const selectedChatData = chatHistory.find(chat => chat.id === chatId);
         if (selectedChatData) {
-          // Map backend type to frontend theme
           const newTheme = selectedChatData.type === 'newbie' ? 'newtimer' : 'veteran';
           setCurrentTheme(newTheme);
         }

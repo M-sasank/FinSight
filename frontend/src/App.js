@@ -5,15 +5,15 @@ import ChatPage from './pages/ChatPage';
 import NavBar from './components/NavBar';
 import TrackerPage from './pages/TrackerPage';
 
-// --- Main App Component ---
-function App() {
-  const [currentTheme, setCurrentTheme] = useState('newtimer'); // 'newtimer' or 'veteran'
 
-  // Apply theme class to the body for global overrides if necessary
+function App() {
+  const [currentTheme, setCurrentTheme] = useState('newtimer'); 
+
+
   useEffect(() => {
-    document.body.className = `app-theme-${currentTheme}`; // Apply theme to body
+    document.body.className = `app-theme-${currentTheme}`; 
     return () => {
-      document.body.className = ''; // Clean up on component unmount
+      document.body.className = ''; 
     };
   }, [currentTheme]);
 
@@ -35,7 +35,7 @@ function App() {
   );
 }
 
-// --- Landing Page Component ---
+
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -58,7 +58,6 @@ function LandingPage() {
           </div>
         </div>
         <div className="hero-visual">
-          {/* Placeholder for a visual element */}
           <div className="visual-placeholder"></div>
         </div>
       </section>
@@ -87,7 +86,7 @@ function LandingPage() {
   );
 }
 
-// --- Insights Page Component ---
+
 function InsightsPage() {
   const navigate = useNavigate();
 
@@ -112,7 +111,7 @@ function InsightsPage() {
   );
 }
 
-// --- News Page Component ---
+
 function NewsPage() {
   return (
     <div className="news-page">

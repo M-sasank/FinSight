@@ -11,7 +11,6 @@ import {
   Legend
 } from 'chart.js';
 
-// Register ChartJS components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,7 +26,6 @@ function TrackerPage() {
   const [showAddAssetModal, setShowAddAssetModal] = useState(false);
   const [newAsset, setNewAsset] = useState({ symbol: '', name: '' });
 
-  // Sample data for demonstration - in real app, this would come from an API
   const sampleAssetData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [{
