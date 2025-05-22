@@ -57,13 +57,8 @@ class ChatService:
 
     def _init_db(self):
         """Initialize SQLite database and create necessary tables."""
-        # Get database path from environment or use default
-        db_path = os.getenv("DB_PATH", "chat_history.db")
-        
-        # Ensure the directory exists
-        db_dir = os.path.dirname(db_path)
-        if db_dir:  # If path contains directory
-            pathlib.Path(db_dir).mkdir(parents=True, exist_ok=True)
+        # Use home directory for database
+        db_path = os.path.expanduser("~/perplexity_hack_chat.db")
         
         # Connect to database
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -81,6 +76,7 @@ class ChatService:
             )
         """)
         self.conn.commit()
+
 
     def clear_database(self):
         """Clear all data from the database."""
