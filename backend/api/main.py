@@ -3,10 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from services.chat_service import ChatService
 from services.news_service import NewsService
+from services.asset_service import AssetService
+from models.asset import AssetCreate, AssetResponse
+from typing import List, Optional
 import uuid
+from datetime import datetime, timezone
 
 # Load environment variables
 load_dotenv()
+logger.info("Environment variables loaded")
 
 app = FastAPI(
     title="Perplexity Hack API",
@@ -26,7 +31,7 @@ app.add_middleware(
 # Initialize services
 chat_service = ChatService()
 news_service = NewsService()
-
+asset_service = AssetService(chat_service.conn)
 
 @app.get("/")
 async def root():
@@ -152,5 +157,21 @@ async def news_completion(topics: str = ""):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/tracker/assets/create", response_model=AssetResponse)
+async def create_asset(asset: AssetCreate):
+    """Create a new tracked asset."""
+    return asset_service.create_asset(asset)
+
+@app.get("/tracker/assets/get", response_model=List[AssetResponse])
+async def get_assets():
+    """Get all tracked assets."""
+    return asset_service.get_assets()
+
+@app.delete("/tracker/assets/delete/")
+async def delete_asset(asset_id: str):
+    """Delete a tracked asset."""
+    return asset_service.delete_asset(asset_id)
     
 

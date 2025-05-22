@@ -75,6 +75,21 @@ class ChatService:
                 type TEXT NOT NULL
             )
         """)
+
+        # Create tracked_assets table if it doesn't exist
+        self.conn.execute("""
+            CREATE TABLE IF NOT EXISTS tracked_assets (
+                id TEXT PRIMARY KEY,
+                symbol TEXT NOT NULL,
+                name TEXT NOT NULL,
+                price REAL NOT NULL,
+                movement REAL NOT NULL,
+                sector TEXT NOT NULL,
+                news TEXT NOT NULL,
+                created_at DATETIME NOT NULL,
+                last_updated DATETIME NOT NULL
+            )
+        """)
         self.conn.commit()
 
 
