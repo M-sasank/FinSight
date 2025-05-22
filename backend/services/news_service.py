@@ -1,11 +1,12 @@
 from openai import OpenAI
 import os
-from typing import Dict, Any
+from typing import Dict, Any, List
 from fastapi import HTTPException
 import logging
 import json
 import yaml
 from pathlib import Path
+from pydantic import BaseModel
 
 # Configure logging
 logging.basicConfig(
@@ -13,6 +14,18 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+class NewsItem(BaseModel):
+    title: str
+    summary: str
+    source: str
+    url: str
+    published_date: str
+
+class NewsResponse(BaseModel):
+    news_items: List[NewsItem]
+    total_items: int
+    last_updated: str
 
 class NewsService:
     def __init__(self):
@@ -50,7 +63,7 @@ class NewsService:
         logger.info(f"Creating messages for topics: {topics}")
         try:
             messages = [self.system_message]
-            focus_topics = f" focusing on {topics}" if topics else ""
+            focus_topics = f"focusing on {topics}" if topics else "market movements, company developments, and economic indicators. "
             user_content = self.user_prompt_template.format(focus_topics=focus_topics)
             messages.append({"role": "user", "content": user_content})
             logger.debug(f"Created messages: {json.dumps(messages, indent=2)}")
@@ -66,7 +79,11 @@ class NewsService:
             logger.debug(f"Sending request to API with messages: {json.dumps(messages, indent=2)}")
             response = self.client.chat.completions.create(
                 model=self.model,
-                messages=messages
+                messages=messages,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {"schema": NewsResponse.model_json_schema()}
+                }
             )
             logger.info("Successfully received response from API")
             
@@ -76,7 +93,7 @@ class NewsService:
             
             # Validate JSON response
             try:
-                json.loads(content.strip('```json').strip('```'))  # Validate JSON format
+                json.loads(content)  # Validate JSON format
                 logger.info("Response is valid JSON")
             except json.JSONDecodeError as e:
                 logger.error(f"Invalid JSON response: {str(e)}")
@@ -106,7 +123,6 @@ class NewsService:
             
             result = self._handle_completion_response(messages)
             logger.info("Successfully processed news request")
-            # result = json.loads(result)
             return result
             
         except Exception as e:
