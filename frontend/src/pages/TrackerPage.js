@@ -111,6 +111,17 @@ function TrackerPage() {
 
   return (
     <div className="tracker-page">
+      <style>
+        {`
+          .last-updated {
+            font-size: 0.7rem;
+            color: #888;
+            text-align: right;
+            padding: 0 10px;
+            margin-bottom: 5px;
+          }
+        `}
+      </style>
       <div className="tracker-header">
         <h2>Asset Tracker</h2>
         <button 
@@ -182,6 +193,9 @@ function TrackerPage() {
                 }
               }} />
             </div>
+            <div className="last-updated">
+              Updated: {new Date(asset.last_updated).toLocaleString()}
+            </div>
             <div className="asset-info">
               <div className="sector">
                 <span className="label">Sector:</span>
@@ -189,7 +203,7 @@ function TrackerPage() {
               </div>
               <div className="movement-insight">
                 <span className="label">Why it Moved:</span>
-                <p className="value">{asset.reason}</p>
+                <p className="value">{asset.news}</p>
               </div>
             </div>
           </div>

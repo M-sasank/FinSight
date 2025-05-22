@@ -2,10 +2,24 @@ from datetime import datetime, timezone
 import uuid
 from fastapi import HTTPException
 from models.asset import AssetCreate, AssetResponse
-from typing import List
+from typing import List, Dict, Any
 import logging
+from openai import OpenAI
+import os
+import yaml
+from pathlib import Path
+import json
+from pydantic import BaseModel
 
-# Configure logging
+class AssetData(BaseModel):
+    price: float
+    movement: float
+    reason: str
+    sector: str
+    news: str
+
+
+# Configure loggingw
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -16,6 +30,70 @@ class AssetService:
     def __init__(self, db_connection):
         logger.info("Initializing AssetService")
         self.conn = db_connection
+        
+        # Initialize OpenAI client for Sonar API
+        try:
+            self.client = OpenAI(
+                api_key=os.getenv("PERPLEXITY_API_KEY"),
+                base_url="https://api.perplexity.ai",
+            )
+            self.model = "sonar-pro"
+            logger.info("OpenAI client initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize OpenAI client: {str(e)}")
+            raise
+
+        # Load prompts from YAML
+        try:
+            config_path = Path(__file__).parent.parent / "config" / "asset_tracking.yaml"
+            with open(config_path, 'r') as file:
+                prompts = yaml.safe_load(file)
+                self.system_message = {
+                    "role": "system",
+                    "content": prompts['asset_tracking']['system_prompt']
+                }
+                self.user_prompt_template = prompts['asset_tracking']['user_prompt_template']
+            logger.info("Successfully loaded prompts from YAML")
+        except Exception as e:
+            logger.error(f"Failed to load prompts from YAML: {str(e)}")
+            raise
+
+    def _fetch_asset_details(self, symbol: str, name: str) -> Dict[str, Any]:
+        """Fetch asset details from Sonar API."""
+        logger.info(f"Fetching details for asset: {symbol} ({name})")
+        try:
+            messages = [
+                self.system_message,
+                {
+                    "role": "user",
+                    "content": self.user_prompt_template.format(symbol=symbol, name=name)
+                }
+            ]
+
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {"schema": AssetData.model_json_schema()}
+                }
+            )
+
+            content = response.choices[0].message.content
+
+            try:
+                asset_details = json.loads(content)
+                logger.info("Response is valid JSON")
+            except json.JSONDecodeError as e:
+                logger.error(f"Invalid JSON response: {str(e)}")
+                logger.error(f"Raw response content: {content}")
+                raise HTTPException(status_code=500, detail="Invalid JSON response from Sonar API when fetching asset details")
+            
+            return asset_details
+        
+        except Exception as e:
+            logger.error(f"Error fetching asset details: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Failed to fetch asset details: {str(e)}")
 
     def create_asset(self, asset: AssetCreate) -> AssetResponse:
         """Create a new tracked asset."""
@@ -24,13 +102,8 @@ class AssetService:
             asset_id = str(uuid.uuid4())
             logger.debug(f"Generated asset ID: {asset_id}")
             
-            initial_data = {
-                "price": 0.0,  
-                "movement": 0.0, 
-                "reason": "No reason provided",
-                "sector": "Unknown", 
-                "news": "No recent news available" 
-            }
+            # Fetch initial data from Sonar API
+            initial_data = self._fetch_asset_details(asset.symbol, asset.name)
             
             # Store the asset in the database
             logger.debug("Storing asset in database")

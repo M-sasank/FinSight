@@ -93,12 +93,12 @@ class NewsService:
             
             # Validate JSON response
             try:
-                json.loads(content)  # Validate JSON format
+                json.loads(content)
                 logger.info("Response is valid JSON")
             except json.JSONDecodeError as e:
-                logger.error(f"Invalid JSON response: {str(e)}")
+                logger.error(f"Invalid JSON response from Sonar API when fetching news: {str(e)}")
                 logger.error(f"Raw response content: {content}")
-                raise HTTPException(status_code=500, detail="Invalid JSON response from API")
+                raise HTTPException(status_code=500, detail="Invalid JSON response from Sonar API when fetching news")
             
             return content
             
