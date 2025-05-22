@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from models import Message, ChatRequest
 from services.chat_service import ChatService
+from services.news_service import NewsService
 import uuid
 
 # Load environment variables
@@ -25,6 +25,7 @@ app.add_middleware(
 
 # Initialize services
 chat_service = ChatService()
+news_service = NewsService()
 
 
 @app.get("/")
@@ -133,3 +134,23 @@ async def clear_chat_history():
             raise HTTPException(status_code=500, detail="Failed to clear chat history")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/news")
+async def news_completion(topics: str = ""):
+    """
+    Fetch latest financial news from the web.
+    
+    Args:
+        topics (str): The topics to focus on
+        
+    Returns:
+        dict: The response from the Sonar Pro model
+    """
+    try:
+        response = news_service.process_news_request(topics)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+

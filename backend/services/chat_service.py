@@ -8,33 +8,50 @@ import json
 from datetime import datetime
 import pprint
 import pathlib
+import yaml
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 class ChatService:
     def __init__(self):
-        self.client = OpenAI(
-            api_key=os.getenv("PERPLEXITY_API_KEY"),
-            base_url="https://api.perplexity.ai",
-        )
+        logger.info("Initializing ChatService")
+        try:
+            self.client = OpenAI(
+                api_key=os.getenv("PERPLEXITY_API_KEY"),
+                base_url="https://api.perplexity.ai",
+            )
+            logger.info("OpenAI client initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize OpenAI client: {str(e)}")
+            raise
+
         self.model = "sonar-pro"
-        self.system_message_chat = {
-            "role": "system",
-            "content": (
-                "You are an financial assistant esigned to empower individuals with"
-                " intelligent insights and tools for managing their personal finances."
-                " You are expected to analyse Real-time Stock Analysis and provide"
-                " insights and tools for managing their personal finances."
-            ),
-        }
-        self.system_message_newbie = {
-            "role": "system",
-            "content": (
-                "You are an financial assistant helping first-time investors and young professionals "
-                "(millennials and Gen Z) seeking to build a strong financial foundation and navigate "
-                "the complexities of the market with confidence. "
-                "You need to be very detailed and specific in your responses. "
-                "You need to be very friendly and engaging in your responses. "
-            ),
-        }
+        logger.info(f"Using model: {self.model}")
+
+        # Load prompts from YAML
+        try:
+            config_path = pathlib.Path(__file__).parent.parent / "config" / "chat_service.yaml"
+            with open(config_path, 'r') as file:
+                prompts = yaml.safe_load(file)
+                self.system_message_chat = {
+                    "role": "system",
+                    "content": prompts['chat_service']['system_message_chat']
+                }
+                self.system_message_newbie = {
+                    "role": "system",
+                    "content": prompts['chat_service']['system_message_newbie']
+                }
+            logger.info("Successfully loaded prompts from YAML")
+        except Exception as e:
+            logger.error(f"Failed to load prompts from YAML: {str(e)}")
+            raise
+
         # Initialize database
         self._init_db()
 
