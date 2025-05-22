@@ -43,7 +43,8 @@ function TrackerPage() {
         price: Math.random() * 1000, // Sample price
         movement: Math.random() * 10 - 5, // Sample movement
         sector: 'Technology', // Sample sector
-        news: 'Recent earnings report shows strong growth in cloud services - TechCrunch' // Sample news
+        news: 'Recent earnings report shows strong growth in cloud services - TechCrunch', // Sample news
+        movementInsight: 'Strong Q4 earnings beat market expectations' // Sample movement insight
       }]);
       setNewAsset({ symbol: '', name: '' });
       setShowAddAssetModal(false);
@@ -122,10 +123,14 @@ function TrackerPage() {
                 <span className="label">Sector:</span>
                 <span className="value">{asset.sector}</span>
               </div>
-              <div className="news">
+              <div className="movement-insight">
+                <span className="label">Why it Moved:</span>
+                <p className="value">{asset.movementInsight}</p>
+              </div>
+              {/* <div className="news">
                 <span className="label">Latest News:</span>
                 <p className="value">{asset.news}</p>
-              </div>
+              </div> */}
             </div>
           </div>
         ))}
