@@ -5,6 +5,7 @@ from services.chat_service import ChatService
 from services.news_service import NewsService
 from services.asset_service import AssetService
 from models.asset import AssetCreate, AssetResponse
+from models.chat import ChatRequest
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
@@ -54,21 +55,21 @@ async def health_check():
     return {"status": "healthy"}
 
 @app.post("/chat")
-async def chat_completion(type: str, user_query: str, conversation_id: str = None):
-    logger.info(f"Chat completion request received - Type: {type}, Conversation ID: {conversation_id}")
+async def chat_completion(request: ChatRequest):
+    logger.info(f"Chat completion request received - Type: {request.type}, Conversation ID: {request.conversation_id}")
     try:
         # Generate a new conversation ID if none provided
-        if conversation_id is None:
-            conversation_id = str(uuid.uuid4())
-            logger.info(f"Generated new conversation ID: {conversation_id}")
+        if request.conversation_id is None:
+            request.conversation_id = str(uuid.uuid4())
+            logger.info(f"Generated new conversation ID: {request.conversation_id}")
 
         # Extract user content from the last message
         response = chat_service.process_chat_request(
-            type, user_query, False, conversation_id
+            request.type, request.user_query, False, request.conversation_id
         )
-        logger.info(f"Successfully processed chat request for conversation: {conversation_id}")
+        logger.info(f"Successfully processed chat request for conversation: {request.conversation_id}")
         return {
-            "conversation_id": conversation_id,
+            "conversation_id": request.conversation_id,
             "response": response,
         }
     except Exception as e:

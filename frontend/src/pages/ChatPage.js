@@ -67,14 +67,17 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
       try {
         // Map frontend theme to backend type
         const backendType = currentTheme === 'newtimer' ? 'newbie' : 'chat';
-        // console.log("Backend type: ", backendType)
-        // console.log("Conversation ID: ", conversationId)
-        // console.log("Text: ", text)
-        const response = await fetch(`http://localhost:8000/chat?type=${backendType}&user_query=${encodeURIComponent(text)}${conversationId ? `&conversation_id=${conversationId}` : ''}`, {
+        
+        const response = await fetch('http://localhost:8000/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
+          body: JSON.stringify({
+            type: backendType,
+            user_query: text,
+            conversation_id: conversationId
+          })
         });
 
         if (!response.ok) {
