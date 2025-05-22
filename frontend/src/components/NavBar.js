@@ -12,13 +12,13 @@ function NavBar() {
     <nav className="nav-bar">
       <div className="nav-content">
         <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
-          <span role="img" aria-label="Home">🏠</span> Home
+          <span role="img" aria-label="Home"></span> Home
         </Link>
         <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
-          <span role="img" aria-label="Chat">💬</span> Chat
+          <span role="img" aria-label="Chat"></span> Chat
         </Link>
         <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
-          <span role="img" aria-label="News">📰</span> News
+          <span role="img" aria-label="News"></span> News
         </Link>
       </div>
     </nav>
