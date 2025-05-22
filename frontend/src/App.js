@@ -3,17 +3,11 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import './App.css'; // Ensure your App.css is linked
 import ChatPage from './pages/ChatPage';
 import NavBar from './components/NavBar';
+import TrackerPage from './pages/TrackerPage';
 
 // --- Main App Component ---
 function App() {
   const [currentTheme, setCurrentTheme] = useState('newtimer'); // 'newtimer' or 'veteran'
-
-  // Common header for the application
-  const renderHeader = () => (
-    <header className={`App-header app-theme-${currentTheme}`}>
-      <h1>FinSight</h1>
-    </header>
-  );
 
   // Apply theme class to the body for global overrides if necessary
   useEffect(() => {
@@ -33,6 +27,7 @@ function App() {
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/insights" element={<InsightsPage />} />
+            <Route path="/tracker" element={<TrackerPage />} />
           </Routes>
         </main>
       </div>

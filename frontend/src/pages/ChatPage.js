@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 function ChatPage({ currentTheme, setCurrentTheme }) {
-  const navigate = useNavigate();
-  const initialChatMessages = () => [ // Function to get initial messages
+  const initialChatMessages = useCallback(() => [ // Function to get initial messages
     {
       id: 'chatmsg-initial-1',
       text: `Welcome to FinSight Chat! You are currently in "${currentTheme}" mode. I'm ready to help with stock analysis, market news, and sentiment. How can I assist you today?`,
       sender: 'bot',
       type: 'greeting'
     }
-  ];
+  ], [currentTheme]); // Add currentTheme as dependency since it's used in the function
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -41,7 +39,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
     setMessages(initialChatMessages());
     setInput('');
     setConversationId(null); // Reset conversation ID when theme changes
-  }, [currentTheme]); // Refreshes messages if theme changes AND on initial mount for the current theme
+  }, [currentTheme, initialChatMessages]); // Added initialChatMessages to dependencies
 
   const suggestionPrompts = [
     { text: "Analyze MSFT stock", query: "Tell me about Microsoft (MSFT) stock" },

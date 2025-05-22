@@ -20,6 +20,9 @@ function NavBar() {
         <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
           <span role="img" aria-label="News"></span> News
         </Link>
+        <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
+          <span role="img" aria-label="Tracker"></span> Tracker
+        </Link>
       </div>
     </nav>
   );
