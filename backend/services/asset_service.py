@@ -27,6 +27,7 @@ class AssetService:
             initial_data = {
                 "price": 0.0,  
                 "movement": 0.0, 
+                "reason": "No reason provided",
                 "sector": "Unknown", 
                 "news": "No recent news available" 
             }
@@ -35,14 +36,15 @@ class AssetService:
             logger.debug("Storing asset in database")
             cursor = self.conn.execute("""
                 INSERT INTO tracked_assets (
-                    id, symbol, name, price, movement, sector, news, created_at, last_updated
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    id, symbol, name, price, movement, reason, sector, news, created_at, last_updated
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 asset_id,
                 asset.symbol,
                 asset.name,
                 initial_data["price"],
                 initial_data["movement"],
+                initial_data["reason"],
                 initial_data["sector"],
                 initial_data["news"],
                 datetime.now(timezone.utc),
@@ -81,6 +83,7 @@ class AssetService:
                     "name": row["name"],
                     "price": row["price"],
                     "movement": row["movement"],
+                    "reason": row["reason"],
                     "sector": row["sector"],
                     "news": row["news"],
                     "created_at": row["created_at"],

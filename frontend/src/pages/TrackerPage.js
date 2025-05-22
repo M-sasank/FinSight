@@ -189,7 +189,7 @@ function TrackerPage() {
               </div>
               <div className="movement-insight">
                 <span className="label">Why it Moved:</span>
-                <p className="value">{asset.news}</p>
+                <p className="value">{asset.reason}</p>
               </div>
             </div>
           </div>

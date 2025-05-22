@@ -84,6 +84,7 @@ class ChatService:
                 name TEXT NOT NULL,
                 price REAL NOT NULL,
                 movement REAL NOT NULL,
+                reason TEXT NOT NULL,
                 sector TEXT NOT NULL,
                 news TEXT NOT NULL,
                 created_at DATETIME NOT NULL,
@@ -96,7 +97,10 @@ class ChatService:
     def clear_database(self):
         """Clear all data from the database."""
         try:
-            self.conn.execute("DELETE FROM messages")
+            # Drop existing tables
+            self.conn.execute("DROP TABLE IF EXISTS messages")
+            self.conn.execute("DROP TABLE IF EXISTS tracked_assets")
+            
             self.conn.commit()
             return True
         except Exception as e:

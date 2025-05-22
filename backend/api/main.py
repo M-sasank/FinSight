@@ -143,19 +143,19 @@ async def get_chat_messages(chat_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.delete("/chat/clear")
-async def clear_chat_history():
-    """Clear all chat history from the database."""
-    logger.info("Clearing chat history")
+async def clear_database():
+    """Clear all data from the database."""
+    logger.info("Clearing database")
     try:
         success = chat_service.clear_database()
         if success:
-            logger.info("Successfully cleared chat history")
-            return {"message": "Chat history cleared successfully"}
+            logger.info("Successfully cleared database")
+            return {"message": "Database cleared successfully"}
         else:
-            logger.error("Failed to clear chat history")
-            raise HTTPException(status_code=500, detail="Failed to clear chat history")
+            logger.error("Failed to clear database")
+            raise HTTPException(status_code=500, detail="Failed to clear database")
     except Exception as e:
-        logger.error(f"Error clearing chat history: {str(e)}")
+        logger.error(f"Error clearing database: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/news")

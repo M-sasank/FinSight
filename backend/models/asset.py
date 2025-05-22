@@ -11,6 +11,7 @@ class AssetResponse(BaseModel):
     name: str
     price: float
     movement: float
+    reason: str
     sector: str
     news: str
     created_at: datetime
