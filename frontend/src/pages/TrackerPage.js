@@ -90,17 +90,6 @@ function TrackerPage() {
     }
   };
 
-  // Sample chart data - you might want to replace this with real data
-  const sampleAssetData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [{
-      label: 'Price Movement',
-      data: [100, 102, 98, 103, 101, 105, 104],
-      borderColor: 'rgb(75, 192, 192)',
-      tension: 0.1
-    }]
-  };
-
   if (loading) {
     return <div className="loading">Loading assets...</div>;
   }
@@ -176,7 +165,15 @@ function TrackerPage() {
               </span>
             </div>
             <div className="asset-chart">
-              <Line data={sampleAssetData} options={{
+              <Line data={{
+                labels: ['6d ago', '5d ago', '4d ago', '3d ago', '2d ago', 'Yesterday', 'Today'],
+                datasets: [{
+                  label: 'Price Movement',
+                  data: [...asset.price_history, asset.price],
+                  borderColor: 'rgb(75, 192, 192)',
+                  tension: 0.1
+                }]
+              }} options={{
                 responsive: true,
                 plugins: {
                   legend: {
@@ -185,7 +182,19 @@ function TrackerPage() {
                 },
                 scales: {
                   y: {
-                    display: false
+                    display: true,
+                    ticks: {
+                      display: true,
+                      font: {
+                        size: 8
+                      },
+                      callback: function(value) {
+                        return '$' + value.toFixed(2);
+                      }
+                    },
+                    grid: {
+                      display: false
+                    }
                   },
                   x: {
                     display: false
