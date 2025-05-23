@@ -22,16 +22,15 @@ function App() {
   return (
     <Router>
       <div className={`App app-theme-${currentTheme}`}>
-        <NavBar />
+        <NavBar currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
         <main className="App-main-content">
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage currentTheme={currentTheme} />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/insights" element={<InsightsPage />} />
-            <Route path="/tracker" element={<TrackerPage />} />
-            <Route path="/asset-chat/:symbol" element={<AssetChatPage />} />
-            <Route path="/guide" element={<GuidePage />} />
+            <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
+            <Route path="/asset-chat/:symbol" element={<AssetChatPage currentTheme={currentTheme} />} />
           </Routes>
         </main>
       </div>
@@ -40,7 +39,7 @@ function App() {
 }
 
 
-function LandingPage() {
+function LandingPage({ currentTheme }) {
   const navigate = useNavigate();
   const [activeCard, setActiveCard] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
@@ -147,7 +146,7 @@ function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="features-section">
+      <section className={`features-section theme-${currentTheme}`}>
         <h2 className="section-title">Discover FinSight's Power</h2>
         <div className="features-grid"
              onMouseEnter={() => setIsHovered(true)}
@@ -216,21 +215,21 @@ function LandingPage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="how-it-works-section">
+      <section className={`how-it-works-section theme-${currentTheme}`}>
         <h2 className="section-title">How FinSight Works</h2>
         <div className="steps-grid">
-          <div className="step-card">
-            <div className="step-number">1</div>
+          <div className={`step-card theme-${currentTheme}`}>
+            <div className={`step-number theme-${currentTheme}`}>1</div>
             <h3>Choose Your Profile</h3>
             <p>Select between Newtimer or Veteran mode based on your experience level</p>
           </div>
-          <div className="step-card">
-            <div className="step-number">2</div>
+          <div className={`step-card theme-${currentTheme}`}>
+            <div className={`step-number theme-${currentTheme}`}>2</div>
             <h3>Ask Questions</h3>
             <p>Chat with our AI assistant about stocks, market trends, or investment strategies</p>
           </div>
-          <div className="step-card">
-            <div className="step-number">3</div>
+          <div className={`step-card theme-${currentTheme}`}>
+            <div className={`step-number theme-${currentTheme}`}>3</div>
             <h3>Track & Analyze</h3>
             <p>Monitor your favorite stocks and get AI-powered insights on their performance</p>
           </div>
@@ -238,7 +237,7 @@ function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="cta-section">
+      <section className={`cta-section theme-${currentTheme}`}>
         <h2>Ready to Transform Your Investment Journey?</h2>
         <p>Join thousands of investors who trust FinSight for smarter financial decisions</p>
         <button onClick={() => navigate('/chat')} className="cta-button primary large">

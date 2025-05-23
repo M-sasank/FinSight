@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { FiSend, FiPlus, FiClock, FiMessageSquare } from 'react-icons/fi';
+import './ChatPage.css';
 
 function ChatPage({ currentTheme, setCurrentTheme }) {
   const initialChatMessages = useCallback(() => [ 
@@ -8,7 +10,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
       sender: 'bot',
       type: 'greeting'
     }
-  ], [currentTheme]); // Add currentTheme as dependency since it's used in the function
+  ], [currentTheme]);
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -16,11 +18,75 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Mode-specific suggestion prompts with enhanced descriptions
+  const suggestionPrompts = {
+    newtimer: [
+      { 
+        text: "What is a stock?", 
+        query: "Can you explain what a stock is in simple terms?",
+        description: "Learn the basics of stocks and how they work"
+      },
+      { 
+        text: "How do I start investing?", 
+        query: "What are the first steps I should take to start investing?",
+        description: "Begin your investment journey with confidence"
+      },
+      { 
+        text: "Explain market terms", 
+        query: "Can you explain some basic market terms I should know?",
+        description: "Understand essential financial terminology"
+      },
+      { 
+        text: "Track a stock", 
+        query: "How do I track a stock I'm interested in?",
+        description: "Learn to monitor stock performance"
+      },
+      { 
+        text: "Market basics", 
+        query: "What are the basics I should know about the stock market?",
+        description: "Get started with market fundamentals"
+      }
+    ],
+    veteran: [
+      { 
+        text: "Technical Analysis", 
+        query: "Show me the technical analysis for AAPL",
+        description: "Deep dive into technical indicators and patterns"
+      },
+      { 
+        text: "Compare P/E Ratios", 
+        query: "Compare the P/E ratios of AAPL, MSFT, and GOOGL",
+        description: "Analyze valuation metrics across tech giants"
+      },
+      { 
+        text: "Market Sentiment", 
+        query: "What's the current market sentiment and key indicators?",
+        description: "Evaluate market mood and momentum"
+      },
+      { 
+        text: "Sector Analysis", 
+        query: "Analyze the tech sector's performance and outlook",
+        description: "Examine sector trends and opportunities"
+      },
+      { 
+        text: "Options Strategy", 
+        query: "What are some effective options strategies for the current market?",
+        description: "Explore advanced trading strategies"
+      }
+    ]
+  };
 
   useEffect(() => {
     fetchChatHistory();
-  }, []);
+    // Initialize with a new chat on first load
+    setMessages(initialChatMessages());
+  }, [initialChatMessages]);
 
   const fetchChatHistory = async () => {
     try {
@@ -28,6 +94,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
       if (response.ok) {
         const data = await response.json();
         setChatHistory(data.history || []);
+        setSelectedChat(null);
       }
     } catch (error) {
       console.error('Error fetching chat history:', error);
@@ -35,37 +102,58 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
   };
 
   useEffect(() => {
-    setMessages(initialChatMessages());
-    setInput('');
-    setConversationId(null); 
-  }, [currentTheme, initialChatMessages]); 
+    const handleThemeTransition = async () => {
+      setIsTransitioning(true);
+      setShowSuggestions(false);
+      
+      // Add a transition message with enhanced animation
+      const transitionMessage = {
+        id: `chatmsg-transition-${Date.now()}`,
+        text: `Switching to ${currentTheme} mode...`,
+        sender: 'bot',
+        type: 'transition'
+      };
+      setMessages(prev => [...prev, transitionMessage]);
+      
+      // Enhanced transition animation
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Clear messages and set new initial message
+      setMessages(initialChatMessages());
+      setInput('');
+      setConversationId(null);
+      
+      // Reset states with delay for smooth transition
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setShowSuggestions(true);
+      }, 300);
+    };
 
-  const suggestionPrompts = [
-    { text: "Analyze MSFT stock", query: "Tell me about Microsoft (MSFT) stock" },
-    { text: "Today's top financial news", query: "What's today's top financial news?" },
-    { text: "Is the market bullish or bearish?", query: "Is the market bullish or bearish currently?" }
-  ];
+    handleThemeTransition();
+  }, [currentTheme, initialChatMessages]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   const processAndAddMessage = async (text, sender) => {
     const newMessage = {
       id: `chatmsg-${Date.now()}`,
       text: text,
       sender: sender,
+      timestamp: new Date().toISOString()
     };
     setMessages(prevMessages => [...prevMessages, newMessage]);
+    setShowSuggestions(false);
 
     if (sender === 'user') {
       setIsLoading(true);
       try {
-        // Map frontend theme to backend type
         const backendType = currentTheme === 'newtimer' ? 'newbie' : 'chat';
         
         const response = await fetch('http://localhost:8000/api/v1/chat', {
@@ -86,10 +174,8 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
 
         const data = await response.json();
         
-        // Update conversation ID if this is a new conversation
         if (!conversationId) {
           setConversationId(data.conversation_id);
-          // Add new chat to history
           setChatHistory(prev => [...prev, {
             id: data.conversation_id,
             title: text.substring(0, 30) + (text.length > 30 ? '...' : ''),
@@ -98,68 +184,88 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
           }]);
         }
 
-        // Add bot response to messages
         let botResponseText = 'Sorry, I could not generate a response.';
-        if (data.response && data.response.type === 'completion' && 
-            data.response.data && data.response.data.choices && 
-            data.response.data.choices[0] && data.response.data.choices[0].message) {
+        if (data.response?.type === 'completion' && 
+            data.response?.data?.choices?.[0]?.message) {
           botResponseText = data.response.data.choices[0].message.content;
         }
 
         const botResponse = {
           id: `chatmsg-${Date.now() + 1}`,
           sender: 'bot',
-          text: botResponseText
+          text: botResponseText,
+          timestamp: new Date().toISOString()
         };
         setMessages(prev => [...prev, botResponse]);
       } catch (error) {
         console.error('Error:', error);
-        // Add error message to chat
         const errorMessage = {
           id: `chatmsg-${Date.now() + 1}`,
           sender: 'bot',
-          text: 'Sorry, I encountered an error while processing your request. Please try again.'
+          text: 'Sorry, I encountered an error while processing your request. Please try again.',
+          type: 'error',
+          timestamp: new Date().toISOString()
         };
         setMessages(prev => [...prev, errorMessage]);
       } finally {
         setIsLoading(false);
+        setShowSuggestions(true);
       }
     }
   };
 
   const handleSendMessage = () => {
-    if (input.trim() && !isLoading) {
+    if (input.trim() && !isLoading && !isTransitioning) {
       processAndAddMessage(input, 'user');
       setInput('');
+      inputRef.current?.focus();
     }
   };
 
   const handleSuggestionClick = (query) => {
-    setInput(query);
-    document.querySelector('.chat-input input').focus();
+    if (!isTransitioning) {
+      setInput(query);
+      inputRef.current?.focus();
+    }
   };
 
-  const handleThemeChange = (e) => {
-    setCurrentTheme(e.target.value);
+  const handleThemeChange = (theme) => {
+    if (!isTransitioning && theme !== currentTheme) {
+      setCurrentTheme(theme);
+    }
   };
 
   const handleChatSelect = async (chatId) => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/v1/chat/${chatId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setMessages(data.messages);
-        setConversationId(chatId);
-        setSelectedChat(chatId);
-        
-        const selectedChatData = chatHistory.find(chat => chat.id === chatId);
-        if (selectedChatData) {
-          const newTheme = selectedChatData.type === 'newbie' ? 'newtimer' : 'veteran';
-          setCurrentTheme(newTheme);
+    if (!isTransitioning && chatId !== selectedChat) {
+      try {
+        const response = await fetch(`http://localhost:8000/api/v1/chat/${chatId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setMessages(data.messages);
+          setConversationId(chatId);
+          setSelectedChat(chatId);
+          
+          const selectedChatData = chatHistory.find(chat => chat.id === chatId);
+          if (selectedChatData) {
+            const newTheme = selectedChatData.type === 'newbie' ? 'newtimer' : 'veteran';
+            if (newTheme !== currentTheme) {
+              setCurrentTheme(newTheme);
+            }
+          }
         }
+      } catch (error) {
+        console.error('Error loading chat:', error);
       }
-    } catch (error) {
-      console.error('Error loading chat:', error);
+    }
+  };
+
+  const handleNewChat = () => {
+    if (!isTransitioning) {
+      setMessages(initialChatMessages());
+      setConversationId(null);
+      setSelectedChat(null);
+      setShowSuggestions(true);
+      inputRef.current?.focus();
     }
   };
 
@@ -179,99 +285,137 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
         </div>
       );
     }
-    return message.text;
+    return (
+      <div className="message-content">
+        <div className="message-text">{message.text}</div>
+        <div className="message-timestamp">
+          {new Date(message.timestamp).toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          })}
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className={`chat-page-container page-theme-${currentTheme}`}>
-        <div className="chat-page-header">
-            <div className="profile-selector">
-                <span className="selector-label">User Profile:</span>
-                <select 
-                    value={currentTheme} 
-                    onChange={handleThemeChange}
-                    className="profile-dropdown"
-                >
-                    <option value="newtimer">Newtimer</option>
-                    <option value="veteran">Veteran</option>
-                </select>
+    <div className={`chat-page-container page-theme-${currentTheme} ${isTransitioning ? 'theme-transitioning' : ''}`}>
+      <div className="chat-page-header">
+      </div>
+      
+      <div className="chat-layout" ref={chatContainerRef}>
+        <div className="chat-sidebar">
+          <div className="profile-selector" style={{ marginBottom: '16px' }}>
+            <span className="selector-label">Experience Level</span>
+            <div className="profile-buttons-group">
+              <button
+                className={`profile-button ${currentTheme === 'newtimer' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('newtimer')}
+                disabled={isTransitioning}
+              >
+                <FiMessageSquare className="button-icon" />
+                Newtimer
+              </button>
+              <button
+                className={`profile-button ${currentTheme === 'veteran' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('veteran')}
+                disabled={isTransitioning}
+              >
+                <FiMessageSquare className="button-icon" />
+                Veteran
+              </button>
             </div>
+          </div>
+          <div className="sidebar-header">
+            <h3>Chat History</h3>
+            <button 
+              className="new-chat-button"
+              onClick={handleNewChat}
+              disabled={isTransitioning}
+            >
+              <FiPlus className="button-icon" />
+              New Chat
+            </button>
+          </div>
+          <div className="chat-history-list">
+            {chatHistory.map((chat) => (
+              <div
+                key={chat.id}
+                className={`chat-history-item ${selectedChat === chat.id ? 'selected' : ''}`}
+                onClick={() => handleChatSelect(chat.id)}
+              >
+                <div className="chat-history-title">{chat.title || 'Untitled Chat'}</div>
+                <div className="chat-history-meta">
+                  <span className="chat-type">
+                    {chat.type === 'newbie' ? 'Newtimer' : 'Veteran'}
+                  </span>
+                  <span className="chat-date">
+                    <FiClock className="icon-small" />
+                    {(() => {
+                      if (!chat.timestamp) return 'No date';
+                      const date = new Date(chat.timestamp);
+                      // Check if the date is valid before attempting to format
+                      return !isNaN(date.getTime()) ? date.toLocaleDateString() : 'Invalid date';
+                    })()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="chat-layout">
-            <div className="chat-sidebar">
-                <div className="sidebar-header">
-                    <h3>Chat History</h3>
-                    <button 
-                        className="new-chat-button"
-                        onClick={() => {
-                            setMessages(initialChatMessages());
-                            setConversationId(null);
-                            setSelectedChat(null);
-                        }}
-                    >
-                        New Chat
-                    </button>
-                </div>
-                <div className="chat-history-list">
-                    {chatHistory.map((chat) => (
-                        <div
-                            key={chat.id}
-                            className={`chat-history-item ${selectedChat === chat.id ? 'selected' : ''}`}
-                            onClick={() => handleChatSelect(chat.id)}
-                        >
-                            <div className="chat-history-title">{chat.title}</div>
-                            <div className="chat-history-meta">
-                                <span className="chat-type">{chat.type}</span>
-                                <span className="chat-date">
-                                    {new Date(chat.timestamp).toLocaleDateString()}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <div className="chat-main">
-                <div className="chat-messages">
-                    {messages.map((message) => (
-                    <div key={message.id} className={`message ${message.sender}`}>
-                        {renderMessageContent(message)}
-                    </div>
-                    ))}
-                    <div ref={messagesEndRef} />
-                </div>
+        
+        <div className="chat-main">
+          <div className="chat-messages">
+            {messages.map((message) => (
+              <div 
+                key={message.id} 
+                className={`message ${message.sender} ${message.type === 'transition' ? 'transition-message' : ''} ${message.type === 'error' ? 'error-message' : ''}`}
+              >
+                {renderMessageContent(message)}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
 
-                {messages.length <= 2 && (
-                    <div className="suggestion-area">
-                    <p className="suggestion-area-title">Try asking:</p>
-                    <div className="suggestion-chips-container">
-                        {suggestionPrompts.map((prompt, index) => (
-                        <button
-                            key={index}
-                            className="suggestion-chip"
-                            onClick={() => handleSuggestionClick(prompt.query)}
-                        >
-                            {prompt.text}
-                        </button>
-                        ))}
-                    </div>
-                    </div>
-                )}
-
-                <div className="chat-input">
-                    <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    placeholder={isLoading ? "Processing..." : "Ask FinSight..."}
-                    disabled={isLoading}
-                    />
-                    <button onClick={handleSendMessage} disabled={isLoading}>
-                        {isLoading ? "Sending..." : "Send"}
-                    </button>
-                </div>
+          {showSuggestions && messages.length <= 2 && !isTransitioning && (
+            <div className="suggestion-area">
+              <p className="suggestion-area-title">Try asking:</p>
+              <div className="suggestion-chips-container">
+                {suggestionPrompts[currentTheme].map((prompt, index) => (
+                  <button
+                    key={index}
+                    className="suggestion-chip"
+                    onClick={() => handleSuggestionClick(prompt.query)}
+                    disabled={isTransitioning}
+                    title={prompt.description}
+                  >
+                    {prompt.text}
+                  </button>
+                ))}
+              </div>
             </div>
+          )}
+
+          <div className="chat-input">
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder={isLoading ? "Processing..." : isTransitioning ? "Switching modes..." : "Ask FinSight..."}
+              disabled={isLoading || isTransitioning}
+            />
+            <button 
+              onClick={handleSendMessage} 
+              disabled={isLoading || isTransitioning || !input.trim()}
+            >
+              <FiSend className="button-icon" />
+              {isLoading ? "Sending..." : isTransitioning ? "Switching..." : "Send"}
+            </button>
+          </div>
         </div>
+      </div>
     </div>
   );
 }
