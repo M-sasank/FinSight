@@ -102,6 +102,34 @@ class ChatService:
             self.conn.execute("DROP TABLE IF EXISTS messages")
             self.conn.execute("DROP TABLE IF EXISTS tracked_assets")
             
+            # recreate the tables
+            self.conn.execute("""
+                CREATE TABLE IF NOT EXISTS messages (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    type TEXT NOT NULL
+                )
+            """)
+
+            self.conn.execute("""
+                CREATE TABLE IF NOT EXISTS tracked_assets (
+                    id TEXT PRIMARY KEY,
+                    symbol TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    price REAL NOT NULL,
+                    movement REAL NOT NULL,
+                    reason TEXT NOT NULL,
+                    sector TEXT NOT NULL,
+                    news TEXT NOT NULL,
+                    price_history TEXT NOT NULL,
+                    created_at DATETIME NOT NULL,
+                    last_updated DATETIME NOT NULL
+                )
+            """)
+            
             self.conn.commit()
             return True
         except Exception as e:
