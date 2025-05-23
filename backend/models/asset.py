@@ -12,6 +12,7 @@ class AssetResponse(BaseModel):
     price: float
     movement: float
     reason: str
+    price_history: list[float]
     sector: str
     news: str
     created_at: datetime

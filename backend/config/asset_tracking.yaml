@@ -10,6 +10,7 @@ asset_tracking:
     - reason: Very brief explanation of the price movement limit to 20 words
     - sector: The industry sector the asset belongs to
     - news: Recent relevant news or developments affecting the asset limit to 25 words
+    - price_history: 6 element list of prices for last 6 days not including today, where first element is the oldest price and last element is the yesterday's price.(array of floats)
 
   user_prompt_template: |
     Please provide detailed information about the asset with symbol {symbol} and name {name}.

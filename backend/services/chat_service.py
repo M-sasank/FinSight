@@ -87,6 +87,7 @@ class ChatService:
                 reason TEXT NOT NULL,
                 sector TEXT NOT NULL,
                 news TEXT NOT NULL,
+                price_history TEXT NOT NULL,
                 created_at DATETIME NOT NULL,
                 last_updated DATETIME NOT NULL
             )

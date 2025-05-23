@@ -17,6 +17,7 @@ class AssetData(BaseModel):
     reason: str
     sector: str
     news: str
+    price_history: list[float]
 
 
 # Configure loggingw
@@ -105,12 +106,18 @@ class AssetService:
             # Fetch initial data from Sonar API
             initial_data = self._fetch_asset_details(asset.symbol, asset.name)
             
+            # Ensure price history is ordered with oldest price first
+            price_history = initial_data["price_history"]
+            if not isinstance(price_history, list) or len(price_history) != 6:
+                logger.warning(f"Invalid price history format from API. Expected 6 prices, got {len(price_history) if isinstance(price_history, list) else 'non-list'}")
+                price_history = [initial_data["price"]] * 6
+            
             # Store the asset in the database
             logger.debug("Storing asset in database")
             cursor = self.conn.execute("""
                 INSERT INTO tracked_assets (
-                    id, symbol, name, price, movement, reason, sector, news, created_at, last_updated
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    id, symbol, name, price, movement, reason, sector, news, price_history, created_at, last_updated
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 asset_id,
                 asset.symbol,
@@ -120,6 +127,7 @@ class AssetService:
                 initial_data["reason"],
                 initial_data["sector"],
                 initial_data["news"],
+                json.dumps(price_history),
                 datetime.now(timezone.utc),
                 datetime.now(timezone.utc)
             ))
@@ -159,6 +167,7 @@ class AssetService:
                     "reason": row["reason"],
                     "sector": row["sector"],
                     "news": row["news"],
+                    "price_history": json.loads(row["price_history"]),
                     "created_at": row["created_at"],
                     "last_updated": row["last_updated"]
                 })
