@@ -4,6 +4,7 @@ import './App.css'; // Ensure your App.css is linked
 import ChatPage from './pages/ChatPage';
 import NavBar from './components/NavBar';
 import TrackerPage from './pages/TrackerPage';
+import AssetChatPage from './pages/AssetChatPage';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             <Route path="/news" element={<NewsPage />} />
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage />} />
+            <Route path="/asset-chat/:symbol" element={<AssetChatPage />} />
           </Routes>
         </main>
       </div>

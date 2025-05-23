@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,6 +23,7 @@ ChartJS.register(
 );
 
 function TrackerPage() {
+  const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
   const [showAddAssetModal, setShowAddAssetModal] = useState(false);
   const [newAsset, setNewAsset] = useState({ symbol: '', name: '' });
@@ -36,7 +38,7 @@ function TrackerPage() {
   const fetchAssets = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8000/tracker/assets/get');
+      const response = await fetch('http://localhost:8000/api/v1/tracker/assets/get');
       if (!response.ok) {
         throw new Error('Failed to fetch assets');
       }
@@ -52,7 +54,7 @@ function TrackerPage() {
   const handleAddAsset = async () => {
     if (newAsset.symbol && newAsset.name) {
       try {
-        const response = await fetch('http://localhost:8000/tracker/assets/create', {
+        const response = await fetch('http://localhost:8000/api/v1/tracker/assets/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ function TrackerPage() {
 
   const handleDeleteAsset = async (assetId) => {
     try {
-      const response = await fetch(`http://localhost:8000/tracker/assets/delete?asset_id=${assetId}`, {
+      const response = await fetch(`http://localhost:8000/api/v1/tracker/assets/delete?asset_id=${assetId}`, {
         method: 'DELETE',
       });
 
@@ -108,6 +110,21 @@ function TrackerPage() {
             text-align: right;
             padding: 0 10px;
             margin-bottom: 5px;
+          }
+          .ask-about-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            width: 100%;
+            transition: background-color 0.2s;
+          }
+          .ask-about-button:hover {
+            background-color: #45a049;
           }
         `}
       </style>
@@ -214,6 +231,12 @@ function TrackerPage() {
                 <span className="label">Why it Moved:</span>
                 <p className="value">{asset.news}</p>
               </div>
+              <button 
+                className="ask-about-button"
+                onClick={() => navigate(`/asset-chat/${asset.symbol}`)}
+              >
+                Ask about {asset.symbol}
+              </button>
             </div>
           </div>
         ))}
