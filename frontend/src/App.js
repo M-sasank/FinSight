@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css'; // Ensure your App.css is linked
 import ChatPage from './pages/ChatPage';
@@ -40,49 +40,208 @@ function App() {
 
 function LandingPage() {
   const navigate = useNavigate();
+  const [activeCard, setActiveCard] = useState(0);
+  const [isSliding, setIsSliding] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef(null);
+  
+  const features = [
+    {
+      title: "Intelligent Chat Assistance",
+      subtitle: "Your AI-Powered Financial Guide",
+      image: "/images/chat-assistant.svg",
+      description: "Get personalized financial guidance with our advanced AI chat assistant. Whether you're new to investing or a seasoned trader, our chat assistant adapts to your needs and provides tailored insights.",
+      modes: [
+        {
+          title: "Newtimer Mode",
+          description: "Perfect for beginners. Get clear, simple explanations about stocks, market trends, and investment basics. Learn at your own pace with easy-to-understand insights."
+        },
+        {
+          title: "Veteran Mode",
+          description: "For experienced investors. Access in-depth analysis, technical indicators, and sophisticated market insights. Dive deep into complex financial concepts and strategies."
+        }
+      ],
+      cta: "Start Chatting",
+      action: () => navigate('/chat')
+    },
+    {
+      title: "Stay Ahead: Market Trends & News",
+      subtitle: "Real-Time Market Intelligence",
+      image: "/images/market-trends.svg",
+      description: "Stay informed with comprehensive market insights and real-time updates. Our platform aggregates the latest market trends, news, and analysis to help you make informed decisions.",
+      features: [
+        "Real-time market trends and analysis",
+        "Latest financial news and updates",
+        "Market sentiment indicators",
+        "Impact analysis on your portfolio"
+      ],
+      cta: "Explore Market Trends",
+      action: () => navigate('/news')
+    },
+    {
+      title: "Precision Stock Tracking",
+      subtitle: "Track, Analyze, and Act",
+      image: "/images/stock-tracking.svg",
+      description: "Monitor your favorite stocks with precision and get AI-powered insights. Our advanced tracking system provides detailed analytics and real-time updates to help you stay on top of your investments.",
+      features: [
+        "Real-time stock price tracking",
+        "Interactive performance charts",
+        "Key metrics and historical data",
+        "AI-powered analysis and insights"
+      ],
+      cta: "Track Stocks Now",
+      action: () => navigate('/tracker')
+    }
+  ];
+
+  const nextCard = useCallback(() => {
+    if (isSliding) return;
+    setIsSliding(true);
+    setActiveCard((prev) => (prev + 1) % features.length);
+    setTimeout(() => setIsSliding(false), 600);
+  }, [features.length, isSliding]);
+
+  const goToCard = useCallback((index) => {
+    if (isSliding || index === activeCard) return;
+    setIsSliding(true);
+    setActiveCard(index);
+    setTimeout(() => setIsSliding(false), 600);
+  }, [activeCard, isSliding]);
+
+  // Auto-slide management
+  useEffect(() => {
+    if (!isHovered) {
+      intervalRef.current = setInterval(nextCard, 3000);
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [nextCard, isHovered]);
 
   return (
     <div className="landing-page">
+      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h2 className="hero-title">FinSight: Your Intelligent Personal Finance Advisor</h2>
+          <h1 className="hero-title">Your AI-Powered Financial Companion</h1>
           <p className="hero-subtitle">
-            Navigate your financial future with clarity. FinSight leverages cutting-edge AI, powered by the Sonar API,
-            to provide real-time, reasoning-backed analysis and recommendations. Understand the 'why' behind your finances.
+            FinSight combines cutting-edge AI with financial expertise to help you make smarter investment decisions. 
+            Whether you're new to investing or a seasoned trader, get personalized insights and real-time market analysis.
           </p>
           <div className="hero-cta-buttons">
             <button onClick={() => navigate('/chat')} className="cta-button primary">
-              Chat with FinSight
+              Start Chatting
             </button>
-            <button onClick={() => navigate('/insights')} className="cta-button secondary">
-              Explore Insights
+            <button onClick={() => navigate('/tracker')} className="cta-button secondary">
+              Track Stocks
             </button>
           </div>
         </div>
         <div className="hero-visual">
-          <div className="visual-placeholder"></div>
+          <div className="hero-image"></div>
         </div>
       </section>
 
-      <section className="features-overview-section">
-        <h3 className="section-title">Unlock Your Financial Potential</h3>
-        <div className="features-grid">
-          <div className="feature-item">
-            <span className="feature-icon">📊</span>
-            <h4>Real-time Stock Analysis</h4>
-            <p>In-depth analysis with Sonar Deep Research, understanding key drivers and cited sources.</p>
+      {/* Features Section */}
+      <section className="features-section">
+        <h2 className="section-title">Discover FinSight's Power</h2>
+        <div className="features-grid"
+             onMouseEnter={() => setIsHovered(true)}
+             onMouseLeave={() => setIsHovered(false)}>
+          <div className="features-carousel">
+            {features.map((feature, index) => {
+              const cardClass = [
+                'feature-card',
+                index === activeCard ? 'active' : '',
+                index === (activeCard - 1 + features.length) % features.length ? 'previous' : '',
+                index === (activeCard + 1) % features.length ? 'next' : '',
+                isSliding ? 'sliding' : ''
+              ].filter(Boolean).join(' ');
+
+              return (
+                <div key={index} className={cardClass}>
+                  <div className="feature-card-image">
+                    <img src={feature.image} alt={feature.title} />
+                  </div>
+                  <div className="feature-card-content">
+                    <div className="feature-card-header">
+                      <h3 className="feature-card-title">{feature.title}</h3>
+                      <p className="feature-card-subtitle">{feature.subtitle}</p>
+                    </div>
+                    <p className="feature-description">{feature.description}</p>
+                    
+                    {feature.modes ? (
+                      <div className="feature-modes">
+                        {feature.modes.map((mode, idx) => (
+                          <div key={idx} className="mode-card">
+                            <h4 className="mode-title">{mode.title}</h4>
+                            <p className="mode-description">{mode.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : feature.features && (
+                      <ul className="feature-list">
+                        {feature.features.map((item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ))}
+                      </ul>
+                    )}
+                    
+                    <button onClick={feature.action} className="feature-cta">
+                      {feature.cta}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div className="feature-item">
-            <span className="feature-icon">📰</span>
-            <h4>Curated Financial News</h4>
-            <p>Understand the "why" behind news with Sonar's reasoning on potential investment impacts.</p>
-          </div>
-          <div className="feature-item">
-            <span className="feature-icon">📈</span>
-            <h4>Market Sentiment Analysis</h4>
-            <p>Gauge market mood using Sonar's analysis of news, social media, and more.</p>
+
+          {/* Navigation Dots */}
+          <div className="carousel-nav">
+            {features.map((_, index) => (
+              <button
+                key={index}
+                className={`carousel-dot ${index === activeCard ? 'active' : ''}`}
+                onClick={() => goToCard(index)}
+                disabled={isSliding}
+                aria-label={`Go to feature ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="how-it-works-section">
+        <h2 className="section-title">How FinSight Works</h2>
+        <div className="steps-grid">
+          <div className="step-card">
+            <div className="step-number">1</div>
+            <h3>Choose Your Profile</h3>
+            <p>Select between Newtimer or Veteran mode based on your experience level</p>
+          </div>
+          <div className="step-card">
+            <div className="step-number">2</div>
+            <h3>Ask Questions</h3>
+            <p>Chat with our AI assistant about stocks, market trends, or investment strategies</p>
+          </div>
+          <div className="step-card">
+            <div className="step-number">3</div>
+            <h3>Track & Analyze</h3>
+            <p>Monitor your favorite stocks and get AI-powered insights on their performance</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <h2>Ready to Transform Your Investment Journey?</h2>
+        <p>Join thousands of investors who trust FinSight for smarter financial decisions</p>
+        <button onClick={() => navigate('/chat')} className="cta-button primary large">
+          Get Started Now
+        </button>
       </section>
     </div>
   );

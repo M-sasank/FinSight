@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Elements -->
+  <circle cx="400" cy="300" r="250" fill="url(#gradient-bg)" opacity="0.1"/>
+  <circle cx="400" cy="300" r="200" fill="url(#gradient-bg)" opacity="0.15"/>
+  <circle cx="400" cy="300" r="150" fill="url(#gradient-bg)" opacity="0.2"/>
+  
+  <!-- Chart Elements -->
+  <path d="M200 400 L300 350 L400 380 L500 320 L600 340" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="300" cy="350" r="6" fill="white"/>
+  <circle cx="400" cy="380" r="6" fill="white"/>
+  <circle cx="500" cy="320" r="6" fill="white"/>
+  
+  <!-- Chat Bubble -->
+  <path d="M250 200 L350 200 L350 250 L320 250 L300 270 L280 250 L250 250 Z" fill="white" opacity="0.9"/>
+  <circle cx="280" cy="225" r="4" fill="#1a237e"/>
+  <circle cx="300" cy="225" r="4" fill="#1a237e"/>
+  <circle cx="320" cy="225" r="4" fill="#1a237e"/>
+  
+  <!-- Stock Graph -->
+  <path d="M450 200 L550 180 L650 220" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="550" cy="180" r="6" fill="white"/>
+  <circle cx="650" cy="220" r="6" fill="white"/>
+  
+  <!-- Decorative Elements -->
+  <circle cx="200" cy="150" r="20" fill="white" opacity="0.2"/>
+  <circle cx="600" cy="400" r="15" fill="white" opacity="0.2"/>
+  <circle cx="150" cy="350" r="10" fill="white" opacity="0.2"/>
+  <circle cx="650" cy="150" r="25" fill="white" opacity="0.2"/>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient-bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e3f2fd"/>
+    </linearGradient>
+  </defs>
+</svg> 

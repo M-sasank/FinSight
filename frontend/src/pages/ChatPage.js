@@ -99,10 +99,17 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
         }
 
         // Add bot response to messages
+        let botResponseText = 'Sorry, I could not generate a response.';
+        if (data.response && data.response.type === 'completion' && 
+            data.response.data && data.response.data.choices && 
+            data.response.data.choices[0] && data.response.data.choices[0].message) {
+          botResponseText = data.response.data.choices[0].message.content;
+        }
+
         const botResponse = {
           id: `chatmsg-${Date.now() + 1}`,
           sender: 'bot',
-          text: data.response.data.choices[0].message.content
+          text: botResponseText
         };
         setMessages(prev => [...prev, botResponse]);
       } catch (error) {
