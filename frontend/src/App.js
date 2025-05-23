@@ -5,6 +5,7 @@ import ChatPage from './pages/ChatPage';
 import NavBar from './components/NavBar';
 import TrackerPage from './pages/TrackerPage';
 import AssetChatPage from './pages/AssetChatPage';
+import NewsPage from './pages/NewsPage';
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} />
-            <Route path="/news" element={<NewsPage />} />
+            <Route path="/news" element={<NewsPage currentTheme={currentTheme} />} />
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
             <Route path="/asset-chat/:symbol" element={<AssetChatPage currentTheme={currentTheme} />} />
@@ -267,20 +268,6 @@ function InsightsPage() {
             <div className="placeholder-card">Spending Trends Line Graph</div>
             <div className="placeholder-card">Key Metric: Savings Rate</div>
         </div>
-      </div>
-    </div>
-  );
-}
-
-
-function NewsPage() {
-  return (
-    <div className="news-page">
-      <div className="news-header">
-        <h2>Financial News</h2>
-      </div>
-      <div className="news-content">
-        <p>News content coming soon...</p>
       </div>
     </div>
   );
