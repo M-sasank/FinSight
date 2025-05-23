@@ -11,21 +11,28 @@ function NavBar() {
   return (
     <nav className="nav-bar">
       <div className="nav-content">
-        <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
-          <span role="img" aria-label="Home"></span> Home
-        </Link>
-        <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
-          <span role="img" aria-label="Chat"></span> Chat
-        </Link>
-        <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
-          <span role="img" aria-label="News"></span> News
-        </Link>
-        <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
-          <span role="img" aria-label="Tracker"></span> Tracker
-        </Link>
+        <div className="nav-left">
+          <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
+            <span role="img" aria-label="Home"></span> Home
+          </Link>
+          <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
+            <span role="img" aria-label="Chat"></span> Chat
+          </Link>
+          <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
+            <span role="img" aria-label="News"></span> News
+          </Link>
+          <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
+            <span role="img" aria-label="Tracker"></span> Tracker
+          </Link>
+        </div>
+        <div className="nav-right">
+          <Link to="/guide" className={`nav-item ${isActive('/guide') ? 'active' : ''}`}>
+            <span role="img" aria-label="Guide"></span> Guide
+          </Link>
+        </div>
       </div>
     </nav>
   );
 }
 
-export default NavBar; 
+export default NavBar;

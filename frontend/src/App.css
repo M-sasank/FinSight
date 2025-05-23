@@ -1127,7 +1127,18 @@ body {
   height: 60px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
   gap: 20px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
 }
 
 .nav-item {

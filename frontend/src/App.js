@@ -5,6 +5,7 @@ import ChatPage from './pages/ChatPage';
 import NavBar from './components/NavBar';
 import TrackerPage from './pages/TrackerPage';
 import AssetChatPage from './pages/AssetChatPage';
+import GuidePage from './pages/GuidePage';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage />} />
             <Route path="/asset-chat/:symbol" element={<AssetChatPage />} />
+            <Route path="/guide" element={<GuidePage />} />
           </Routes>
         </main>
       </div>
