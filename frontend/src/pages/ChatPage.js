@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FiSend, FiPlus, FiClock, FiMessageSquare } from 'react-icons/fi';
+import './ChatPage.css';
 
 function ChatPage({ currentTheme, setCurrentTheme }) {
   const initialChatMessages = useCallback(() => [ 
@@ -83,7 +84,9 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
 
   useEffect(() => {
     fetchChatHistory();
-  }, []);
+    // Initialize with a new chat on first load
+    setMessages(initialChatMessages());
+  }, [initialChatMessages]);
 
   const fetchChatHistory = async () => {
     try {
@@ -91,6 +94,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
       if (response.ok) {
         const data = await response.json();
         setChatHistory(data.history || []);
+        setSelectedChat(null);
       }
     } catch (error) {
       console.error('Error fetching chat history:', error);
@@ -297,31 +301,31 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
   return (
     <div className={`chat-page-container page-theme-${currentTheme} ${isTransitioning ? 'theme-transitioning' : ''}`}>
       <div className="chat-page-header">
-        <div className="profile-selector">
-          <span className="selector-label">Experience Level</span>
-          <div className="profile-buttons-group">
-            <button
-              className={`profile-button ${currentTheme === 'newtimer' ? 'active' : ''}`}
-              onClick={() => handleThemeChange('newtimer')}
-              disabled={isTransitioning}
-            >
-              <FiMessageSquare className="button-icon" />
-              Newtimer
-            </button>
-            <button
-              className={`profile-button ${currentTheme === 'veteran' ? 'active' : ''}`}
-              onClick={() => handleThemeChange('veteran')}
-              disabled={isTransitioning}
-            >
-              <FiMessageSquare className="button-icon" />
-              Veteran
-            </button>
-          </div>
-        </div>
       </div>
       
       <div className="chat-layout" ref={chatContainerRef}>
         <div className="chat-sidebar">
+          <div className="profile-selector" style={{ marginBottom: '16px' }}>
+            <span className="selector-label">Experience Level</span>
+            <div className="profile-buttons-group">
+              <button
+                className={`profile-button ${currentTheme === 'newtimer' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('newtimer')}
+                disabled={isTransitioning}
+              >
+                <FiMessageSquare className="button-icon" />
+                Newtimer
+              </button>
+              <button
+                className={`profile-button ${currentTheme === 'veteran' ? 'active' : ''}`}
+                onClick={() => handleThemeChange('veteran')}
+                disabled={isTransitioning}
+              >
+                <FiMessageSquare className="button-icon" />
+                Veteran
+              </button>
+            </div>
+          </div>
           <div className="sidebar-header">
             <h3>Chat History</h3>
             <button 
@@ -340,14 +344,19 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
                 className={`chat-history-item ${selectedChat === chat.id ? 'selected' : ''}`}
                 onClick={() => handleChatSelect(chat.id)}
               >
-                <div className="chat-history-title">{chat.title}</div>
+                <div className="chat-history-title">{chat.title || 'Untitled Chat'}</div>
                 <div className="chat-history-meta">
                   <span className="chat-type">
                     {chat.type === 'newbie' ? 'Newtimer' : 'Veteran'}
                   </span>
                   <span className="chat-date">
                     <FiClock className="icon-small" />
-                    {new Date(chat.timestamp).toLocaleDateString()}
+                    {(() => {
+                      if (!chat.timestamp) return 'No date';
+                      const date = new Date(chat.timestamp);
+                      // Check if the date is valid before attempting to format
+                      return !isNaN(date.getTime()) ? date.toLocaleDateString() : 'Invalid date';
+                    })()}
                   </span>
                 </div>
               </div>

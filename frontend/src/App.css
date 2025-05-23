@@ -884,7 +884,7 @@ body {
 .chat-page-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(100vh - 64px); /* Subtract navbar height */
   background: var(--chat-bg);
   transition: all var(--finsight-transition-normal);
   position: relative;
@@ -908,8 +908,8 @@ body {
   padding: var(--finsight-space-4) var(--finsight-space-8);
   background: var(--chat-header-bg);
   border-bottom: 1px solid var(--chat-border);
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  z-index: 999;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -1082,6 +1082,7 @@ body {
   flex-direction: column;
   gap: var(--finsight-space-4);
   background: var(--chat-messages-bg);
+  min-height: 0; /* Important for flex child scrolling */
 }
 
 .message {
@@ -1137,6 +1138,7 @@ body {
   border-top: 1px solid var(--chat-border);
   background: var(--suggestion-bg);
   transition: all var(--finsight-transition-normal);
+  flex-shrink: 0; /* Prevent suggestions from shrinking */
 }
 
 .suggestion-chips-container {
@@ -1187,6 +1189,7 @@ body {
   gap: var(--finsight-space-4);
   background: var(--chat-input-bg);
   position: relative;
+  flex-shrink: 0; /* Prevent input from shrinking */
 }
 
 .chat-input input {
