@@ -239,4 +239,121 @@
     width: 100%;
     right: -100%;
   }
+}
+
+/* Theme-specific styles */
+.guide-page.theme-newtimer {
+  background-color: #ffffff; /* Example: light background for newtimer */
+  color: #333333;
+}
+
+.guide-page.theme-newtimer .guide-section {
+  background-color: #f8f9fa;
+}
+
+.guide-page.theme-newtimer .country-dropdown {
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+}
+
+
+.guide-page.theme-veteran {
+  background-color: #2c3e50; /* Example: dark background for veteran */
+  color: #ecf0f1;
+}
+
+.guide-page.theme-veteran .guide-section {
+  background-color: #34495e;
+  border: 1px solid #4a6278;
+}
+
+.guide-page.theme-veteran .guide-section h2 {
+  color: #ecf0f1;
+}
+
+.guide-page.theme-veteran .country-dropdown {
+  background-color: #34495e;
+  color: #ecf0f1;
+  border: 1px solid #4a6278;
+}
+
+.guide-page.theme-veteran .help-button {
+  background-color: #1abc9c; /* Example: different button color for veteran */
+}
+
+.guide-page.theme-veteran .help-button:hover {
+  background-color: #16a085;
+}
+
+/* You may want to adjust chat drawer colors for veteran theme as well */
+.guide-page.theme-veteran .sliding-drawer {
+  background-color: #283747; /* Darker drawer for veteran */
+}
+
+.guide-page.theme-veteran .drawer-header {
+  border-bottom: 1px solid #374d61;
+}
+
+.guide-page.theme-veteran .drawer-header h3 {
+  color: #ecf0f1;
+}
+
+.guide-page.theme-veteran .close-button {
+  color: #bdc3c7;
+}
+
+.guide-page.theme-veteran .close-button:hover {
+  color: #ecf0f1;
+}
+
+.guide-page.theme-veteran .message.bot {
+  background-color: #3b536b;
+  color: #ecf0f1;
+}
+
+.guide-page.theme-veteran .message.user {
+  background-color: #1abc9c;
+}
+
+.guide-page.theme-veteran .suggestion-area {
+  border-top: 1px solid #374d61;
+}
+
+.guide-page.theme-veteran .suggestion-area-title {
+  color: #bdc3c7;
+}
+
+.guide-page.theme-veteran .suggestion-chip {
+  background-color: #3b536b;
+  color: #ecf0f1;
+}
+
+.guide-page.theme-veteran .suggestion-chip:hover {
+  background-color: #4a6278;
+}
+
+.guide-page.theme-veteran .chat-input {
+  border-top: 1px solid #374d61;
+}
+
+.guide-page.theme-veteran .chat-input input {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  border: 1px solid #4a6278;
+}
+
+.guide-page.theme-veteran .chat-input input:focus {
+  border-color: #1abc9c;
+}
+
+.guide-page.theme-veteran .chat-input button {
+  background-color: #1abc9c;
+}
+
+.guide-page.theme-veteran .chat-input button:hover {
+  background-color: #16a085;
+}
+
+.guide-page.theme-veteran .chat-input button:disabled {
+  background-color: #566573;
 } 

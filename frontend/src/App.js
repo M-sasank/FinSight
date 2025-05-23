@@ -31,6 +31,7 @@ function App() {
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
             <Route path="/asset-chat/:symbol" element={<AssetChatPage currentTheme={currentTheme} />} />
+            <Route path="/guide" element={<GuidePage currentTheme={currentTheme} />} />
           </Routes>
         </main>
       </div>

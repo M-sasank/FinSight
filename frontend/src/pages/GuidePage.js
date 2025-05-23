@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/GuidePage.css';
 
-function GuidePage() {
+function GuidePage({ currentTheme }) {
   const [selectedCountry, setSelectedCountry] = useState('US');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -90,7 +90,7 @@ function GuidePage() {
   };
 
   return (
-    <div className="guide-page">
+    <div className={`guide-page theme-${currentTheme}`}>
       <div className="country-selector">
         <select 
           value={selectedCountry} 
