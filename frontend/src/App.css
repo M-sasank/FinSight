@@ -461,9 +461,18 @@ body {
   width: 100%;
   padding: 70px 20px 90px;
   background-color: #f8f9fa;
-  position: relative;
-  overflow: hidden;
-  perspective: 1000px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme-specific styling for features section */
+.features-section.theme-newtimer {
+  background-color: #f0f7ff;
+  color: #333d47;
+}
+
+.features-section.theme-veteran {
+  background-color: #161B22;
+  color: #c9d1d9;
 }
 
 .features-grid {
@@ -785,15 +794,20 @@ body {
 
 /* How It Works Section */
 .how-it-works-section {
-  width: 100%;
-  padding: 100px 20px;
-  background: white;
+  padding: 80px 30px;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-@media (min-width: 1024px) {
-  .how-it-works-section {
-    padding: 120px 60px;
-  }
+/* Theme-specific styling for how-it-works section */
+.how-it-works-section.theme-newtimer {
+  background-color: #ffffff;
+  color: #333d47;
+}
+
+.how-it-works-section.theme-veteran {
+  background-color: #0D1117;
+  color: #c9d1d9;
 }
 
 .steps-grid {
@@ -853,10 +867,16 @@ body {
   text-align: center;
 }
 
-@media (min-width: 1024px) {
-  .cta-section {
-    padding: 120px 60px;
-  }
+/* Theme-specific styling for CTA section */
+.cta-section.theme-newtimer {
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+  color: white;
+}
+
+.cta-section.theme-veteran {
+  background: linear-gradient(135deg, #161B22 0%, #0D1117 70%), url('https://www.transparenttextures.com/patterns/nistri.png');
+  background-blend-mode: normal, normal;
+  color: #e5e7eb;
 }
 
 .cta-section h2 {
@@ -2309,4 +2329,136 @@ body {
     width: 95%;
     margin: 16px;
   }
+}
+
+/* --- Section Title --- */
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2em;
+  font-weight: 700;
+  color: #333d47;
+  text-align: center;
+  margin-bottom: 35px;
+  position: relative;
+  padding-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #2979ff;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+/* Theme-specific styling for section titles */
+.theme-newtimer .section-title {
+  color: #1565c0;
+}
+
+.theme-newtimer .section-title::after {
+  background-color: #2979ff;
+}
+
+.theme-veteran .section-title {
+  color: #c9d1d9;
+}
+
+.theme-veteran .section-title::after {
+  background-color: #58a6ff;
+}
+
+/* --- Step Card --- */
+.step-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Theme-specific styling for step cards */
+.theme-newtimer .step-card {
+  background-color: #ffffff;
+  color: #333d47;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.theme-veteran .step-card {
+  background-color: #161B22;
+  color: #c9d1d9;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #30363d;
+}
+
+.step-number {
+  width: 60px;
+  height: 60px;
+  background-color: #2979ff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 24px;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+/* Theme-specific styling for step numbers */
+.theme-newtimer .step-number {
+  background-color: #2979ff;
+}
+
+.theme-veteran .step-number {
+  background-color: #238636;
+}
+
+/* Theme-specific styling for feature cards */
+.theme-newtimer .feature-card {
+  background-color: #ffffff; /* Or your desired newtimer background */
+  color: #333d47; /* Or your desired newtimer text color */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Or your desired newtimer shadow */
+  border: 1px solid #e0e0e0; /* Optional: border for newtimer */
+}
+
+.theme-veteran .feature-card {
+  background-color: #1e2a38; /* Or your desired veteran background */
+  color: #c9d1d9; /* Or your desired veteran text color */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Or your desired veteran shadow */
+  border: 1px solid #30363d; /* Optional: border for veteran */
+}
+
+.theme-newtimer .feature-card .feature-card-title,
+.theme-newtimer .feature-card .feature-card-subtitle,
+.theme-newtimer .feature-card .feature-description,
+.theme-newtimer .feature-card .mode-title,
+.theme-newtimer .feature-card .mode-description {
+  color: #333d47; /* Text color for newtimer theme */
+}
+
+.theme-veteran .feature-card .feature-card-title,
+.theme-veteran .feature-card .feature-card-subtitle,
+.theme-veteran .feature-card .feature-description,
+.theme-veteran .feature-card .mode-title,
+.theme-veteran .feature-card .mode-description {
+  color: #c9d1d9; /* Text color for veteran theme */
+}
+
+.theme-newtimer .mode-card {
+  background-color: #f8f9fa; /* Lighter background for newtimer mode cards */
+  border: 1px solid #dee2e6;
+}
+
+.theme-veteran .mode-card {
+  background-color: #22303c; /* Darker background for veteran mode cards */
+  border: 1px solid #3a4a58;
 }
