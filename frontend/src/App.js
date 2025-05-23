@@ -21,15 +21,15 @@ function App() {
   return (
     <Router>
       <div className={`App app-theme-${currentTheme}`}>
-        <NavBar />
+        <NavBar currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
         <main className="App-main-content">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/insights" element={<InsightsPage />} />
-            <Route path="/tracker" element={<TrackerPage />} />
-            <Route path="/asset-chat/:symbol" element={<AssetChatPage />} />
+            <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
+            <Route path="/asset-chat/:symbol" element={<AssetChatPage currentTheme={currentTheme} />} />
           </Routes>
         </main>
       </div>
