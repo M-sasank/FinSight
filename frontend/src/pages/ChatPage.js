@@ -90,7 +90,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
 
   const fetchChatHistory = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/chat/history');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/history`);
       if (response.ok) {
         const data = await response.json();
         setChatHistory(data.history || []);
@@ -156,7 +156,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
       try {
         const backendType = currentTheme === 'newtimer' ? 'newbie' : 'chat';
         
-        const response = await fetch('http://localhost:8000/api/v1/chat', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
   const handleChatSelect = async (chatId) => {
     if (!isTransitioning && chatId !== selectedChat) {
       try {
-        const response = await fetch(`http://localhost:8000/api/v1/chat/${chatId}`);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/${chatId}`);
         if (response.ok) {
           const data = await response.json();
           setMessages(data.messages);

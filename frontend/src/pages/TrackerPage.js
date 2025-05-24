@@ -39,7 +39,7 @@ function TrackerPage({ currentTheme }) {
   const fetchAssets = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8000/api/v1/tracker/assets/get');
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/get`);
       if (!response.ok) {
         throw new Error('Failed to fetch assets');
       }
@@ -55,7 +55,7 @@ function TrackerPage({ currentTheme }) {
   const handleAddAsset = async () => {
     if (newAsset.symbol && newAsset.name) {
       try {
-        const response = await fetch('http://localhost:8000/api/v1/tracker/assets/create', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ function TrackerPage({ currentTheme }) {
 
   const handleDeleteAsset = async (assetId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tracker/assets/delete?asset_id=${assetId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete?asset_id=${assetId}`, {
         method: 'DELETE',
       });
 
