@@ -1,5 +1,6 @@
 services:
   frontend:
+    image: 242201287555.dkr.ecr.us-east-1.amazonaws.com/my-finsight-app:frontend-latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -11,6 +12,7 @@ services:
       - backend 
   
   backend:
+    image: 242201287555.dkr.ecr.us-east-1.amazonaws.com/my-finsight-app:backend-latest
     build: 
       context: ./backend
       dockerfile: Dockerfile
