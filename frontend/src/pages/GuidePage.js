@@ -17,14 +17,24 @@ function GuidePage({ currentTheme }) {
   const [isPrerequisitesCollapsed, setIsPrerequisitesCollapsed] = useState(false);
   const [isAccountOpeningCollapsed, setIsAccountOpeningCollapsed] = useState(false);
   const [isStockFundamentalsCollapsed, setIsStockFundamentalsCollapsed] = useState(false);
+  const [isInvestmentPlanningCollapsed, setIsInvestmentPlanningCollapsed] = useState(false);
+  const [isBrokerSelectionCollapsed, setIsBrokerSelectionCollapsed] = useState(false);
+  const [isInvestmentJourneyCollapsed, setIsInvestmentJourneyCollapsed] = useState(false);
   const [currentSectionName, setCurrentSectionName] = useState('');
   const messagesEndRef = useRef(null);
 
-  const sectionRefs = {
-    prerequisites: useRef(null),
-    accountOpening: useRef(null),
-    stockFundamentals: useRef(null),
-  };
+  // State for stock recommendation feature
+  const [isRecommendingStock, setIsRecommendingStock] = useState(false);
+  const [recommendedStock, setRecommendedStock] = useState(null);
+  const [recommendationError, setRecommendationError] = useState(null);
+
+  // Define individual refs for each section for stability
+  const prerequisitesRef = useRef(null);
+  const accountOpeningRef = useRef(null);
+  const stockFundamentalsRef = useRef(null);
+  const investmentPlanningRef = useRef(null);
+  const brokerSelectionRef = useRef(null);
+  const investmentJourneyRef = useRef(null);
 
   const suggestionPrompts = [
     { text: "What is a stock?", query: "Can you explain what a stock is?" },
@@ -50,13 +60,18 @@ function GuidePage({ currentTheme }) {
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Determine section name based on the ref
-          if (entry.target === sectionRefs.prerequisites.current) {
+          if (entry.target === prerequisitesRef.current) {
             setCurrentSectionName('Prerequisites');
-          } else if (entry.target === sectionRefs.accountOpening.current) {
+          } else if (entry.target === accountOpeningRef.current) {
             setCurrentSectionName('Account Opening');
-          } else if (entry.target === sectionRefs.stockFundamentals.current) {
+          } else if (entry.target === stockFundamentalsRef.current) {
             setCurrentSectionName('Stock Fundamentals');
+          } else if (entry.target === investmentPlanningRef.current) {
+            setCurrentSectionName('Investment Planning');
+          } else if (entry.target === brokerSelectionRef.current) {
+            setCurrentSectionName('Broker Selection');
+          } else if (entry.target === investmentJourneyRef.current) {
+            setCurrentSectionName('Investment Journey');
           }
         }
       });
@@ -64,20 +79,50 @@ function GuidePage({ currentTheme }) {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    Object.values(sectionRefs).forEach(ref => {
+    const sectionsToObserve = [
+      prerequisitesRef,
+      accountOpeningRef,
+      stockFundamentalsRef,
+      investmentPlanningRef,
+      brokerSelectionRef,
+      investmentJourneyRef
+    ];
+
+    sectionsToObserve.forEach(ref => {
       if (ref.current) {
         observer.observe(ref.current);
       }
     });
 
     return () => {
-      Object.values(sectionRefs).forEach(ref => {
+      sectionsToObserve.forEach(ref => {
         if (ref.current) {
           observer.unobserve(ref.current);
         }
       });
     };
-  }, [sectionRefs]);
+  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+
+  const handleGetStockRecommendation = async () => {
+    setIsRecommendingStock(true);
+    setRecommendedStock(null);
+    setRecommendationError(null);
+
+    // Simulate API call / deep research
+    setTimeout(() => {
+      // Simulate success
+      const stockData = {
+        name: "INFOSYS (INFY)",
+        reason: "Strong fundamentals, consistent growth in the IT sector, and positive future outlook based on recent analyst reports."
+      };
+      setRecommendedStock(stockData);
+      setIsRecommendingStock(false);
+
+      // To simulate an error, you could do something like:
+      // setRecommendationError("Failed to fetch stock recommendation. Please try again later.");
+      // setIsRecommendingStock(false);
+    }, 3000); // Simulate 3 seconds of research
+  };
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -158,7 +203,7 @@ function GuidePage({ currentTheme }) {
         <h1>Complete Guide to Start Investing in Stocks in India</h1>
         <p className="guide-intro">This comprehensive guide provides a step-by-step roadmap for beginners to start investing in the Indian stock market. The guide covers all essential requirements, account setup procedures, fundamental concepts, and practical investment strategies specifically tailored for the Indian market. Whether you're a college student or working professional, this guide will help you navigate the complexities of stock market investing while ensuring compliance with regulatory requirements and establishing a solid foundation for your investment journey.</p>
 
-        <section ref={sectionRefs.prerequisites} className={`guide-section prerequisites ${isPrerequisitesCollapsed ? 'collapsed' : ''}`}>
+        <section ref={prerequisitesRef} className={`guide-section prerequisites ${isPrerequisitesCollapsed ? 'collapsed' : ''}`}>
           <div className="section-header">
             <h2>Prerequisites and Requirements</h2>
             <div className="collapse-control">
@@ -240,7 +285,7 @@ function GuidePage({ currentTheme }) {
           </div>
         </section>
 
-        <section ref={sectionRefs.accountOpening} className={`guide-section account-opening ${isAccountOpeningCollapsed ? 'collapsed' : ''}`}>
+        <section ref={accountOpeningRef} className={`guide-section account-opening ${isAccountOpeningCollapsed ? 'collapsed' : ''}`}>
           <div className="section-header">
             <h2>Account Opening Process</h2>
             <div className="collapse-control">
@@ -343,7 +388,7 @@ function GuidePage({ currentTheme }) {
         </section>
 
         {/* New Stock Market Fundamentals Section */}
-        <section ref={sectionRefs.stockFundamentals} className={`guide-section stock-fundamentals ${isStockFundamentalsCollapsed ? 'collapsed' : ''}`}>
+        <section ref={stockFundamentalsRef} className={`guide-section stock-fundamentals ${isStockFundamentalsCollapsed ? 'collapsed' : ''}`}>
           <div className="section-header">
             <h2>Stock Market Fundamentals</h2>
             <div className="collapse-control">
@@ -408,6 +453,313 @@ function GuidePage({ currentTheme }) {
             </div>
           </div>
         </section>
+
+        {/* New Investment Planning and Amount Determination Section */}
+        <section ref={investmentPlanningRef} className={`guide-section investment-planning ${isInvestmentPlanningCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header">
+            <h2>Investment Planning and Amount Determination</h2>
+            <div className="collapse-control">
+              <input
+                type="checkbox"
+                id="collapse-investment-planning"
+                checked={isInvestmentPlanningCollapsed}
+                onChange={() => setIsInvestmentPlanningCollapsed(!isInvestmentPlanningCollapsed)}
+              />
+              <label htmlFor="collapse-investment-planning">
+                <span className="custom-checkbox-visual"></span>
+                <span className="collapse-text">
+                  {isInvestmentPlanningCollapsed ? 'Not Completed?' : 'Completed?'}
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="section-content">
+            <p>Determining how much money to invest represents a crucial decision that impacts your financial security and investment success. Unlike many misconceptions, there is no strict minimum limit to commence trading or investing in Indian stocks, as your starting point depends on having sufficient funds to purchase stocks based on their current share prices, which can range from ₹1 to ₹10,000 or more on Indian stock exchanges.</p>
+
+            <h3>Investment Amount Strategies</h3>
+            <p>Several proven strategies can guide your investment amount decisions, each tailored to different risk tolerances and life stages. The most widely recommended approaches consider your age, financial stability, and long-term goals.</p>
+            <ol className="process-list">
+              <li>
+                <strong>100 Minus Age Strategy:</strong>
+                <p>This strategy suggests allocating a percentage of your portfolio to stocks by subtracting your age from 100. For instance, if you're 30 years old, invest 70% of your investment portfolio in stocks. This approach promotes dynamic allocation, reducing equity exposure as you age and adopting a more conservative stance over time.</p>
+              </li>
+              <li>
+                <strong>X/3 Strategy:</strong>
+                <p>The X/3 strategy involves systematic investment by dividing your available investment capital into three equal parts and investing them over time. This approach helps average out market volatility and reduces the risk of investing all funds at market peaks.</p>
+              </li>
+            </ol>
+
+            <h3>Risk Assessment and Capital Allocation</h3>
+            <p>Before determining investment amounts, conduct a thorough assessment of your financial situation. Only invest money you can afford to lose without affecting your daily expenses, emergency fund, or essential financial obligations. Consider factors such as your monthly income, existing savings, debt obligations, and future financial goals when deciding investment amounts.</p>
+            
+            <h4>Financial Health Evaluation:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="ip-fhe-emergency" /> <label htmlFor="ip-fhe-emergency">Emergency fund covering 6-12 months of expenses</label></li>
+                <li><input type="checkbox" id="ip-fhe-debt" /> <label htmlFor="ip-fhe-debt">No high-interest debt (credit cards, personal loans)</label></li>
+                <li><input type="checkbox" id="ip-fhe-income" /> <label htmlFor="ip-fhe-income">Stable income source</label></li>
+                <li><input type="checkbox" id="ip-fhe-surplus" /> <label htmlFor="ip-fhe-surplus">Clear understanding of monthly surplus available for investing</label></li>
+                <li><input type="checkbox" id="ip-fhe-goals" /> <label htmlFor="ip-fhe-goals">Long-term financial goals defined</label></li>
+              </ul>
+            </div>
+
+            <h4>Amount Planning Checklist:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="ip-apc-income" /> <label htmlFor="ip-apc-income">Monthly income and expenses calculated</label></li>
+                <li><input type="checkbox" id="ip-apc-emergency" /> <label htmlFor="ip-apc-emergency">Emergency fund established</label></li>
+                <li><input type="checkbox" id="ip-apc-debt" /> <label htmlFor="ip-apc-debt">High-interest debts cleared</label></li>
+                <li><input type="checkbox" id="ip-apc-budget" /> <label htmlFor="ip-apc-budget">Investment budget determined</label></li>
+                <li><input type="checkbox" id="ip-apc-risk" /> <label htmlFor="ip-apc-risk">Risk tolerance assessed</label></li>
+                <li><input type="checkbox" id="ip-apc-timeline" /> <label htmlFor="ip-apc-timeline">Investment timeline defined</label></li>
+              </ul>
+            </div>
+
+            <h3>Diversification and Portfolio Construction</h3>
+            <p>Effective investment planning extends beyond amount determination to include diversification strategies that spread risk across different stocks, sectors, and market capitalizations. Avoid concentrating all investments in a single stock or sector, regardless of how confident you feel about its prospects.</p>
+
+            <h4>Diversification Guidelines:</h4>
+            <ul className="standard-list">
+              <li>Invest in 8-15 different stocks across various sectors</li>
+              <li>Allocate funds across different market capitalizations (large, mid, small-cap)</li>
+              <li>Consider both growth and value stocks</li>
+              <li>Maintain sector allocation limits (maximum 20-25% in any single sector)</li>
+              <li>Regular portfolio review and rebalancing</li>
+            </ul>
+            
+            <h4>Progress Tracker - Investment Planning:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="ip-pt-strategy" /> <label htmlFor="ip-pt-strategy">Investment amount strategy selected</label></li>
+                <li><input type="checkbox" id="ip-pt-eval" /> <label htmlFor="ip-pt-eval">Financial health evaluation completed</label></li>
+                <li><input type="checkbox" id="ip-pt-risk" /> <label htmlFor="ip-pt-risk">Risk tolerance determined</label></li>
+                <li><input type="checkbox" id="ip-pt-diversification" /> <label htmlFor="ip-pt-diversification">Diversification plan created</label></li>
+                <li><input type="checkbox" id="ip-pt-allocation" /> <label htmlFor="ip-pt-allocation">Portfolio allocation decided</label></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* New Broker Selection and Platform Setup Section */}
+        <section ref={brokerSelectionRef} className={`guide-section broker-selection ${isBrokerSelectionCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header">
+            <h2>Broker Selection and Platform Setup</h2>
+            <div className="collapse-control">
+              <input
+                type="checkbox"
+                id="collapse-broker-selection"
+                checked={isBrokerSelectionCollapsed}
+                onChange={() => setIsBrokerSelectionCollapsed(!isBrokerSelectionCollapsed)}
+              />
+              <label htmlFor="collapse-broker-selection">
+                <span className="custom-checkbox-visual"></span>
+                <span className="collapse-text">
+                  {isBrokerSelectionCollapsed ? 'Not Completed?' : 'Completed?'}
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="section-content">
+            <p>Choosing the right broker significantly impacts your overall investment experience, affecting everything from trading costs to research availability and customer service quality. The Indian market offers various brokerage options, from discount brokers focusing on low costs to full-service brokers providing comprehensive advisory services.</p>
+            
+            <h3>Comprehensive Broker Comparison</h3>
+            <p>The current landscape includes several highly-rated brokers, each offering distinct advantages depending on your trading frequency, investment style, and service preferences. Understanding the differences between discount and full-service brokers helps align your choice with your specific needs.</p>
+            <p>Discount Brokers offer better investing tools and low brokerage fees, making them ideal for self-directed investors who prefer conducting their own research. Full-Service Brokers provide personalized recommendations and advisory services but typically charge higher fees for these additional services.</p>
+
+            <h4>Top Broker Analysis:</h4>
+            <ul className="standard-list">
+              <li>Zerodha (9.80/10): Market leader with zero delivery charges and ₹20 per order for intraday trading</li>
+              <li>Groww (9.61/10): User-friendly platform with ₹20 per order across all segments</li>
+              <li>Angel One (9.60/10): Zero delivery charges with comprehensive research tools</li>
+              <li>Upstox (9.50/10): Technology-focused platform with competitive pricing</li>
+            </ul>
+
+            <h3>Platform Features and Technology</h3>
+            <p>Modern trading platforms offer sophisticated tools for research, analysis, and order execution. Evaluate platforms based on user interface design, mobile app functionality, real-time data availability, and advanced charting capabilities.</p>
+
+            <h4>Essential Platform Features:</h4>
+            <ul className="standard-list">
+              <li>Real-time market data and price quotes</li>
+              <li>Advanced charting tools with technical indicators</li>
+              <li>Research reports and analyst recommendations</li>
+              <li>Mobile trading applications with full functionality</li>
+              <li>Order types variety (market, limit, stop-loss, bracket orders)</li>
+              <li>Portfolio tracking and performance analysis tools</li>
+            </ul>
+
+            <h3>Account Setup and Fund Transfer</h3>
+            <p>Once you select a broker, the account setup process involves funding your trading account through various payment methods. Most brokers support multiple funding options including net banking, UPI transfers, and direct bank transfers, providing flexibility in account management.</p>
+
+            <h4>Funding Methods:</h4>
+            <ul className="standard-list">
+              <li>UPI transfers for instant deposits</li>
+              <li>Net banking for larger amounts</li>
+              <li>NEFT/RTGS for bank-to-bank transfers</li>
+              <li>Cheque deposits (though less common with digital platforms)</li>
+            </ul>
+
+            <h4>Broker Selection Checklist:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="bs-check-charges" /> <label htmlFor="bs-check-charges">Brokerage charges compared across multiple platforms</label></li>
+                <li><input type="checkbox" id="bs-check-features" /> <label htmlFor="bs-check-features">Platform features evaluated for your needs</label></li>
+                <li><input type="checkbox" id="bs-check-service" /> <label htmlFor="bs-check-service">Customer service quality researched</label></li>
+                <li><input type="checkbox" id="bs-check-compliance" /> <label htmlFor="bs-check-compliance">Regulatory compliance verified</label></li>
+                <li><input type="checkbox" id="bs-check-mobile" /> <label htmlFor="bs-check-mobile">Mobile app functionality tested</label></li>
+                <li><input type="checkbox" id="bs-check-tools" /> <label htmlFor="bs-check-tools">Research and analysis tools assessed</label></li>
+              </ul>
+            </div>
+
+            <h4>Progress Tracker - Broker Selection:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="bs-progress-research" /> <label htmlFor="bs-progress-research">Broker research completed</label></li>
+                <li><input type="checkbox" id="bs-progress-features" /> <label htmlFor="bs-progress-features">Platform features compared</label></li>
+                <li><input type="checkbox" id="bs-progress-account" /> <label htmlFor="bs-progress-account">Account opening initiated</label></li>
+                <li><input type="checkbox" id="bs-progress-funding" /> <label htmlFor="bs-progress-funding">Funding method configured</label></li>
+                <li><input type="checkbox" id="bs-progress-platform" /> <label htmlFor="bs-progress-platform">Trading platform familiarized</label></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* New Starting Your Investment Journey Section */}
+        <section ref={investmentJourneyRef} className={`guide-section investment-journey ${isInvestmentJourneyCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header">
+            <h2>Starting Your Investment Journey</h2>
+            <div className="collapse-control">
+              <input
+                type="checkbox"
+                id="collapse-investment-journey"
+                checked={isInvestmentJourneyCollapsed}
+                onChange={() => setIsInvestmentJourneyCollapsed(!isInvestmentJourneyCollapsed)}
+              />
+              <label htmlFor="collapse-investment-journey">
+                <span className="custom-checkbox-visual"></span>
+                <span className="collapse-text">
+                  {isInvestmentJourneyCollapsed ? 'Not Completed?' : 'Completed?'}
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="section-content">
+            <p>With all prerequisites met, accounts opened, and platforms configured, you're ready to make your first stock investment. The initial steps involve careful stock selection, strategic order placement, and ongoing portfolio monitoring to ensure your investments align with your financial goals.</p>
+
+            <h3>First Stock Selection Process</h3>
+            <p>Your first stock purchase should reflect careful research and analysis rather than speculation or emotional decisions. Consider companies with strong fundamentals, consistent earnings growth, and business models you understand. Start with well-established companies in sectors you're familiar with before exploring more complex investment opportunities.</p>
+
+            <h4>Stock Research Framework:</h4>
+            <ul className="standard-list">
+              <li>Company Fundamentals: Analyze financial statements, revenue growth, and profitability trends</li>
+              <li>Market Position: Evaluate competitive advantages and market share</li>
+              <li>Management Quality: Research leadership track record and corporate governance</li>
+              <li>Valuation Metrics: Compare price-to-earnings ratios with industry peers</li>
+              <li>Growth Prospects: Assess future expansion plans and market opportunities</li>
+            </ul>
+
+            <h4>Investment Execution Steps:</h4>
+            <ol className="process-list">
+              <li>Log into your trading account and navigate to the stock selection interface</li>
+              <li>Choose the stock based on your research and analysis</li>
+              <li>Decide your investment amount considering portfolio allocation and risk management</li>
+              <li>Purchase the stock at its listed price using appropriate order types</li>
+            </ol>
+
+            <h3>Order Types and Execution</h3>
+            <p>Understanding different order types helps optimize your entry and exit points while managing risk effectively. Market orders execute immediately at current prices, while limit orders allow you to specify exact purchase or sale prices.</p>
+
+            <h4>Order Type Selection:</h4>
+            <ul className="standard-list">
+              <li>Market Orders: Execute immediately at best available price</li>
+              <li>Limit Orders: Execute only at specified price or better</li>
+              <li>Stop-Loss Orders: Automatically sell if price falls below specified level</li>
+              <li>Good Till Cancelled (GTC): Remain active until executed or cancelled</li>
+            </ul>
+
+            <h3>Portfolio Monitoring and Management</h3>
+            <p>Successful investing requires ongoing portfolio monitoring and periodic rebalancing to maintain desired asset allocation. Regular review helps identify underperforming investments and opportunities for improvement while ensuring your portfolio remains aligned with changing financial goals.</p>
+
+            <h4>Monitoring Framework:</h4>
+            <ul className="standard-list">
+              <li>Weekly portfolio performance review</li>
+              <li>Monthly rebalancing assessment</li>
+              <li>Quarterly fundamental analysis update</li>
+              <li>Annual investment strategy evaluation</li>
+              <li>Continuous market news and company updates tracking</li>
+            </ul>
+            
+            <h4>Investment Journey Checklist:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="ij-check-research" /> <label htmlFor="ij-check-research">First stock research completed</label></li>
+                <li><input type="checkbox" id="ij-check-amount" /> <label htmlFor="ij-check-amount">Investment amount allocated</label></li>
+                <li><input type="checkbox" id="ij-check-order" /> <label htmlFor="ij-check-order">Order type selected</label></li>
+                <li><input type="checkbox" id="ij-check-purchase" /> <label htmlFor="ij-check-purchase">First purchase executed</label></li>
+                <li><input type="checkbox" id="ij-check-tracking" /> <label htmlFor="ij-check-tracking">Portfolio tracking system established</label></li>
+                <li><input type="checkbox" id="ij-check-schedule" /> <label htmlFor="ij-check-schedule">Regular monitoring schedule created</label></li>
+              </ul>
+            </div>
+
+            <h4>Final Progress Tracker - Complete Journey:</h4>
+            <div className="progress-tracker">
+              <ul>
+                <li><input type="checkbox" id="fpt-prerequisites" /> <label htmlFor="fpt-prerequisites">All prerequisites met</label></li>
+                <li><input type="checkbox" id="fpt-accounts" /> <label htmlFor="fpt-accounts">Accounts successfully opened</label></li>
+                <li><input type="checkbox" id="fpt-fundamentals" /> <label htmlFor="fpt-fundamentals">Market fundamentals understood</label></li>
+                <li><input type="checkbox" id="fpt-strategy" /> <label htmlFor="fpt-strategy">Investment strategy defined</label></li>
+                <li><input type="checkbox" id="fpt-platform" /> <label htmlFor="fpt-platform">Broker platform configured</label></li>
+                <li><input type="checkbox" id="fpt-investment" /> <label htmlFor="fpt-investment">First investment completed</label></li>
+                <li><input type="checkbox" id="fpt-monitoring" /> <label htmlFor="fpt-monitoring">Monitoring system established</label></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* New Feeling Confident Section */}
+        <section className="guide-section feeling-confident-section">
+          <h2>Feeling confident?</h2>
+          <p>Ready to take the next step? Based on current market analysis and our simulated deep research, here's a stock pick to consider for your initial investment research.</p>
+          
+          <button 
+            onClick={handleGetStockRecommendation} 
+            disabled={isRecommendingStock}
+            className="recommendation-button"
+          >
+            {isRecommendingStock ? "Researching Your Stock..." : "Get Stock Recommendation"}
+          </button>
+
+          {isRecommendingStock && (
+            <div className="loading-recommendation">
+              <p>Performing sonar deep research... please wait.</p>
+              {/* You can add a spinner icon here if you have one */}
+            </div>
+          )}
+
+          {recommendationError && (
+            <div className="recommendation-error">
+              <p>Error: {recommendationError}</p>
+            </div>
+          )}
+
+          {recommendedStock && !isRecommendingStock && (
+            <div className="recommendation-result">
+              <h3>Recommended Stock:</h3>
+              <p className="stock-name">{recommendedStock.name}</p>
+              <h4>Reason:</h4>
+              <p className="stock-reason">{recommendedStock.reason}</p>
+              <p className="disclaimer"><em>Disclaimer: This is a simulated recommendation for educational purposes only. Always conduct your own thorough research before investing.</em></p>
+            </div>
+          )}
+        </section>
+
+        {/* New Conclusion Section */}
+        <section className="guide-section conclusion-section">
+          <h2>Conclusion</h2>
+          <p>Starting your stock market investment journey in India requires systematic preparation, thorough understanding of market fundamentals, and careful execution of account setup procedures. This comprehensive guide has provided a structured approach to navigate the complexities of stock market entry, from meeting basic eligibility criteria to executing your first trades.</p>
+          <p>The Indian stock market offers tremendous opportunities for wealth creation, but success requires patience, continuous learning, and disciplined investment approaches. Remember that investing involves risks, and past performance doesn't guarantee future results. Start with amounts you can afford to lose, diversify your investments across different stocks and sectors, and maintain a long-term perspective on wealth building.</p>
+          <p>As you progress in your investment journey, continue expanding your knowledge through market research, financial news, and educational resources provided by your chosen broker. The foundation you've built through this guide will serve as a solid starting point for developing more sophisticated investment strategies as your experience and confidence grow. Consider this guide as your first step toward financial independence through intelligent stock market participation in the dynamic Indian economy.</p>
+        </section>
+
       </div>
 
       <div className="floating-bubble">
@@ -417,7 +769,10 @@ function GuidePage({ currentTheme }) {
             ((
               currentSectionName === 'Prerequisites' && !isPrerequisitesCollapsed) ||
               (currentSectionName === 'Account Opening' && !isAccountOpeningCollapsed) ||
-              (currentSectionName === 'Stock Fundamentals' && !isStockFundamentalsCollapsed)
+              (currentSectionName === 'Stock Fundamentals' && !isStockFundamentalsCollapsed) ||
+              (currentSectionName === 'Investment Planning' && !isInvestmentPlanningCollapsed) ||
+              (currentSectionName === 'Broker Selection' && !isBrokerSelectionCollapsed) ||
+              (currentSectionName === 'Investment Journey' && !isInvestmentJourneyCollapsed)
             )
             ? `Stuck in ${currentSectionName}?` 
             : 'Need Help?'

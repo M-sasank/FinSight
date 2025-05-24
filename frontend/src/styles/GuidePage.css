@@ -153,7 +153,12 @@
 
 .guide-section.prerequisites,
 .guide-section.account-opening,
-.guide-section.stock-fundamentals {
+.guide-section.stock-fundamentals,
+.guide-section.investment-planning,
+.guide-section.broker-selection,
+.guide-section.investment-journey,
+.guide-section.conclusion-section,
+.guide-section.feeling-confident-section {
   background-color: #fff;
   border: 1px solid #e0e0e0;
   padding: 1.5rem;
@@ -578,4 +583,100 @@
 
 .process-list li strong {
   font-weight: 600;
+}
+
+/* Styles for standard unordered list */
+.standard-list {
+  list-style-type: disc;
+  padding-left: 40px;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.standard-list li {
+  margin-bottom: 0.5rem;
+  padding-left: 5px;
+}
+
+/* Styles for Feeling Confident Section */
+.recommendation-button {
+  background-color: #27ae60; /* A confident green */
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  display: block; /* Make it a block to center if needed or control width */
+  margin: 1.5rem auto; /* Center the button */
+}
+
+.recommendation-button:hover {
+  background-color: #229954;
+  transform: translateY(-2px);
+}
+
+.recommendation-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+
+.loading-recommendation,
+.recommendation-error,
+.recommendation-result {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.loading-recommendation p {
+  font-style: italic;
+  color: #555;
+}
+
+.recommendation-error {
+  background-color: #ffebee; /* Light red for errors */
+  border: 1px solid #e57373;
+  color: #c62828;
+}
+
+.recommendation-result {
+  background-color: #e8f5e9; /* Light green for success */
+  border: 1px solid #a5d6a7;
+}
+
+.recommendation-result h3 {
+  color: #2e7d32;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.recommendation-result .stock-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1b5e20;
+  margin-bottom: 0.75rem;
+}
+
+.recommendation-result h4 {
+  font-size: 1rem;
+  color: #388e3c;
+  margin-bottom: 0.25rem;
+}
+
+.recommendation-result .stock-reason {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.recommendation-result .disclaimer {
+  font-size: 0.8rem;
+  color: #555;
+  font-style: italic;
+  margin-top: 1rem;
+  border-top: 1px dashed #ccc;
+  padding-top: 0.5rem;
 } 
