@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../styles/GuidePage.css';
 
 function GuidePage({ currentTheme }) {
-  const [selectedCountry, setSelectedCountry] = useState('US');
+  const [selectedCountry, setSelectedCountry] = useState('IN');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -91,15 +91,18 @@ function GuidePage({ currentTheme }) {
 
   return (
     <div className={`guide-page theme-${currentTheme}`}>
-      <div className="country-selector">
-        <select 
-          value={selectedCountry} 
+      <div className="country-selector-container">
+        <select
+          value={selectedCountry}
           onChange={(e) => setSelectedCountry(e.target.value)}
           className="country-dropdown"
         >
-          <option value="US">United States</option>
           <option value="IN">India</option>
         </select>
+        <span className="tooltip-icon-container">
+          <span className="tooltip-icon">?</span>
+          <span className="tooltip-text">Support for more countries coming soon</span>
+        </span>
       </div>
 
       <div className="guide-content">

@@ -21,7 +21,7 @@ function App() {
   }, [currentTheme]);
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className={`App app-theme-${currentTheme}`}>
         <NavBar currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
         <main className="App-main-content">

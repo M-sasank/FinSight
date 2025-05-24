@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiHome, FiMessageSquare, FiTrendingUp, FiSun, FiMoon, FiGlobe, FiHelpCircle } from 'react-icons/fi';
+import { FiHome, FiMessageSquare, FiTrendingUp, FiSun, FiMoon, FiGlobe, FiHelpCircle, FiBarChart2 } from 'react-icons/fi';
 
 function NavBar({ currentTheme, setCurrentTheme }) {
   const location = useLocation();
