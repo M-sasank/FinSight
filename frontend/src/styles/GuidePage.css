@@ -151,10 +151,13 @@
   cursor: pointer;
 }
 
-.guide-section.prerequisites {
+.guide-section.prerequisites,
+.guide-section.account-opening,
+.guide-section.stock-fundamentals {
   background-color: #fff;
   border: 1px solid #e0e0e0;
   padding: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .guide-section h2 {
@@ -174,12 +177,12 @@
   position: relative;
 }
 
-.guide-section li:before {
+/* .guide-section li:before {
   content: "•";
   position: absolute;
   left: 0;
   color: #3498db;
-}
+} */
 
 .floating-bubble {
   position: fixed;
@@ -209,14 +212,14 @@
 /* Sliding Drawer Styles */
 .sliding-drawer {
   position: fixed;
-  top: 0;
+  top: 64px;
   right: -400px;
   width: 400px;
-  height: 100vh;
+  height: calc(100vh - 64px);
   background-color: white;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease-in-out;
-  z-index: 1001;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
 }
@@ -558,4 +561,21 @@
 
 .guide-section.collapsed .section-content {
   display: none;
+}
+
+/* Styles for ordered list in account opening */
+.process-list {
+  list-style-type: decimal;
+  padding-left: 40px;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.process-list li {
+  margin-bottom: 0.5rem;
+  padding-left: 5px;
+}
+
+.process-list li strong {
+  font-weight: 600;
 } 
