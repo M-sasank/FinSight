@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiHome, FiMessageSquare, FiBarChart2, FiTrendingUp, FiSun, FiMoon, FiHelpCircle } from 'react-icons/fi';
+import { FiHome, FiMessageSquare, FiTrendingUp, FiSun, FiMoon, FiGlobe, FiHelpCircle } from 'react-icons/fi';
 
 function NavBar({ currentTheme, setCurrentTheme }) {
   const location = useLocation();
@@ -46,6 +46,10 @@ function NavBar({ currentTheme, setCurrentTheme }) {
           <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
             <FiMessageSquare className="nav-icon" />
             <span>Chat</span>
+          </Link>
+          <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
+            <FiGlobe className="nav-icon" />
+            <span>News</span>
           </Link>
           <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
             <FiTrendingUp className="nav-icon" />

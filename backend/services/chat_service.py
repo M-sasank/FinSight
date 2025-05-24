@@ -58,7 +58,7 @@ class ChatService:
     def _init_db(self):
         """Initialize SQLite database and create necessary tables."""
         # Use home directory for database
-        db_path = os.path.expanduser("~/perplexity_hack_chat.db")
+        db_path = os.path.expanduser("~/perplexity_hack.db")
         
         # Connect to database
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
