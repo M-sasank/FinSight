@@ -14,6 +14,7 @@ function GuidePage({ currentTheme }) {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPrerequisitesCollapsed, setIsPrerequisitesCollapsed] = useState(false);
   const messagesEndRef = useRef(null);
 
   const suggestionPrompts = [
@@ -106,31 +107,89 @@ function GuidePage({ currentTheme }) {
       </div>
 
       <div className="guide-content">
-        <h1>Guide to the Curious: Investing Basics</h1>
-        
-        <section className="guide-section">
-          <h2>Understanding the Stock Market</h2>
-          <p>The stock market is a marketplace where shares of publicly traded companies are bought and sold. It's one of the most popular ways to invest and grow your wealth over time.</p>
-        </section>
+        <h1>Complete Guide to Start Investing in Stocks in India</h1>
+        <p className="guide-intro">This comprehensive guide provides a step-by-step roadmap for beginners to start investing in the Indian stock market. The guide covers all essential requirements, account setup procedures, fundamental concepts, and practical investment strategies specifically tailored for the Indian market. Whether you're a college student or working professional, this guide will help you navigate the complexities of stock market investing while ensuring compliance with regulatory requirements and establishing a solid foundation for your investment journey.</p>
 
-        <section className="guide-section">
-          <h2>Key Investment Concepts</h2>
-          <ul>
-            <li>Stocks: Ownership shares in a company</li>
-            <li>Bonds: Debt securities issued by governments or corporations</li>
-            <li>Mutual Funds: Pooled investment funds managed by professionals</li>
-            <li>ETFs: Exchange-traded funds that track specific indexes</li>
-          </ul>
-        </section>
+        <section className={`guide-section prerequisites ${isPrerequisitesCollapsed ? 'collapsed' : ''}`}>
+          <div className="section-header">
+            <h2>Prerequisites and Requirements</h2>
+            <div className="collapse-control">
+              <input
+                type="checkbox"
+                id="collapse-prerequisites"
+                checked={isPrerequisitesCollapsed}
+                onChange={() => setIsPrerequisitesCollapsed(!isPrerequisitesCollapsed)}
+              />
+              <label htmlFor="collapse-prerequisites">
+                <span className="custom-checkbox-visual"></span> 
+                <span className="collapse-text">
+                  {isPrerequisitesCollapsed ? 'Not Completed?' : 'Completed?'}
+                </span>
+              </label>
+            </div>
+          </div>
+          <div className="section-content">
+            <p>Before diving into stock market investments, you must meet certain basic eligibility criteria and understand the fundamental requirements. The Indian stock market, regulated by the Securities and Exchange Board of India (SEBI), has established clear guidelines for who can participate and what documentation is necessary.</p>
 
-        <section className="guide-section">
-          <h2>Investment Strategies</h2>
-          <p>Different strategies work for different investors. Some common approaches include:</p>
-          <ul>
-            <li>Value Investing: Finding undervalued stocks</li>
-            <li>Growth Investing: Investing in companies with high growth potential</li>
-            <li>Index Investing: Following market indexes</li>
-          </ul>
+            <div className="checklist-container">
+              <h3>Eligibility Criteria Checklist</h3>
+              <div className="check-item">
+                <span className="checkmark">✓</span>
+                <p><strong>Age Requirement</strong></p>
+              </div>
+              <ul>
+                <li>Must be 18 years or older</li>
+                <li>Valid proof of age through government-issued documents</li>
+              </ul>
+
+              <div className="check-item">
+                <span className="checkmark">✓</span>
+                <p><strong>Nationality Requirement</strong></p>
+              </div>
+              <ul>
+                <li>Must be an Indian citizen</li>
+                <li>Foreign nationals have different procedures (not covered in this guide)</li>
+              </ul>
+
+              <div className="check-item">
+                <span className="checkmark">✓</span>
+                <p><strong>Financial Prerequisites</strong></p>
+              </div>
+              <ul>
+                <li>Active bank account in India</li>
+                <li>Sufficient funds to meet minimum investment requirements</li>
+                <li>Understanding that there is no strict minimum limit to start trading</li>
+              </ul>
+
+              <div className="check-item">
+                <span className="checkmark">✓</span>
+                <p><strong>Documentation Readiness</strong></p>
+              </div>
+              <ul>
+                <li>PAN Card (mandatory for all financial transactions)</li>
+                <li>Aadhaar Card for address verification</li>
+                <li>Recent photograph (passport size)</li>
+                <li>Bank account proof (cancelled cheque or 3 months bank statements)</li>
+                <li>Income proof (required for futures and options trading)</li>
+              </ul>
+            </div>
+
+            <div className="knowledge-requirements">
+              <h3>Essential Knowledge Requirements</h3>
+              <p>Before opening accounts, ensure you understand that investing involves risks, stock prices fluctuate based on market conditions, and you should only invest money you can afford to lose. The stock market operates on demand and supply principles, where prices are determined by market forces rather than any central authority.</p>
+            </div>
+
+            <div className="progress-tracker">
+              <h3>Progress Tracker - Prerequisites:</h3>
+              <ul>
+                <li><input type="checkbox" id="age-verification" /> <label htmlFor="age-verification">Age verification (18+)</label></li>
+                <li><input type="checkbox" id="indian-citizenship" /> <label htmlFor="indian-citizenship">Indian citizenship confirmed</label></li>
+                <li><input type="checkbox" id="active-bank-account" /> <label htmlFor="active-bank-account">Active bank account available</label></li>
+                <li><input type="checkbox" id="documents-collected" /> <label htmlFor="documents-collected">All required documents collected</label></li>
+                <li><input type="checkbox" id="risk-understanding" /> <label htmlFor="risk-understanding">Basic risk understanding completed</label></li>
+              </ul>
+            </div>
+          </div>
         </section>
       </div>
 
