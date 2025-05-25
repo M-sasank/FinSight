@@ -10,8 +10,8 @@ import GuidePage from './pages/GuidePage';
 
 
 function App() {
-  const [currentTheme, setCurrentTheme] = useState('newtimer'); 
-
+  // Set default theme to 'veteran' (dark) and make it constant
+  const currentTheme = 'veteran';
 
   useEffect(() => {
     document.body.className = `app-theme-${currentTheme}`; 
@@ -23,11 +23,11 @@ function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className={`App app-theme-${currentTheme}`}>
-        <NavBar currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
+        <NavBar currentTheme={currentTheme} />
         <main className="App-main-content">
           <Routes>
             <Route path="/" element={<LandingPage currentTheme={currentTheme} />} />
-            <Route path="/chat" element={<ChatPage currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />} />
+            <Route path="/chat" element={<ChatPage currentTheme={currentTheme} />} />
             <Route path="/news" element={<NewsPage currentTheme={currentTheme} />} />
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />

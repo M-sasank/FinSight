@@ -202,7 +202,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* @media (min-width: 1024px) { ... } */
 
 .hero-content {
-  max-width: 750px; /* Increased max-width */
+  max-width: 80vw; /* Increased max-width */
   /* text-align: center; */ /* Already centered by hero-section */
   z-index: 2; /* Keep if necessary for layering */
   margin-bottom: 40px; /* Space for visual below */
@@ -223,6 +223,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .hero-subtitle {
+  width: 60vw;
   font-family: var(--apple-font-family);
   font-size: 1.4em; /* Larger subtitle */
   line-height: 1.5;
@@ -351,10 +352,15 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* Features Section */
 .features-section {
-  width: 100%;
-  padding: 80px 20px; /* Adjusted padding */
+  width: 100vw;
+  min-height: 100vh; /* Minimum full viewport height */
+  padding: 80px 40px; /* Increased padding for better spacing */
   background-color: var(--features-section-bg); /* Theme variable */
   transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center content vertically */
 }
 
 /* Theme-specific variables for Features Section */
@@ -415,6 +421,9 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .feature-card {
@@ -432,14 +441,17 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   backface-visibility: hidden;
   opacity: 0;
   pointer-events: none;
+  left: 50%;
+  top: 50%;
+  transform-origin: center center;
 }
 
 .feature-card.active {
   opacity: 1;
-  transform: translateZ(0) scale(1);
+  transform: translate(-50%, -50%) translateZ(0) scale(1);
   z-index: 3;
   pointer-events: auto;
-  width: 580px; /* Increased width for active card */
+  width: 60vw; /* Increased width for active card */
   height: auto; /* Auto height based on content */
   min-height: 600px; /* Minimum height for more presence */
   max-height: 95%;
@@ -457,10 +469,10 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   max-height: 90%;
 }
 .feature-card.previous {
-  transform: translateZ(-150px) translateX(-70%) scale(0.80) rotateY(15deg); 
+  transform: translate(-50%, -50%) translateZ(-150px) translateX(-70%) scale(0.80) rotateY(15deg); 
 }
 .feature-card.next {
-  transform: translateZ(-150px) translateX(70%) scale(0.80) rotateY(-15deg); 
+  transform: translate(-50%, -50%) translateZ(-150px) translateX(70%) scale(0.80) rotateY(-15deg); 
 }
 
 
@@ -618,7 +630,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* Carousel Navigation */
 .carousel-nav {
   position: absolute;
-  bottom: -70px; /* Adjusted position */
+  bottom: -50px; /* Adjusted position */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -660,7 +672,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
     padding-bottom: 80px; /* Space for dots */
   }
 
-  .feature-card.active { width: 90%; max-width: 400px; }
+  .feature-card.active { width: 90%; max-width: 650px; }
   .feature-card.previous,
   .feature-card.next {
      /* Stack behind active card, or hide */
@@ -680,7 +692,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   }
   .features-grid { height: auto; } /* Auto height */
 
-  .feature-card.active { width: 95%; max-width: 350px; }
+  .feature-card.active { width: 95%; max-width: 500px; }
   .feature-card.previous,
   .feature-card.next {
     display: none; /* Hide side cards on mobile for simplicity */
@@ -692,11 +704,15 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* How It Works Section */
 .how-it-works-section {
-  padding: 80px 30px;
+  width: 85vw;
+  padding: 80px 40px; /* Increased padding for consistency */
   transition: background-color 0.3s ease;
   /* Apply glass effect */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .page-theme-newtimer .how-it-works-section {
   background-color: var(--how-it-works-glass-bg-newtimer); /* Use glass variable */
@@ -709,8 +725,9 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .steps-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 24px; /* Slightly reduced gap */
-  max-width: 1000px; /* Adjusted max-width */
+  gap: 32px; /* Increased gap for better spacing */
+  max-width: 100vw; /* Full viewport width */
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -783,10 +800,13 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* CTA Section */
 .cta-section {
   width: 100%;
-  padding: 80px 20px; /* Adjusted padding */
+  padding: 80px 40px; /* Increased padding for consistency */
   background-color: var(--hero-bg); /* Reuse hero bg for consistency or define new */
   color: var(--hero-title-color); /* Reuse hero text color */
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 /* Theme-specific styling for CTA section backgrounds and text */
 .page-theme-newtimer .cta-section {
@@ -811,7 +831,8 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   font-size: 1.1em; /* Adjusted size */
   color: var(--hero-subtitle-color); /* Reuse hero subtitle color */
   margin-bottom: 32px; /* Adjusted margin */
-  max-width: 550px; /* Adjusted width */
+  max-width: 100vw; /* Full viewport width */
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -855,75 +876,16 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   -webkit-backdrop-filter: blur(8px);
 }
 
-.profile-selector {
-  display: flex;
-  align-items: center;
-  gap: var(--finsight-space-4);
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.selector-label {
-  font-family: var(--finsight-font-display);
-  font-weight: 600;
-  color: var(--chat-text);
-  font-size: 0.95rem;
-  letter-spacing: 0.025em;
-}
-
-.profile-buttons-group {
-  display: flex;
-  gap: var(--finsight-space-2);
-  background: var(--chat-button-group-bg);
-  padding: var(--finsight-space-1);
-  border-radius: var(--finsight-radius-lg);
-  border: 1px solid var(--chat-border);
-}
-
-.profile-button {
-  padding: var(--finsight-space-2) var(--finsight-space-4);
-  border: none;
-  border-radius: var(--finsight-radius-md);
-  background: transparent;
-  color: var(--chat-text);
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all var(--finsight-transition-fast);
-  position: relative;
-  overflow: hidden;
-}
-
-.profile-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--chat-button-hover);
-  opacity: 0;
-  transition: opacity var(--finsight-transition-fast);
-  z-index: -1;
-}
-
-.profile-button:hover:not(:disabled)::before {
-  opacity: 1;
-}
-
-.profile-button.active {
-  background: var(--chat-button-active);
-  color: var(--chat-button-active-text);
-  box-shadow: var(--finsight-shadow-sm);
-}
+/* profile-selector and profile-button styles removed since theme switching is disabled */
 
 .chat-layout {
   display: flex;
   flex: 1;
   overflow: hidden;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100vw;
   width: 100%;
+  height: calc(100vh - 64px);
+  margin: 0 auto;
   padding: var(--finsight-space-4);
   gap: var(--finsight-space-4);
   position: relative;
@@ -1380,20 +1342,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
     padding: var(--finsight-space-3);
   }
 
-  .profile-selector {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--finsight-space-2);
-  }
-
-  .profile-buttons-group {
-    width: 100%;
-  }
-
-  .profile-button {
-    flex: 1;
-    text-align: center;
-  }
+  /* profile-selector mobile styles removed since theme switching is disabled */
 
   .message {
     max-width: 90%;
@@ -1517,7 +1466,8 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .nav-content {
-  max-width: 980px; /* Apple's typical content width */
+  max-width: 100vw; /* Full viewport width */
+  width: 100%;
   height: 100%;
   margin: 0 auto;
   padding: 0 22px; /* Apple's padding */
@@ -1595,38 +1545,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .nav-icon { display: none; }
 
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  /* gap: var(--finsight-space-4); */ /* Adjust gap if needed */
-  position: relative; /* Keep for z-index if needed */
-  /* z-index: 2; */
-}
-
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto; /* Auto width based on content */
-  height: auto; /* Auto height */
-  padding: 6px 8px; /* Minimal padding */
-  border-radius: var(--finsight-radius-sm);
-  border: none;
-  background: transparent; /* Transparent background */
-  color: var(--nav-text);
-  cursor: pointer;
-  transition: color var(--finsight-transition-fast), background-color var(--finsight-transition-fast);
-  font-size: 1.1rem; /* Adjust emoji size */
-}
-
-.theme-toggle:hover {
-  /* color: var(--nav-text-hover); */ /* Optional: change color on hover */
-  background-color: var(--nav-item-hover); /* Subtle background on hover */
-}
-
-/* Remove ::before and svg specific styles for theme-toggle */
-.theme-toggle::before { display: none; }
-.theme-toggle svg { display: none; } /* If any SVG was still there */
+/* nav-actions and theme-toggle removed since theme switching is disabled */
 
 
 /* Theme Variables - Apple-inspired */
@@ -1705,19 +1624,9 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
     /* If nav items become too crowded, consider hiding text or using icons for mobile */
   }
 
-  .nav-actions {
-    /* gap: var(--finsight-space-2); */
-    /* Ensure actions (theme toggle) are accessible and don't crowd other elements */
-    position: absolute; /* Example: move toggle to one side */
-    right: 16px;
-  }
   .nav-brand {
     position: absolute; /* Example: move brand to one side */
     left: 16px;
-  }
-
-  .theme-toggle {
-    font-size: 1rem; /* Adjust emoji size for mobile */
   }
 }
 
@@ -2019,9 +1928,9 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .ask-about-button {
-  margin-top: auto; /* Pushes to the bottom of the card flex container */
+  /* margin-top: auto; */
   width: 100%;
-  padding: 12px 20px; /* Slightly adjusted padding */
+  padding: 12px 20px;
   background: var(--finsight-primary, #2563eb); /* Use FinSight primary, with fallback */
   color: white;
   border: none;
@@ -2313,10 +2222,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   font-weight: 700;
   color: #333d47;
   text-align: center;
-  margin-bottom: 35px;
+  margin: 0 auto 35px auto;
   position: relative;
   padding-bottom: 12px;
   transition: color 0.3s ease;
+  width: 100%;
+  max-width: 800px;
 }
 
 .section-title::after {
@@ -2454,10 +2365,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* Asset Chat Page Styles */
 .asset-chat-container {
-  max-width: 1400px;
+  max-width: 100vw;
+  width: 100%;
   margin: 0 auto;
   padding: 24px;
   min-height: calc(100vh - 64px);
+  height: calc(100vh - 64px);
   display: flex;
   gap: 24px;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-function NavBar({ currentTheme, setCurrentTheme }) {
+function NavBar({ currentTheme }) {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -22,10 +22,6 @@ function NavBar({ currentTheme, setCurrentTheme }) {
 
   const isActive = (path) => {
     return location.pathname === path;
-  };
-
-  const toggleTheme = () => {
-    setCurrentTheme(currentTheme === 'newtimer' ? 'veteran' : 'newtimer');
   };
 
   return (
@@ -56,16 +52,6 @@ function NavBar({ currentTheme, setCurrentTheme }) {
           <Link to="/guide" className={`nav-item ${isActive('/guide') ? 'active' : ''}`}>
             <span>Guide</span>
           </Link>
-        </div>
-
-        <div className="nav-actions">
-          <button 
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${currentTheme === 'newtimer' ? 'Veteran' : 'Newtimer'} mode`}
-          >
-            {currentTheme === 'newtimer' ? '🌙' : '🔆'}
-          </button>
         </div>
       </div>
     </nav>
