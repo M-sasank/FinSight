@@ -8,45 +8,57 @@ import json
 from datetime import datetime
 import pprint
 import pathlib
+import yaml
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 class ChatService:
     def __init__(self):
-        self.client = OpenAI(
-            api_key=os.getenv("PERPLEXITY_API_KEY"),
-            base_url="https://api.perplexity.ai",
-        )
+        logger.info("Initializing ChatService")
+        try:
+            self.client = OpenAI(
+                api_key=os.getenv("PERPLEXITY_API_KEY"),
+                base_url="https://api.perplexity.ai",
+            )
+            logger.info("OpenAI client initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize OpenAI client: {str(e)}")
+            raise
+
         self.model = "sonar-pro"
-        self.system_message_chat = {
-            "role": "system",
-            "content": (
-                "You are an financial assistant esigned to empower individuals with"
-                " intelligent insights and tools for managing their personal finances."
-                " You are expected to analyse Real-time Stock Analysis and provide"
-                " insights and tools for managing their personal finances."
-            ),
-        }
-        self.system_message_newbie = {
-            "role": "system",
-            "content": (
-                "You are an financial assistant helping first-time investors and young professionals "
-                "(millennials and Gen Z) seeking to build a strong financial foundation and navigate "
-                "the complexities of the market with confidence. "
-                "You need to be very detailed and specific in your responses. "
-                "You need to be very friendly and engaging in your responses. "
-            ),
-        }
+        logger.info(f"Using model: {self.model}")
+
+        # Load prompts from YAML
+        try:
+            config_path = pathlib.Path(__file__).parent.parent / "config" / "chat_service.yaml"
+            with open(config_path, 'r') as file:
+                prompts = yaml.safe_load(file)
+                self.system_message_chat = {
+                    "role": "system",
+                    "content": prompts['chat_service']['system_message_chat']
+                }
+                self.system_message_newbie = {
+                    "role": "system",
+                    "content": prompts['chat_service']['system_message_newbie']
+                }
+            logger.info("Successfully loaded prompts from YAML")
+        except Exception as e:
+            logger.error(f"Failed to load prompts from YAML: {str(e)}")
+            raise
+
         # Initialize database
         self._init_db()
 
     def _init_db(self):
         """Initialize SQLite database and create necessary tables."""
-        # Get database path from environment or use default
-        db_path = os.getenv("DB_PATH", "chat_history.db")
-        
-        # Ensure the directory exists
-        db_dir = os.path.dirname(db_path)
-        if db_dir:  # If path contains directory
-            pathlib.Path(db_dir).mkdir(parents=True, exist_ok=True)
+        # Use home directory for database
+        db_path = os.path.expanduser("~/perplexity_hack.db")
         
         # Connect to database
         self.conn = sqlite3.connect(db_path, check_same_thread=False)
@@ -63,12 +75,61 @@ class ChatService:
                 type TEXT NOT NULL
             )
         """)
+
+        # Create tracked_assets table if it doesn't exist
+        self.conn.execute("""
+            CREATE TABLE IF NOT EXISTS tracked_assets (
+                id TEXT PRIMARY KEY,
+                symbol TEXT NOT NULL,
+                name TEXT NOT NULL,
+                price REAL NOT NULL,
+                movement REAL NOT NULL,
+                reason TEXT NOT NULL,
+                sector TEXT NOT NULL,
+                news TEXT NOT NULL,
+                price_history TEXT NOT NULL,
+                created_at DATETIME NOT NULL,
+                last_updated DATETIME NOT NULL
+            )
+        """)
         self.conn.commit()
+
 
     def clear_database(self):
         """Clear all data from the database."""
         try:
-            self.conn.execute("DELETE FROM messages")
+            # Drop existing tables
+            self.conn.execute("DROP TABLE IF EXISTS messages")
+            self.conn.execute("DROP TABLE IF EXISTS tracked_assets")
+            
+            # recreate the tables
+            self.conn.execute("""
+                CREATE TABLE IF NOT EXISTS messages (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    conversation_id TEXT NOT NULL,
+                    role TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    type TEXT NOT NULL
+                )
+            """)
+
+            self.conn.execute("""
+                CREATE TABLE IF NOT EXISTS tracked_assets (
+                    id TEXT PRIMARY KEY,
+                    symbol TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    price REAL NOT NULL,
+                    movement REAL NOT NULL,
+                    reason TEXT NOT NULL,
+                    sector TEXT NOT NULL,
+                    news TEXT NOT NULL,
+                    price_history TEXT NOT NULL,
+                    created_at DATETIME NOT NULL,
+                    last_updated DATETIME NOT NULL
+                )
+            """)
+            
             self.conn.commit()
             return True
         except Exception as e:

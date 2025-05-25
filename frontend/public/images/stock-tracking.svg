@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Elements -->
+  <circle cx="400" cy="300" r="250" fill="#E3F2FD" opacity="0.5"/>
+  <circle cx="200" cy="200" r="100" fill="#BBDEFB" opacity="0.3"/>
+  <circle cx="600" cy="400" r="150" fill="#90CAF9" opacity="0.2"/>
+  
+  <!-- Stock Dashboard -->
+  <g transform="translate(100, 100)">
+    <!-- Main Dashboard -->
+    <rect x="0" y="0" width="600" height="400" rx="15" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="2"/>
+    
+    <!-- Stock Chart -->
+    <g transform="translate(20, 20)">
+      <!-- Chart Area -->
+      <rect x="0" y="0" width="400" height="200" rx="5" fill="#F5F5F5"/>
+      
+      <!-- Price Lines -->
+      <path d="M0 150 L80 120 L160 180 L240 100 L320 50 L400 80" 
+            stroke="#2196F3" stroke-width="3" fill="none"/>
+      <path d="M0 180 L80 160 L160 140 L240 120 L320 100 L400 60" 
+            stroke="#FF9800" stroke-width="3" fill="none"/>
+      
+      <!-- Data Points -->
+      <circle cx="0" cy="150" r="4" fill="#2196F3"/>
+      <circle cx="80" cy="120" r="4" fill="#2196F3"/>
+      <circle cx="160" cy="180" r="4" fill="#2196F3"/>
+      <circle cx="240" cy="100" r="4" fill="#2196F3"/>
+      <circle cx="320" cy="50" r="4" fill="#2196F3"/>
+      <circle cx="400" cy="80" r="4" fill="#2196F3"/>
+      
+      <!-- Legend -->
+      <rect x="0" y="220" width="12" height="12" fill="#2196F3"/>
+      <text x="20" y="232" font-family="Arial" font-size="12" fill="#333">AAPL</text>
+      <rect x="100" y="220" width="12" height="12" fill="#FF9800"/>
+      <text x="120" y="232" font-family="Arial" font-size="12" fill="#333">GOOGL</text>
+    </g>
+    
+    <!-- Stock List -->
+    <g transform="translate(440, 20)">
+      <!-- List Header -->
+      <rect x="0" y="0" width="140" height="30" rx="5" fill="#2196F3"/>
+      <text x="10" y="20" font-family="Arial" font-size="12" fill="#FFFFFF">Watchlist</text>
+      
+      <!-- Stock Items -->
+      <g transform="translate(0, 40)">
+        <!-- AAPL -->
+        <rect x="0" y="0" width="140" height="40" rx="5" fill="#F5F5F5"/>
+        <text x="10" y="15" font-family="Arial" font-size="12" fill="#333">AAPL</text>
+        <text x="10" y="30" font-family="Arial" font-size="10" fill="#4CAF50">+2.5%</text>
+        
+        <!-- GOOGL -->
+        <rect x="0" y="50" width="140" height="40" rx="5" fill="#F5F5F5"/>
+        <text x="10" y="65" font-family="Arial" font-size="12" fill="#333">GOOGL</text>
+        <text x="10" y="80" font-family="Arial" font-size="10" fill="#F44336">-1.2%</text>
+        
+        <!-- MSFT -->
+        <rect x="0" y="100" width="140" height="40" rx="5" fill="#F5F5F5"/>
+        <text x="10" y="115" font-family="Arial" font-size="12" fill="#333">MSFT</text>
+        <text x="10" y="130" font-family="Arial" font-size="10" fill="#4CAF50">+0.8%</text>
+      </g>
+    </g>
+    
+    <!-- AI Insights -->
+    <g transform="translate(20, 240)">
+      <rect x="0" y="0" width="560" height="140" rx="10" fill="#E3F2FD"/>
+      
+      <!-- Insight Icons -->
+      <g transform="translate(20, 20)">
+        <!-- Trend Icon -->
+        <circle cx="20" cy="20" r="20" fill="#2196F3" opacity="0.2"/>
+        <path d="M10 30 L20 10 L30 30" stroke="#2196F3" stroke-width="2" fill="none"/>
+        
+        <!-- Analysis Icon -->
+        <circle cx="80" cy="20" r="20" fill="#2196F3" opacity="0.2"/>
+        <path d="M70 20 L80 10 L90 20 L80 30 Z" fill="#2196F3"/>
+        
+        <!-- Alert Icon -->
+        <circle cx="140" cy="20" r="20" fill="#2196F3" opacity="0.2"/>
+        <path d="M130 20 L150 20 M140 10 L140 30" stroke="#2196F3" stroke-width="2"/>
+      </g>
+      
+      <!-- Insight Text -->
+      <text x="20" y="80" font-family="Arial" font-size="14" fill="#333">AI-Powered Market Analysis</text>
+      <text x="20" y="100" font-family="Arial" font-size="12" fill="#666">Real-time insights and predictions based on market data</text>
+    </g>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="500" r="30" fill="#BBDEFB" opacity="0.3"/>
+  <circle cx="700" cy="100" r="40" fill="#90CAF9" opacity="0.3"/>
+  <circle cx="650" cy="550" r="25" fill="#E3F2FD" opacity="0.4"/>
+</svg> 

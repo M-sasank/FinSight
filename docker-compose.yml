@@ -1,16 +1,18 @@
 services:
   frontend:
+    image: 242201287555.dkr.ecr.us-east-1.amazonaws.com/my-finsight-app:frontend-latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "80:80"
     env_file:
       - .env
     depends_on:
       - backend 
   
   backend:
+    image: 242201287555.dkr.ecr.us-east-1.amazonaws.com/my-finsight-app:backend-latest
     build: 
       context: ./backend
       dockerfile: Dockerfile

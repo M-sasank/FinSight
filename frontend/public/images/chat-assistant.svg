@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Elements -->
+  <circle cx="400" cy="300" r="250" fill="#E3F2FD" opacity="0.5"/>
+  <circle cx="200" cy="200" r="100" fill="#BBDEFB" opacity="0.3"/>
+  <circle cx="600" cy="400" r="150" fill="#90CAF9" opacity="0.2"/>
+  
+  <!-- Chat Bubbles -->
+  <g transform="translate(200, 200)">
+    <!-- User Message -->
+    <path d="M0 0 L120 0 L120 80 L20 80 L0 100 Z" fill="#1E88E5"/>
+    <circle cx="40" cy="40" r="15" fill="#FFFFFF" opacity="0.2"/>
+    <circle cx="80" cy="40" r="15" fill="#FFFFFF" opacity="0.2"/>
+    
+    <!-- Bot Message -->
+    <path d="M180 120 L300 120 L300 200 L280 200 L260 220 L240 200 L180 200 Z" fill="#FFFFFF" stroke="#BBDEFB" stroke-width="2"/>
+    <path d="M220 160 L260 160 M220 180 L260 180" stroke="#1E88E5" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Mode Toggle -->
+    <rect x="400" y="100" width="200" height="60" rx="30" fill="#E3F2FD" stroke="#1E88E5" stroke-width="2"/>
+    <circle cx="450" cy="130" r="25" fill="#1E88E5"/>
+    <text x="500" y="135" font-family="Arial" font-size="14" fill="#1E88E5">Newtimer</text>
+    <text x="500" y="155" font-family="Arial" font-size="14" fill="#1E88E5">Veteran</text>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="500" r="30" fill="#90CAF9" opacity="0.3"/>
+  <circle cx="700" cy="100" r="40" fill="#BBDEFB" opacity="0.3"/>
+  <circle cx="650" cy="550" r="25" fill="#E3F2FD" opacity="0.4"/>
+</svg> 

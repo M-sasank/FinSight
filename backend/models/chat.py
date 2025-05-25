@@ -6,5 +6,6 @@ class Message(BaseModel):
     content: str
 
 class ChatRequest(BaseModel):
-    messages: List[Message]
-    stream: Optional[bool] = False 
+    type: str
+    user_query: str
+    conversation_id: Optional[str] = None 
