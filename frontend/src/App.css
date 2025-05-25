@@ -1916,26 +1916,49 @@ body {
 }
 
 .add-asset-button {
+  background: linear-gradient(135deg, #2196F3, #4CAF50);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.add-asset-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #4CAF50, #2196F3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .add-asset-button:hover {
-  background: var(--primary-color-dark);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+  /* The background-color and other hover styles from the previous edit will be overridden here */
+}
+
+.add-asset-button:hover::before {
+  opacity: 1;
 }
 
 .button-icon {
-  font-size: 1.1rem;
+  font-size: 1.1rem; /* Ensure this is not lost if it was in the original */
+  position: relative;
+  z-index: 1;
 }
 
 .assets-grid {
@@ -1946,19 +1969,42 @@ body {
 }
 
 .asset-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  background: rgba(255, 255, 255, 0.15); /* Slightly increased opacity */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Added default subtle shadow */
+}
+
+.asset-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #2196F3, #4CAF50);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
 }
 
 .asset-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.asset-card:hover::before {
+  transform: scaleX(1);
 }
 
 .asset-header {
@@ -1974,10 +2020,12 @@ body {
 }
 
 .asset-title h3 {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #2196F3, #4CAF50);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
 }
 
 .asset-name {
@@ -1986,18 +2034,23 @@ body {
 }
 
 .delete-button {
-  background: none;
+  background: transparent; /* Changed from none to transparent */
   border: none;
-  color: var(--text-secondary);
+  color: var(--text-secondary); /* Default subtle color */
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 8px; /* Slightly more padding for a better click target */
+  border-radius: 50%; /* Make it circular for a modern icon-button look */
   transition: all 0.2s ease;
+  display: flex; /* For centering the icon */
+  align-items: center; /* For centering the icon */
+  justify-content: center; /* For centering the icon */
+  font-size: 1.1rem; /* Adjust icon size if needed */
 }
 
 .delete-button:hover {
-  color: var(--error-color);
-  background: var(--error-color-light);
+  color: #ffffff; /* White icon on hover */
+  background: #ef4444; /* Red background on hover - var(--error-color) could also be used */
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3); /* Subtle red shadow */
 }
 
 .asset-price {
@@ -2007,57 +2060,79 @@ body {
 }
 
 .price {
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
   color: var(--text-primary);
 }
 
 .movement {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
   font-size: 0.9rem;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
+  display: flex; /* Ensure flex properties are maintained or added */
+  align-items: center; /* from original */
+  gap: 4px; /* from original */
+  transition: transform 0.2s ease;
+  /* other properties like color, background from original .movement will be overridden by .positive/.negative */
+}
+
+.movement:hover {
+  transform: scale(1.05);
 }
 
 .movement.positive {
-  color: var(--success-color);
-  background: var(--success-color-light);
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
 }
 
 .movement.negative {
-  color: var(--error-color);
-  background: var(--error-color-light);
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
 }
 
 .asset-chart {
-  height: 120px;
-  margin: 8px 0;
+  height: 150px; /* Increased from 120px */
+  margin: 24px 0;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .asset-info {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: flex; /* from original */
+  flex-direction: column; /* from original */
+  gap: 12px; /* from original, or adjust as needed */
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
 }
 
 .info-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: flex; /* from original */
+  flex-direction: column; /* from original */
+  gap: 4px; /* from original, or adjust as needed */
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-row:last-child {
+  border-bottom: none;
 }
 
 .info-row .label {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-size: 0.85rem; 
+  color: rgba(255, 255, 255, 0.7); /* Default for dark themes or if no theme applied */
   font-weight: 500;
 }
 
 .info-row .value {
-  font-size: 0.9rem;
-  color: var(--text-primary);
+  font-size: 1rem; 
+  color: var(--text-primary, #ffffff); /* Default to white if --text-primary is not set */
+  font-weight: 500; 
 }
 
 .movement-insight .value {
@@ -2066,20 +2141,32 @@ body {
 }
 
 .ask-about-button {
-  margin-top: auto;
+  margin-top: auto; /* Pushes to the bottom of the card flex container */
   width: 100%;
-  padding: 10px;
-  background: var(--primary-color);
+  padding: 12px 20px; /* Slightly adjusted padding */
+  background: var(--finsight-primary, #2563eb); /* Use FinSight primary, with fallback */
   color: white;
   border: none;
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: 10px; /* Slightly larger radius */
+  font-weight: 600; /* Increased font weight */
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Added shadow */
+  text-align: center;
 }
 
 .ask-about-button:hover {
-  background: var(--primary-color-dark);
+  background: var(--finsight-primary-dark, #1d4ed8); /* Use FinSight primary dark, with fallback */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.ask-about-button:disabled {
+  background-color: #cccccc; /* Muted background for disabled state */
+  color: #666666;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* Modal Styles */
@@ -2089,21 +2176,30 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.65); /* Retain from previous edit or adjust if needed */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
+  z-index: 1050; /* Retain from previous edit */
+  opacity: 0; /* Retain from previous edit for animation */
+  animation: fadeIn 0.3s forwards; /* Retain from previous edit */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-content {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 24px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 32px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  width: 90%; /* Retain or adjust from original/previous edit */
+  max-width: 500px; /* Retain or adjust from original/previous edit */
+  transform: translateY(-20px); /* Retain for animation */
+  animation: slideInFromTop 0.3s forwards ease-out; /* Retain for animation */
+  color: #333333; /* Retain text color or adjust as needed */
 }
 
 .modal-content h3 {
@@ -2125,29 +2221,46 @@ body {
 }
 
 .input-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  background: var(--input-bg);
-  color: var(--text-primary);
+  width: 100%; /* from original */
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(33, 150, 243, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
   transition: all 0.3s ease;
+  color: var(--text-primary); /* from original */
 }
 
 .input-group input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px var(--primary-color-light);
+  outline: none; /* from original */
+  border-color: #2196F3;
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.15);
 }
 
 .modal-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
+  display: flex; /* from original */
+  gap: 16px;
+  margin-top: 32px;
 }
 
-.primary-button,
+.primary-button {
+  flex: 1; /* from original */
+  background: linear-gradient(135deg, #2196F3, #4CAF50);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer; /* from original */
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+  /* background var(--primary-color-dark) from original is overridden */
+}
+
 .secondary-button {
   flex: 1;
   padding: 10px;
@@ -2155,22 +2268,6 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.primary-button {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-}
-
-.primary-button:hover {
-  background: var(--primary-color-dark);
-}
-
-.secondary-button {
-  background: var(--secondary-bg);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
 }
 
 .secondary-button:hover {
@@ -2462,3 +2559,572 @@ body {
   background-color: #22303c; /* Darker background for veteran mode cards */
   border: 1px solid #3a4a58;
 }
+
+/* Keyframes for modal animations (if not already present) */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromTop {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Asset Chat Page Styles */
+.asset-chat-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  gap: 24px;
+}
+
+/* Asset Info Sidebar */
+.asset-info-sidebar {
+  width: 320px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg); /* Ensure --radius-lg is defined or use a fallback */
+  padding: 24px;
+  border: 1px solid rgba(33, 150, 243, 0.1);
+  box-shadow: var(--shadow-md); /* Ensure --shadow-md is defined or use a fallback */
+  height: fit-content;
+  position: sticky;
+  top: 88px;
+}
+
+.asset-info-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.asset-info-symbol {
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--gradient-primary); /* Ensure --gradient-primary is defined */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.asset-info-name {
+  font-size: 1rem;
+  color: var(--text-secondary); /* Ensure --text-secondary is defined */
+}
+
+.asset-quick-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(33, 150, 243, 0.05);
+  border-radius: var(--radius-sm); /* Ensure --radius-sm is defined */
+  transition: var(--transition-quick); /* Ensure --transition-quick is defined */
+}
+
+.stat-item:hover {
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--text-primary); /* Ensure --text-primary is defined */
+}
+
+/* Chat Main Area */
+.asset-chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(33, 150, 243, 0.1);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.chat-header { /* This class might conflict if used elsewhere, consider namespacing e.g. .asset-chat-header */
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-title { /* This class might conflict, consider .asset-chat-title */
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* .chat-messages is already styled, these will add to/override existing */
+/* Consider if these .message styles should be specific to .asset-chat-main .message */
+.asset-chat-main .message {
+  max-width: 80%;
+  padding: 16px;
+  border-radius: 16px;
+  position: relative;
+  animation: messageSlide 0.3s ease;
+}
+
+.asset-chat-main .message.user {
+  align-self: flex-end;
+  background: var(--gradient-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.asset-chat-main .message.bot {
+  align-self: flex-start;
+  background: rgba(33, 150, 243, 0.1);
+  color: var(--text-primary);
+  border-bottom-left-radius: 4px;
+}
+
+.asset-chat-main .message.bot.insight {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.message-content { /* This is a general class, ensure it doesn't conflict */
+  line-height: 1.6;
+}
+
+.message-timestamp { /* This is a general class */
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 8px;
+  text-align: right;
+}
+
+/* Quick Actions */
+.quick-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none; /* For Firefox */
+}
+
+.quick-actions::-webkit-scrollbar { /* For Chrome, Safari, Edge */
+  display: none;
+}
+
+.quick-action-button {
+  padding: 8px 16px;
+  background: rgba(33, 150, 243, 0.1);
+  border: none;
+  border-radius: 20px;
+  color: var(--primary-color); /* Ensure --primary-color is defined */
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-quick);
+}
+
+.quick-action-button:hover {
+  background: rgba(33, 150, 243, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Chat Input */
+/* .chat-input-container might be too generic. Consider .asset-chat-input-container */
+.chat-input-container {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.chat-input-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* .chat-input is already styled. These might override or add to existing. */
+/* Consider namespacing to .asset-chat-main .chat-input */
+.asset-chat-main .chat-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid rgba(33, 150, 243, 0.2);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: var(--transition-normal); /* Ensure --transition-normal is defined */
+  background: white;
+}
+
+.asset-chat-main .chat-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.15);
+}
+
+.send-button {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.send-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.send-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Animations */
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .asset-chat-container {
+    flex-direction: column;
+  }
+
+  .asset-info-sidebar {
+    width: 100%;
+    position: static; /* Overrides sticky positioning for smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .asset-chat-container {
+    padding: 16px;
+  }
+
+  .asset-chat-main .message { /* Ensure specificity for responsive message styles */
+    max-width: 90%;
+  }
+
+  .quick-actions {
+    padding: 12px 16px;
+  }
+
+  .chat-input-container {
+    padding: 16px;
+  }
+}
+
+/* Theme-specific overrides for asset card info text */
+.app-theme-newtimer .asset-card .info-row .label { /* Changed from page-theme-newtimer */
+  color: var(--text-secondary-newtimer, #555555); /* Darker grey for light theme */
+}
+
+.app-theme-newtimer .asset-card .info-row .value { /* Changed from page-theme-newtimer */
+  color: var(--text-primary-newtimer, #1a237e); /* Theme primary for light theme */
+}
+
+/* We should also consider if the Veteran theme needs overrides for these */
+.app-theme-veteran .asset-card .info-row .label {
+  color: var(--text-secondary-veteran, #a0a0a0); /* Adjust if needed for Veteran theme */
+}
+
+.app-theme-veteran .asset-card .info-row .value {
+  color: var(--text-primary-veteran, #ffffff); /* Adjust if needed for Veteran theme */
+}
+
+/* Asset Chat Page Styles - Veteran Theme Overrides */
+.app-theme-veteran .asset-chat-container {
+  /* No specific background needed here, it will inherit from body --chat-bg-veteran */
+}
+
+.app-theme-veteran .asset-info-sidebar {
+  background: var(--chat-sidebar-bg-veteran, rgba(30, 41, 59, 0.9));
+  border-color: var(--chat-border-veteran, rgba(255, 255, 255, 0.08));
+  box-shadow: var(--finsight-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)); /* Re-apply shadow if needed for contrast */
+}
+
+.app-theme-veteran .asset-info-header {
+  border-bottom-color: var(--chat-border-veteran, rgba(255, 255, 255, 0.08));
+}
+
+.app-theme-veteran .asset-info-symbol {
+  /* Gradient should still work, assuming --gradient-primary is theme-agnostic or adapted */
+  /* If not, specify veteran theme colors */
+}
+
+.app-theme-veteran .asset-info-name {
+  color: var(--chat-text-veteran, #e2e8f0); 
+}
+
+.app-theme-veteran .stat-item {
+  background: rgba(255, 255, 255, 0.03); /* Very subtle light background for items */
+  /* border: 1px solid var(--chat-border-veteran, rgba(255,255,255,0.05)); */ /* Optional border */
+}
+
+.app-theme-veteran .stat-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.app-theme-veteran .stat-label {
+  color: var(--text-secondary-veteran, #a0a0a0); /* from existing variables */
+}
+
+.app-theme-veteran .stat-value {
+  color: var(--text-primary-veteran, #ffffff); /* from existing variables */
+}
+
+.app-theme-veteran .asset-chat-main {
+  background: var(--chat-main-bg-veteran, rgba(30, 41, 59, 0.9));
+  border-color: var(--chat-border-veteran, rgba(255, 255, 255, 0.08));
+  box-shadow: var(--finsight-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05));
+}
+
+.app-theme-veteran .chat-header {
+  border-bottom-color: var(--chat-border-veteran, rgba(255, 255, 255, 0.08));
+}
+
+.app-theme-veteran .chat-title {
+  color: var(--chat-text-veteran, #e2e8f0);
+}
+
+/* Messages in Veteran Theme */
+.app-theme-veteran .asset-chat-main .message.user {
+  /* Default style using --gradient-primary and white text is likely fine */
+  /* Add specific overrides if needed */
+}
+
+.app-theme-veteran .asset-chat-main .message.bot {
+  background: var(--message-bot-bg-veteran, rgba(51, 65, 85, 0.9));
+  color: var(--message-bot-text-veteran, #e2e8f0);
+  border: 1px solid var(--chat-border-veteran, rgba(255,255,255,0.08)); /* Added border for definition */
+}
+
+.app-theme-veteran .asset-chat-main .message.bot.insight {
+  background: rgba(35, 134, 54, 0.2); /* Darker green insight for veteran */
+  border-color: rgba(35, 134, 54, 0.4);
+  color: var(--chat-text-veteran, #e2e8f0);
+}
+
+.app-theme-veteran .asset-chat-main .message.bot.error-message {
+    background: rgba(218, 54, 51, 0.2); /* Darker red error for veteran */
+    border-color: rgba(218, 54, 51, 0.4);
+    color: var(--chat-text-veteran, #e2e8f0);
+}
+
+.app-theme-veteran .message-timestamp {
+  color: var(--text-secondary-veteran, #a0a0a0); /* Lighter muted text for timestamp */
+  opacity: 0.7;
+}
+
+/* Quick Actions in Veteran Theme */
+.app-theme-veteran .quick-actions {
+  border-top-color: var(--chat-border-veteran, rgba(255, 255, 255, 0.08));
+  background: var(--suggestion-bg-veteran, rgba(15, 23, 42, 0.9)); /* Match chat input area bg */
+}
+
+.app-theme-veteran .quick-action-button {
+  background: var(--chip-bg-veteran, rgba(30, 41, 59, 0.9));
+  color: var(--chip-text-veteran, #60a5fa); /* Using a light blue from finsight-primary-light */
+  border: 1px solid var(--chat-border-veteran, rgba(255,255,255,0.08));
+}
+
+.app-theme-veteran .quick-action-button:hover {
+  background: var(--chip-hover-veteran, rgba(96, 165, 250, 0.08)); /* This variable implies a very subtle hover */
+  border-color: var(--chip-border-hover-veteran, var(--finsight-primary-light));
+  /* Making hover more distinct */
+  background-color: rgba(51, 65, 85, 0.9); /* Darker shade for hover */
+}
+
+/* Chat Input Area in Veteran Theme */
+.app-theme-veteran .chat-input-container {
+  background: var(--chat-input-bg-veteran, rgba(30, 41, 59, 0.9));
+  border-top-color: var(--chat-border-veteran, rgba(255, 255, 255, 0.08));
+}
+
+.app-theme-veteran .asset-chat-main .chat-input {
+  background: var(--chat-input-field-bg-veteran, rgba(15, 23, 42, 0.95));
+  color: var(--chat-text-veteran, #e2e8f0);
+  border-color: var(--chat-border-veteran, rgba(255,255,255,0.08));
+}
+
+.app-theme-veteran .asset-chat-main .chat-input:focus {
+  border-color: var(--chat-input-focus-veteran, #60a5fa);
+  box-shadow: 0 0 0 4px var(--chat-input-focus-ring-veteran, rgba(96, 165, 250, 0.1));
+}
+
+.app-theme-veteran .send-button {
+  /* Default style using --gradient-primary and white text is likely fine */
+  /* Add specific overrides if needed, e.g., for box-shadow on hover if it clashes */
+}
+
+.app-theme-veteran .send-button span {
+    color: white; /* Ensure text in span is white */
+}
+
+/* AssetChatPage - General Enhancements & Light Mode Fixes */
+
+.chat-nav-button.home-button {
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Light Theme specific styles for AssetChatPage */
+.app-theme-newtimer .asset-chat-main .message.user {
+  background-color: #007bff; /* A distinct blue for user messages */
+  color: #ffffff; /* White text for contrast */
+  border-radius: 15px 15px 0 15px; /* Slightly different bubble shape */
+}
+
+.app-theme-newtimer .asset-chat-main .message.user .message-content {
+  color: #ffffff; /* Ensure content inherits color */
+}
+
+.app-theme-newtimer .send-button {
+  background-color: #007bff; /* Primary action color for light theme */
+  color: #ffffff;
+  border: 1px solid #007bff;
+}
+
+.app-theme-newtimer .send-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+  border-color: #0056b3;
+}
+
+.app-theme-newtimer .send-button:disabled {
+  background-color: #a0c7e4; /* Lighter, less prominent when disabled */
+  border-color: #a0c7e4;
+  color: #e0e0e0;
+}
+
+.app-theme-newtimer .send-button svg {
+  color: #ffffff; /* Ensure icon is white */
+}
+
+.app-theme-newtimer .send-button span {
+  color: #ffffff; /* Ensure text is white */
+}
+
+/* Ensure dark theme still looks good for the home button if general styles above are too light */
+.app-theme-veteran .chat-nav-button.home-button {
+  background-color: #21262D; 
+  color: #c9d1d9; 
+  border: 1px solid #30363d;
+}
+
+.app-theme-veteran .chat-nav-button.home-button:hover {
+  background-color: #30363d;
+  border-color: #484f58;
+}
+
+
+/* --- End of AssetChatPage Enhancements --- */
+
+/* AssetChatPage - Visual Enhancements & Bug Fixes (Continued) */
+
+/* Refined "Back to Tracker" button for light theme */
+.app-theme-newtimer .chat-nav-button.home-button {
+  background-color: #f0f2f5; /* Subtle background */
+  color: #007bff; /* Primary text color */
+  border: 1px solid #dee2e6; /* Light border */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.app-theme-newtimer .chat-nav-button.home-button:hover {
+  background-color: #e9ecef;
+  border-color: #ced4da;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+}
+
+/* Message Styling */
+.asset-chat-main .message {
+  margin-bottom: 12px; /* Increased spacing between messages */
+  padding: 14px 18px; /* Adjusted padding for better readability */
+}
+
+/* Light theme user message - ensure padding is consistent */
+.app-theme-newtimer .asset-chat-main .message.user {
+  padding: 14px 18px; /* Overriding if previous padding was different */
+}
+
+/* Quick Action Buttons */
+.quick-action-button {
+  padding: 10px 18px; /* Slightly more padding */
+}
+
+.app-theme-newtimer .quick-action-button {
+  background-color: #e9f5ff; /* Lighter blue background */
+  color: #007bff;
+  border: 1px solid #cce7ff;
+}
+
+.app-theme-newtimer .quick-action-button:hover {
+  background-color: #d4ebff;
+  border-color: #b3d9ff;
+  transform: translateY(-1px);
+}
+
+/* Chat Input Area - Stability and Aesthetics */
+.chat-input-container {
+  /* Stability: Set a min-height to prevent resize when button text/state changes */
+  min-height: 88px; /* Adjust as needed based on exact content height */
+  display: flex; /* Helps in vertical alignment if wrapper takes full height */
+  align-items: center; /* Vertically center the wrapper */
+}
+
+.chat-input-wrapper {
+    width: 100%; /* Ensure wrapper takes full width for consistent layout */
+}
+
+.asset-chat-main .chat-input {
+  padding: 14px 18px; /* More spacious input field */
+}
+
+.send-button {
+  min-height: 48px; /* Ensure button height is consistent */
+  display: flex;
+  align-items: center; /* Vertically center icon and text */
+  justify-content: center;
+}
+
+/* --- End of AssetChatPage Enhancements & Bug Fixes --- */
