@@ -10,7 +10,7 @@ router = APIRouter()
 # Initialize service
 chat_service = ChatService()
 
-@router.post("/")
+@router.post("/send")
 async def chat_completion(request: ChatRequest):
     logger.info(f"Chat completion request received - Type: {request.type}, Conversation ID: {request.conversation_id}")
     try:

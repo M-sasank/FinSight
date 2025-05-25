@@ -156,7 +156,7 @@ function ChatPage({ currentTheme, setCurrentTheme }) {
       try {
         const backendType = currentTheme === 'newtimer' ? 'newbie' : 'chat';
         
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

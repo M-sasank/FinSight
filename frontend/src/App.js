@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import TrackerPage from './pages/TrackerPage';
 import AssetChatPage from './pages/AssetChatPage';
 import NewsPage from './pages/NewsPage';
+import GuidePage from './pages/GuidePage';
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
   }, [currentTheme]);
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className={`App app-theme-${currentTheme}`}>
         <NavBar currentTheme={currentTheme} setCurrentTheme={setCurrentTheme} />
         <main className="App-main-content">
@@ -31,6 +32,7 @@ function App() {
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
             <Route path="/asset-chat/:symbol" element={<AssetChatPage currentTheme={currentTheme} />} />
+            <Route path="/guide" element={<GuidePage currentTheme={currentTheme} />} />
           </Routes>
         </main>
       </div>
