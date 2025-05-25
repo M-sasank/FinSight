@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinSight - Smart Investing, Made Simple</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="landing_page_v2.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="logo">FinSight</div>
+            <button class="hamburger-menu" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-menu-wrapper"> <!-- Wrapper for links and CTA -->
+                <nav class="nav-links">
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How it Works</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                    </ul>
+                </nav>
+                <button class="btn btn-primary nav-cta">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="container hero-content">
+                <h1>Smart Investing, Made Simple.</h1>
+                <p class="sub-headline">FinSight gives you the clear insights and approachable tools you need to invest with confidence, no matter your experience level.</p>
+                <div class="hero-cta-buttons">
+                    <button class="btn btn-primary hero-cta-primary">Get Started for Free</button>
+                    <a href="#" class="btn btn-secondary hero-cta-secondary">Learn More</a>
+                </div>
+                <div class="hero-visual-placeholder">
+                    <!-- Placeholder for visual element -->
+                </div>
+            </div>
+        </section>
+
+        <section class="social-proof-bar"> <!-- Not typically animated, but can be if desired -->
+            <div class="container">
+                <p>Trusted by 10,000+ happy investors.</p>
+            </div>
+        </section>
+
+        <section id="features" class="features-section" data-animate-on-scroll>
+            <div class="container">
+                <h2>Unlock Your Financial Potential with FinSight</h2>
+                <div class="features-grid">
+                    <div class="feature-block">
+                        <div class="feature-icon-placeholder"></div>
+                        <h3>Clear Insights, Not Clutter</h3>
+                        <p>Understand your finances with easy-to-digest reports and visualizations.</p>
+                    </div>
+                    <div class="feature-block">
+                        <div class="feature-icon-placeholder"></div>
+                        <h3>Invest with Confidence</h3>
+                        <p>Tools and guidance to help you make informed investment decisions.</p>
+                    </div>
+                    <div class="feature-block">
+                        <div class="feature-icon-placeholder"></div>
+                        <h3>Guidance for Every Step</h3>
+                        <p>Whether you're a beginner or a pro, FinSight adapts to your needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="how-it-works-section" data-animate-on-scroll>
+            <div class="container">
+                <h2>Get Started in Minutes</h2>
+                <div class="steps-grid">
+                    <div class="step-block">
+                        <div class="step-number">1.</div>
+                        <h4>Sign Up Quickly</h4>
+                        <p>Create your secure FinSight account in just a few easy steps.</p>
+                    </div>
+                    <div class="step-block">
+                        <div class="step-number">2.</div>
+                        <h4>Link Your Accounts</h4>
+                        <p>Securely connect your brokerage and financial accounts.</p>
+                    </div>
+                    <div class="step-block">
+                        <div class="step-number">3.</div>
+                        <h4>Gain Insights</h4>
+                        <p>Explore your personalized dashboard and start investing smarter.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="final-cta-section" data-animate-on-scroll>
+            <div class="container">
+                <h2>Ready to Take Control of Your Finances?</h2>
+                <button class="btn btn-primary final-cta-button">Sign Up Now - It's Free</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; 2024 FinSight. All rights reserved.</p>
+            <nav class="footer-links">
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Scroll animations
+          const sections = document.querySelectorAll('section[data-animate-on-scroll]');
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.1 });
+          sections.forEach(section => {
+            observer.observe(section);
+          });
+
+          // Hamburger menu
+          const hamburger = document.querySelector('.hamburger-menu');
+          const navMenuWrapper = document.querySelector('.nav-menu-wrapper');
+          if (hamburger && navMenuWrapper) {
+            hamburger.addEventListener('click', () => {
+              navMenuWrapper.classList.toggle('active');
+              const isExpanded = navMenuWrapper.classList.contains('active');
+              hamburger.setAttribute('aria-expanded', isExpanded);
+              if(isExpanded) {
+                hamburger.classList.add('open');
+              } else {
+                hamburger.classList.remove('open');
+              }
+            });
+          }
+        });
+    </script>
+</body>
+</html>
