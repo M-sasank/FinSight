@@ -17,6 +17,11 @@ body {
   line-height: 1.5; /* Base line height */
   -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
   -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
+  /* Subtle global background pattern */
+  background-image: linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01)),
+                    linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01));
+  background-size: 50px 50px; /* Adjust size for subtlety */
+  background-position: 0 0, 25px 25px; /* Adjust position for interleaving */
 }
 
 .App {
@@ -50,11 +55,11 @@ body {
 /* --- Base Theme Variables (applied via theme classes on body or .App) --- */
 :root {
   /* Light Theme Defaults (Newtimer) */
-  --page-bg-newtimer: #ffffff;
-  --text-color-primary-newtimer: #1d1d1f; /* Near black */
-  --text-color-secondary-newtimer: #555555; /* Dark grey */
-  --link-color-newtimer: #007aff; /* Apple Blue */
-  --link-hover-color-newtimer: #0056b3; /* Darker Apple Blue */
+  --page-bg-newtimer: #f0f2f5; /* Existing light page bg */
+  --text-color-primary-newtimer: #1d1d1f; 
+  --text-color-secondary-newtimer: #555555; 
+  --link-color-newtimer: #007aff; 
+  --link-hover-color-newtimer: #0056b3; 
   --accent-color-primary-newtimer: #007aff;
   --card-bg-newtimer: #ffffff;
   --card-border-newtimer: #e5e5e5;
@@ -64,15 +69,19 @@ body {
   --input-focus-border-newtimer: #007aff;
   --button-primary-bg-newtimer: #007aff;
   --button-primary-text-newtimer: #ffffff;
+  /* Glass effect backgrounds for Newtimer */
+  --hero-glass-bg-newtimer: rgba(251, 251, 253, 0.75); /* Based on --hero-bg-newtimer: #fbfbfd */
+  --how-it-works-glass-bg-newtimer: rgba(255, 255, 255, 0.75); /* Based on --how-it-works-bg-newtimer: #ffffff */
+
 
   /* Dark Theme Defaults (Veteran) */
-  --page-bg-veteran: #000000; /* True black or very dark grey */
-  --text-color-primary-veteran: #f5f5f7; /* Near white */
-  --text-color-secondary-veteran: #888888; /* Lighter grey */
-  --link-color-veteran: #0A84FF; /* Brighter Apple Blue */
+  --page-bg-veteran: #0D1117; /* Existing dark page bg */
+  --text-color-primary-veteran: #f5f5f7; 
+  --text-color-secondary-veteran: #888888; 
+  --link-color-veteran: #0A84FF; 
   --link-hover-color-veteran: #0A78E8; 
   --accent-color-primary-veteran: #0A84FF;
-  --card-bg-veteran: #1c1c1e; /* Dark grey */
+  --card-bg-veteran: #1c1c1e; 
   --card-border-veteran: #38383a;
   --card-shadow-veteran: 0 1px 3px rgba(0,0,0,0.1);
   --input-bg-veteran: #2c2c2e;
@@ -80,16 +89,19 @@ body {
   --input-focus-border-veteran: #0A84FF;
   --button-primary-bg-veteran: #0A84FF;
   --button-primary-text-veteran: #ffffff;
+  /* Glass effect backgrounds for Veteran */
+  --hero-glass-bg-veteran: rgba(21, 21, 23, 0.75); /* Based on --hero-bg-veteran: #151517 */
+  --how-it-works-glass-bg-veteran: rgba(13, 17, 23, 0.75); /* Based on --how-it-works-bg-veteran: #0D1117 */
 }
 
 /* Apply base theme styles */
 .app-theme-newtimer {
-  background-color: var(--page-bg-newtimer);
+  background-color: var(--page-bg-newtimer); /* This will be the base color under the pattern */
   color: var(--text-color-primary-newtimer);
 }
 
 .app-theme-veteran {
-  background-color: var(--page-bg-veteran);
+  background-color: var(--page-bg-veteran); /* This will be the base color under the pattern */
   color: var(--text-color-primary-veteran);
 }
 
@@ -177,11 +189,13 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   display: flex;
   flex-direction: column; /* Stack content vertically */
   align-items: center;
-  justify-content: center; /* Center content vertically initially */
+  justify-content: center; 
   position: relative;
   overflow: hidden;
-  text-align: center; /* Center align text for all children */
-  /* Background will be handled by theme-specific styles */
+  text-align: center; 
+  /* Apply glass effect */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 /* Remove desktop-specific flex-direction override */
@@ -308,9 +322,13 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 /* Apply themed background to hero section */
-.hero-section {
-  background-color: var(--hero-bg);
-  color: var(--hero-subtitle-color); /* Default text color for section */
+.page-theme-newtimer .hero-section {
+  background-color: var(--hero-glass-bg-newtimer); /* Use glass variable */
+  color: var(--hero-subtitle-color); 
+}
+.page-theme-veteran .hero-section {
+  background-color: var(--hero-glass-bg-veteran); /* Use glass variable */
+  color: var(--hero-subtitle-color);
 }
 
 
@@ -381,11 +399,15 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 .features-grid {
   position: relative;
-  max-width: 1200px; /* Keep max width */
+  max-width: 1200px; 
   margin: 0 auto;
-  height: 650px; /* Adjusted height */
+  height: 750px; 
   perspective: 2000px;
   transform-style: preserve-3d;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  padding-bottom: 60px; /* Ensure space for carousel nav dots below */
 }
 
 .features-carousel {
@@ -417,10 +439,11 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   transform: translateZ(0) scale(1);
   z-index: 3;
   pointer-events: auto;
-  width: 450px; /* Max width for active card */
+  width: 580px; /* Increased width for active card */
   height: auto; /* Auto height based on content */
+  min-height: 600px; /* Minimum height for more presence */
   max-height: 95%;
-  box-shadow: var(--feature-card-shadow); /* Re-apply for emphasis if needed */
+  box-shadow: var(--feature-card-shadow); 
 }
 
 .feature-card.previous,
@@ -428,15 +451,16 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   opacity: 0.4;
   z-index: 2;
   pointer-events: none;
-  width: 400px; /* Slightly smaller for prev/next */
+  width: 480px; /* Adjusted size for prev/next */
   height: auto;
+  min-height: 550px;
   max-height: 90%;
 }
 .feature-card.previous {
-  transform: translateZ(-100px) translateX(-60%) scale(0.85) rotateY(10deg);
+  transform: translateZ(-150px) translateX(-70%) scale(0.80) rotateY(15deg); 
 }
 .feature-card.next {
-  transform: translateZ(-100px) translateX(60%) scale(0.85) rotateY(-10deg);
+  transform: translateZ(-150px) translateX(70%) scale(0.80) rotateY(-15deg); 
 }
 
 
@@ -445,27 +469,29 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .feature-card-image {
-  flex-shrink: 0; /* Prevent image from shrinking */
+  flex-shrink: 0; 
   width: 100%;
-  height: 250px; /* Fixed height for image container */
+  height: 300px; /* Increased image container height */
   position: relative;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.05); /* Placeholder bg */
+  background-color: rgba(0,0,0,0.05); 
+  display: flex; /* For centering image if it's smaller than container */
+  align-items: center;
+  justify-content: center;
 }
 
 .feature-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* Use contain to show full illustration */
+  max-width: 100%; /* Ensure image scales down if too wide */
+  max-height: 100%; /* Ensure image scales down if too tall */
+  object-fit: contain; 
   object-position: center;
-  transition: transform 0.3s ease; /* Subtle hover on image if desired */
+  transition: transform 0.3s ease; 
 }
 
-/* Removed .feature-card:hover .feature-card-image img transform */
 
 .feature-card-content {
-  flex-grow: 1; /* Allow content to take remaining space */
-  padding: 32px; /* Generous padding */
+  flex-grow: 1; 
+  padding: 40px; /* Increased padding */
   display: flex;
   flex-direction: column;
   justify-content: flex-start; /* Align content to top */
@@ -506,18 +532,21 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 .feature-modes {
   display: flex;
-  flex-direction: column; /* Stack mode cards */
-  gap: 12px;
+  flex-direction: column; 
+  gap: 16px; /* Increased gap */
   margin-bottom: 24px;
+  align-items: center; /* Center mode cards if they don't fill width */
 }
 
 .mode-card {
-  flex: 1;
-  padding: 16px;
+  flex-basis: auto; /* Let content decide width, up to max */
+  width: 100%;
+  max-width: 220px; /* Max width for mode cards */
+  padding: 20px; /* Increased padding */
   background: var(--mode-card-bg);
-  border-radius: 12px; /* Softer radius */
-  border: none; /* Remove border or make very subtle */
-  text-align: center; /* Center text in mode cards */
+  border-radius: 12px; 
+  border: none; 
+  text-align: center; 
 }
 
 .mode-card:hover {
@@ -527,38 +556,40 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .mode-title {
   font-family: var(--apple-font-family);
   font-weight: 600;
-  color: var(--feature-card-title-color); /* Use main title color */
-  margin-bottom: 6px;
-  font-size: 1em;
+  color: var(--feature-card-title-color); 
+  margin-bottom: 8px; /* Increased margin */
+  font-size: 1.05em; /* Slightly larger */
 }
 
 .mode-description {
   font-family: var(--apple-font-family);
   font-size: 0.9em;
-  color: var(--feature-card-text-color); /* Use main text color */
+  color: var(--feature-card-text-color); 
   line-height: 1.5;
 }
 
 .feature-list {
   list-style-type: none;
-  padding-left: 0;
+  padding-left: 0; /* Will be centered by text-align on parent */
   margin-bottom: 24px;
-  text-align: left; /* Align list items to left */
+  text-align: center; /* Center list items */
 }
 .feature-list li {
   font-family: var(--apple-font-family);
   font-size: 0.95em;
   color: var(--feature-card-text-color);
   margin-bottom: 10px;
-  position: relative;
-  padding-left: 25px; /* Space for custom bullet */
+  /* position: relative; */ /* Not needed for centered text */
+  /* padding-left: 25px; */ /* Not needed for centered text */
 }
 .feature-list li::before {
-  content: "✓"; /* Simple checkmark */
-  position: absolute;
-  left: 0;
-  color: var(--feature-list-bullet-color); /* Use theme accent */
-  font-weight: 600;
+  /* content: "✓"; */ /* Removed, as centering text is simpler */
+  /* position: absolute; */
+  /* left: 0; */
+  /* color: var(--feature-list-bullet-color); */
+  /* font-weight: 600; */
+  display: inline-block; /* Could use this for custom bullets if needed */
+  margin-right: 8px;
 }
 
 
@@ -662,11 +693,16 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* How It Works Section */
 .how-it-works-section {
   padding: 80px 30px;
-  background-color: var(--page-bg-newtimer); /* Use page background */
   transition: background-color 0.3s ease;
+  /* Apply glass effect */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.page-theme-newtimer .how-it-works-section {
+  background-color: var(--how-it-works-glass-bg-newtimer); /* Use glass variable */
 }
 .page-theme-veteran .how-it-works-section {
-  background-color: var(--page-bg-veteran);
+  background-color: var(--how-it-works-glass-bg-veteran); /* Use glass variable */
 }
 
 
