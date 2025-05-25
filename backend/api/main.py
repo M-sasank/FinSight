@@ -33,10 +33,10 @@ app.add_middleware(
 from api.v1 import router as v1_router
 app.include_router(v1_router)
 
-@app.get("/")
-async def root():
-    logger.info("Root endpoint accessed")
-    return {"message": "Welcome to FinSight API"}
+# @app.get("/")
+# async def root():
+#     logger.info("Root endpoint accessed")
+#     return {"message": "Welcome to FinSight API"}
 
 @app.get("/health")
 async def health_check():
