@@ -269,7 +269,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   }
   
   .hero-svg {
-    max-width: 400px;
+    max-width: 600px;
   }
 }
 
@@ -398,11 +398,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 
 .hero-visual {
-  flex: 1;
-  max-width: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: 1; /* Allow it to take up space */
+  display: flex; /* Added */
+  flex-direction: column; /* Added */
+  align-items: center; /* Added to center the animation container horizontally if needed */
+  justify-content: center; /* Added to center the animation container vertically */
+  /* max-width: 450px; */ /* Consider adjusting or removing if the animation container handles its own max-width */
   position: relative;
   z-index: 1;
 }
@@ -410,7 +411,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .hero-svg {
   width: 100%;
   height: auto;
-  max-width: 450px;
+  max-width: 750px;
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
 }
 

@@ -1,0 +1,146 @@
+.hero-animation-container {
+  width: 100%;
+  max-width: auto; /* Increased from 400px */
+  height: auto;
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: rgba(15, 23, 42, 0.75); Dark background with alpha for blur */
+  padding: 25px; /* Slightly increased padding */
+  border-radius: 12px; /* Slightly increased border-radius */
+  backdrop-filter: blur(20px); /* Added for glassmorphism */
+  -webkit-backdrop-filter: blur(10px); /* For Safari compatibility */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Optional: subtle border for glass effect */
+}
+
+.hero-animation-svg {
+  width: 40vw;
+  height: 60vh; /* Maintain aspect ratio */
+  overflow: visible; /* Important for animations that might temporarily go out of bounds */
+}
+
+/* --- Element Specific Styles --- */
+
+/* Wavy Line 1 (top-left, lighter blue) */
+.ha-wavy-line-1 {
+  stroke: #A3D5FF; /* Light blue */
+  stroke-dasharray: 200; /* Approximate length of path */
+  stroke-dashoffset: 200;
+  animation: drawLine 1s ease-out 0.2s forwards;
+}
+
+/* Curve Line 2 (top-left, darker, smoother) */
+.ha-curve-line-2 {
+  stroke: #6B92B5; /* Muted blue-gray */
+  stroke-dasharray: 300; /* Approximate length */
+  stroke-dashoffset: 300;
+  animation: drawLine 1.2s ease-out 0.5s forwards;
+}
+
+/* Dotted Lines (using stroke-dasharray trick for dots) */
+.ha-dotted-line, .ha-dotted-line-2 {
+  stroke: #A3D5FF; /* Light blue, similar to wavy line 1 */
+  /* For dots: 1px line, 10px gap (adjust as needed) */
+  stroke-dasharray: 1 15; 
+  stroke-dashoffset: 100; /* Start with offset to make them appear */
+  animation: drawDottedLine 0.8s ease-out forwards;
+}
+
+.ha-dotted-line {
+  animation-delay: 0.8s;
+}
+
+.ha-dotted-line-2 {
+  animation-delay: 1.0s;
+}
+
+/* Bar Chart (top-right, teal colors) */
+.ha-bar-1, .ha-bar-2, .ha-bar-3 {
+  fill: #2DD4BF; /* Teal color */
+  transform-origin: bottom; /* Animation scales from bottom */
+  transform: scaleY(0);
+  animation: growBar 0.5s ease-out forwards;
+}
+
+.ha-bar-1 { animation-delay: 1.3s; }
+.ha-bar-2 { animation-delay: 1.5s; }
+.ha-bar-3 { animation-delay: 1.7s; }
+
+/* Main ZigZag Line (white) */
+.ha-zigzag-line {
+  stroke: #FFFFFF; /* White */
+  stroke-dasharray: 500; /* Approximate length */
+  stroke-dashoffset: 500;
+  animation: drawLine 1.5s ease-out 2.0s forwards;
+}
+
+/* Nodes for ZigZag Line (white) */
+.ha-node {
+  fill: #FFFFFF; /* White */
+  opacity: 0;
+  transform: scale(0.5);
+  animation: fadeInNode 0.4s ease-out forwards;
+}
+
+/* Staggering node animations */
+.ha-node:nth-of-type(1) { animation-delay: 2.2s; }
+.ha-node:nth-of-type(2) { animation-delay: 2.4s; }
+.ha-node:nth-of-type(3) { animation-delay: 2.6s; }
+.ha-node:nth-of-type(4) { animation-delay: 2.8s; }
+.ha-node:nth-of-type(5) { animation-delay: 3.0s; }
+
+
+/* Percentage Box (background and text) */
+.ha-percentage-box {
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  animation: fadeInBox 0.6s ease-out 3.2s forwards;
+}
+
+.ha-percentage-box rect {
+  fill: #374151; /* Dark gray box, as per image */
+  stroke: #4B5563; /* Slightly lighter border */
+  stroke-width: 1;
+}
+
+.ha-percentage-box text {
+  fill: #FFFFFF; /* White text */
+  font-family: 'Arial', sans-serif; /* Example font */
+  font-weight: bold;
+}
+
+
+/* --- Keyframe Animations --- */
+
+@keyframes drawLine {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawDottedLine {
+  to {
+    stroke-dashoffset: 0; /* Makes the dots appear */
+  }
+}
+
+@keyframes growBar {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes fadeInNode {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInBox {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+} 

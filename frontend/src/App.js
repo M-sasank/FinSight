@@ -7,6 +7,7 @@ import TrackerPage from './pages/TrackerPage';
 import AssetChatPage from './pages/AssetChatPage';
 import NewsPage from './pages/NewsPage';
 import GuidePage from './pages/GuidePage';
+import HeroAnimation from './components/HeroAnimation';
 
 
 function App() {
@@ -143,7 +144,7 @@ function LandingPage({ currentTheme }) {
             </div>
           </div>
           <div className="hero-visual">
-            <img src="/images/chat-assistant.svg" alt="AI Financial Assistant" className="hero-svg" />
+            <HeroAnimation />
           </div>
         </div>
       </section>
