@@ -29,7 +29,6 @@ function App() {
             <Route path="/" element={<LandingPage currentTheme={currentTheme} />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} />} />
             <Route path="/news" element={<NewsPage currentTheme={currentTheme} />} />
-            <Route path="/insights" element={<InsightsPage />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
             <Route path="/asset-chat/:symbol" element={<AssetChatPage currentTheme={currentTheme} />} />
             <Route path="/guide" element={<GuidePage currentTheme={currentTheme} />} />
@@ -252,29 +251,5 @@ function LandingPage({ currentTheme }) {
   );
 }
 
-
-function InsightsPage() {
-  const navigate = useNavigate();
-
-  return (
-    <div className="insights-page">
-      <div className="insights-header">
-        <h2>Your Financial Insights Dashboard</h2>
-        <button onClick={() => navigate('/')} className="back-to-landing-button small">
-            ← Back to Home
-        </button>
-      </div>
-      <div className="insights-content">
-        <p>This section will provide a visual overview of your portfolio, budget allocations, spending trends, and more.</p>
-        <div className="placeholder-grid">
-            <div className="placeholder-card">Portfolio Performance Chart</div>
-            <div className="placeholder-card">Budget Allocation Donut</div>
-            <div className="placeholder-card">Spending Trends Line Graph</div>
-            <div className="placeholder-card">Key Metric: Savings Rate</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default App;

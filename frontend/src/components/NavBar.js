@@ -46,9 +46,6 @@ function NavBar({ currentTheme }) {
           <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
             <span>Tracker</span>
           </Link>
-          <Link to="/insights" className={`nav-item ${isActive('/insights') ? 'active' : ''}`}>
-            <span>Insights</span>
-          </Link>
           <Link to="/guide" className={`nav-item ${isActive('/guide') ? 'active' : ''}`}>
             <span>Guide</span>
           </Link>
