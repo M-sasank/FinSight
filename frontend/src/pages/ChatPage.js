@@ -219,8 +219,6 @@ function ChatPage({ currentTheme }) {
 
   return (
     <div className={`chat-page-container page-theme-${currentTheme}`}>
-      <div className="chat-page-header">
-      </div>
       
       <div className="chat-layout" ref={chatContainerRef}>
         <div className="chat-sidebar">

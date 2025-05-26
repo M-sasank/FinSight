@@ -1,7 +1,7 @@
 /* Chat Page Styles - Apple Aesthetic */
 
 .chat-page-container {
-  min-height: 100vh;
+  min-height: 100vh-10px;
   padding: var(--finsight-space-8) var(--finsight-space-6);
   font-family: var(--apple-font-family);
   /* Background and color will be set by .app-theme-* on body */
