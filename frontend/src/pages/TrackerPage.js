@@ -195,99 +195,101 @@ function TrackerPage({ currentTheme }) {
 
           return (
             <div key={asset.id} className="asset-card">
-              <div className="asset-header">
-                <div className="asset-title">
-                  <h3>{asset.symbol || 'N/A'}</h3>
-                  <span className="asset-name">{asset.name || 'Unknown Asset'}</span>
+              <div className="asset-card-inner-content">
+                <div className="asset-header">
+                  <div className="asset-title">
+                    <h3>{asset.symbol || 'N/A'}</h3>
+                    <span className="asset-name">{asset.name || 'Unknown Asset'}</span>
+                  </div>
+                  <button 
+                    className="delete-button"
+                    onClick={() => handleDeleteAsset(asset.id)}
+                    aria-label={`Delete ${asset.symbol || 'asset'}`}
+                  >
+                    <FiTrash2 />
+                  </button>
                 </div>
-                <button 
-                  className="delete-button"
-                  onClick={() => handleDeleteAsset(asset.id)}
-                  aria-label={`Delete ${asset.symbol || 'asset'}`}
-                >
-                  <FiTrash2 />
-                </button>
-              </div>
-              
-              <div className="asset-price">
-                <span className="price">${price.toFixed(2)}</span>
-                <span className={`movement ${movement >= 0 ? 'positive' : 'negative'}`}>
-                  {movement >= 0 ? <FiTrendingUp /> : <FiTrendingDown />}
-                  {movement >= 0 ? '+' : ''}{movement.toFixed(2)}%
-                </span>
-              </div>
+                
+                <div className="asset-price">
+                  <span className="price">${price.toFixed(2)}</span>
+                  <span className={`movement ${movement >= 0 ? 'positive' : 'negative'}`}>
+                    {movement >= 0 ? <FiTrendingUp /> : <FiTrendingDown />}
+                    {movement >= 0 ? '+' : ''}{movement.toFixed(2)}%
+                  </span>
+                </div>
 
-              <div className="asset-chart">
-                <Line 
-                  data={{
-                    labels: ['6d ago', '5d ago', '4d ago', '3d ago', '2d ago', 'Yesterday', 'Today'],
-                    datasets: [{
-                      label: 'Price Movement',
-                      data: [...priceHistory, price], // Use defaulted price
-                      borderColor: movement >= 0 ? '#4CAF50' : '#f44336',
-                      backgroundColor: movement >= 0 ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
-                      tension: 0.4,
-                      fill: true
-                    }]
-                  }} 
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        display: false
-                      },
-                      tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                          label: function(context) {
-                            const yValue = context?.parsed?.y;
-                            return typeof yValue === 'number' ? `$${yValue.toFixed(2)}` : 'N/A';
-                          }
-                        }
-                      }
-                    },
-                    scales: {
-                      y: {
-                        display: true,
-                        grid: {
-                          display: true,
-                          color: 'rgba(0, 0, 0, 0.05)'
-                        },
-                        ticks: {
-                          callback: function(value) {
-                            return typeof value === 'number' ? '$' + value.toFixed(0) : 'N/A';
-                          }
-                        }
-                      },
-                      x: {
-                        display: true,
-                        grid: {
+                <div className="asset-chart">
+                  <Line 
+                    data={{
+                      labels: ['6d ago', '5d ago', '4d ago', '3d ago', '2d ago', 'Yesterday', 'Today'],
+                      datasets: [{
+                        label: 'Price Movement',
+                        data: [...priceHistory, price], // Use defaulted price
+                        borderColor: movement >= 0 ? '#4CAF50' : '#f44336',
+                        backgroundColor: movement >= 0 ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                      }]
+                    }} 
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
                           display: false
+                        },
+                        tooltip: {
+                          mode: 'index',
+                          intersect: false,
+                          callbacks: {
+                            label: function(context) {
+                              const yValue = context?.parsed?.y;
+                              return typeof yValue === 'number' ? `$${yValue.toFixed(2)}` : 'N/A';
+                            }
+                          }
+                        }
+                      },
+                      scales: {
+                        y: {
+                          display: true,
+                          grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                          },
+                          ticks: {
+                            callback: function(value) {
+                              return typeof value === 'number' ? '$' + value.toFixed(0) : 'N/A';
+                            }
+                          }
+                        },
+                        x: {
+                          display: true,
+                          grid: {
+                            display: false
+                          }
                         }
                       }
-                    }
-                  }}
-                />
-              </div>
-
-              <button 
-                className="ask-about-button" 
-                onClick={() => navigate(`/asset-chat/${asset.symbol}`, { state: { companyName: asset.name } })}
-                disabled={!asset.symbol} // Disable if no symbol
-              >
-                Ask about {asset.symbol || 'Asset'}
-              </button>
-
-              <div className="asset-info">
-                <div className="info-row">
-                  <span className="label">Sector</span>
-                  <span className="value">{sector}</span>
+                    }}
+                  />
                 </div>
-                <div className="info-row">
-                  <span className="label">Recent News</span>
-                  <span className="value">{newsSnippet}</span>
+
+                <button 
+                  className="ask-about-button" 
+                  onClick={() => navigate(`/asset-chat/${asset.symbol}`, { state: { companyName: asset.name } })}
+                  disabled={!asset.symbol} // Disable if no symbol
+                >
+                  Ask about {asset.symbol || 'Asset'}
+                </button>
+
+                <div className="asset-info">
+                  <div className="info-row">
+                    <span className="label">Sector</span>
+                    <span className="value">{sector}</span>
+                  </div>
+                  <div className="info-row">
+                    <span className="label">Recent News</span>
+                    <span className="value">{newsSnippet}</span>
+                  </div>
                 </div>
               </div>
             </div>
