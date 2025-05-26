@@ -1,7 +1,7 @@
 /* Guide Page Styles - Modern Dark Design */
 .guide-page {
   padding: var(--finsight-space-6) var(--finsight-space-4);
-  max-width: 1200px; /* Increased width for better content layout */
+  max-width: 90vw; /* Increased width for better content layout */
   margin: 0 auto;
   font-family: var(--apple-font-family);
   line-height: 1.6;
