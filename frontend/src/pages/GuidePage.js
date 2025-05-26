@@ -752,14 +752,6 @@ function GuidePage({ currentTheme }) {
           )}
         </section>
 
-        {/* New Conclusion Section */}
-        <section className="guide-section conclusion-section">
-          <h2>Conclusion</h2>
-          <p>Starting your stock market investment journey in India requires systematic preparation, thorough understanding of market fundamentals, and careful execution of account setup procedures. This comprehensive guide has provided a structured approach to navigate the complexities of stock market entry, from meeting basic eligibility criteria to executing your first trades.</p>
-          <p>The Indian stock market offers tremendous opportunities for wealth creation, but success requires patience, continuous learning, and disciplined investment approaches. Remember that investing involves risks, and past performance doesn't guarantee future results. Start with amounts you can afford to lose, diversify your investments across different stocks and sectors, and maintain a long-term perspective on wealth building.</p>
-          <p>As you progress in your investment journey, continue expanding your knowledge through market research, financial news, and educational resources provided by your chosen broker. The foundation you've built through this guide will serve as a solid starting point for developing more sophisticated investment strategies as your experience and confidence grow. Consider this guide as your first step toward financial independence through intelligent stock market participation in the dynamic Indian economy.</p>
-        </section>
-
       </div>
 
       <div className="floating-bubble">

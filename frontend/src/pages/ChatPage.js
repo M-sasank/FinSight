@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { FiSend, FiPlus, FiClock, FiMessageSquare } from 'react-icons/fi';
+import { FiSend, FiPlus, FiClock } from 'react-icons/fi';
 import './ChatPage.css';
 
 function ChatPage({ currentTheme }) {

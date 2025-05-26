@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { FiSend, FiBarChart2, FiInfo, FiAlertTriangle, FiLoader, FiArrowLeft } from 'react-icons/fi';
+import { FiSend, FiAlertTriangle, FiLoader, FiArrowLeft } from 'react-icons/fi';
 
 // Simulated API responses for asset details
 const SIMULATED_ASSET_DATA = {
