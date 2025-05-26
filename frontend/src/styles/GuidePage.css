@@ -1,77 +1,119 @@
-/* Guide Page Styles - Apple Aesthetic */
+/* Guide Page Styles - Modern Dark Design */
 .guide-page {
-  padding: var(--finsight-space-6) var(--finsight-space-4); /* Use global spacing */
-  max-width: 900px; /* Optimal width for readability */
+  padding: var(--finsight-space-6) var(--finsight-space-4);
+  max-width: 1200px; /* Increased width for better content layout */
   margin: 0 auto;
   font-family: var(--apple-font-family);
-  line-height: 1.6; /* Improved line height for text */
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
-/* Country Selector - make it more subtle */
+/* Page Header */
+.guide-content h1 {
+  font-size: 3.2em;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--finsight-space-6);
+  background: linear-gradient(135deg, #0A84FF, #007AFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+/* Country Selector - Enhanced */
 .country-selector-container {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-bottom: var(--finsight-space-6);
+  margin-bottom: var(--finsight-space-8);
+  padding: var(--finsight-space-4);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: var(--finsight-radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .country-dropdown {
-  padding: var(--finsight-space-2) var(--finsight-space-3);
-  font-size: 0.95rem;
-  border-radius: var(--finsight-radius-md);
+  padding: var(--finsight-space-3) var(--finsight-space-4);
+  font-size: 1rem;
+  border-radius: var(--finsight-radius-lg);
   cursor: pointer;
   font-family: var(--apple-font-family);
-  /* Themed border and background */
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.country-dropdown:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .tooltip-icon-container {
   position: relative;
-  display: inline-flex; /* Use inline-flex for better alignment */
-  margin-left: var(--finsight-space-2);
+  display: inline-flex;
+  margin-left: var(--finsight-space-3);
   cursor: help;
 }
 
 .tooltip-icon {
-  font-size: 0.9rem; /* Smaller icon */
+  font-size: 1rem;
   border-radius: 50%;
-  width: 22px; /* Slightly larger touch target */
-  height: 22px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Themed border, background, color */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.tooltip-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 .tooltip-text {
   visibility: hidden;
-  width: 200px; /* Adjusted width */
-  text-align: left; /* Better for readability */
-  border-radius: var(--finsight-radius-md);
-  padding: var(--finsight-space-3);
+  width: 220px;
+  text-align: left;
+  border-radius: var(--finsight-radius-lg);
+  padding: var(--finsight-space-4);
   position: absolute;
-  z-index: 10; /* Ensure it's above other content */
-  bottom: 130%; /* Position above icon */
+  z-index: 10;
+  bottom: 140%;
   left: 50%;
-  transform: translateX(-50%); /* Center tooltip */
+  transform: translateX(-50%);
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  font-size: 0.85rem;
-  line-height: 1.4;
-  /* Themed background, color */
-  box-shadow: var(--finsight-shadow-md); /* Subtle shadow */
+  transition: opacity 0.3s ease-in-out;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.9);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
 }
-.tooltip-icon-container:hover .tooltip-text { visibility: visible; opacity: 1; }
-.tooltip-text::after { /* Triangle pointing down */
+
+.tooltip-icon-container:hover .tooltip-text { 
+  visibility: visible; 
+  opacity: 1; 
+}
+
+.tooltip-text::after {
   content: "";
   position: absolute;
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-width: 6px;
+  border-width: 8px;
   border-style: solid;
-  /* Themed border color (tooltip background) */
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
 }
-
 
 .guide-content {
   margin-top: var(--finsight-space-6);
@@ -79,493 +121,689 @@
 }
 
 .guide-intro {
-  margin-bottom: var(--finsight-space-6);
-  font-size: 1.1em; /* Slightly larger intro text */
+  margin-bottom: var(--finsight-space-8);
+  font-size: 1.2em;
   line-height: 1.7;
-  /* color will be themed */
-}
-
-.guide-section {
+  text-align: center;
   padding: var(--finsight-space-6);
-  margin-bottom: var(--finsight-space-6);
-  border-radius: var(--finsight-radius-lg); /* Consistent radius */
-  /* Themed background, border, shadow */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: var(--finsight-radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.guide-section h2 { /* Already styled globally, confirm specificity if needed */
-  margin-top: 0; /* First element in section */
-  padding-bottom: var(--finsight-space-3);
-  /* Themed border-bottom */
+/* Enhanced Guide Sections */
+.guide-section {
+  padding: var(--finsight-space-8);
+  margin-bottom: var(--finsight-space-8);
+  border-radius: var(--finsight-radius-xl);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
-.guide-section h3 { /* Already styled globally */
+
+.guide-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0A84FF, #007AFF, #0A84FF);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+.guide-section:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.guide-section h2 {
+  margin-top: 0;
+  padding-bottom: var(--finsight-space-4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  font-size: 2.2em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--finsight-space-6);
+}
+
+.guide-section h3 {
+  margin-top: var(--finsight-space-6);
+  margin-bottom: var(--finsight-space-4);
+  font-size: 1.6em;
+  font-weight: 600;
+  color: #ffffff;
+  position: relative;
+  padding-left: var(--finsight-space-4);
+}
+
+.guide-section h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #0A84FF, #007AFF);
+  border-radius: 2px;
+}
+
+.guide-section h4 {
   margin-top: var(--finsight-space-4);
-  margin-bottom: var(--finsight-space-2);
+  margin-bottom: var(--finsight-space-3);
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+.guide-section p {
+  margin-bottom: var(--finsight-space-4);
+  line-height: 1.7;
+  color: #c0c0c0;
+  font-size: 1.05em;
 }
 
 .guide-section ul, .guide-section ol {
-  padding-left: var(--finsight-space-6); /* Indent lists */
+  padding-left: var(--finsight-space-6);
   margin-bottom: var(--finsight-space-4);
 }
-.guide-section li {
-  margin-bottom: var(--finsight-space-2);
-  padding-left: 0; /* Remove previous padding if custom bullets were used */
-}
-/* Removed custom li:before for standard bullets */
 
-/* Checklists and Progress Trackers */
+.guide-section li {
+  margin-bottom: var(--finsight-space-3);
+  padding-left: var(--finsight-space-2);
+  color: #c0c0c0;
+  line-height: 1.6;
+}
+
+.guide-section li::marker {
+  color: #0A84FF;
+}
+
+/* Enhanced Checklists and Progress Trackers */
 .checklist-container ul, .progress-tracker ul {
   list-style-type: none;
-  padding-left: 0; /* Remove default padding */
+  padding-left: 0;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--finsight-radius-lg);
+  padding: var(--finsight-space-4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 .checklist-container li, .progress-tracker li {
-  padding-left: 0; /* Remove previous padding */
+  padding: var(--finsight-space-3);
   margin-bottom: var(--finsight-space-2);
+  border-radius: var(--finsight-radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.checklist-container li:hover, .progress-tracker li:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
 }
 
 .check-item, .progress-tracker li {
   display: flex;
   align-items: center;
-  gap: var(--finsight-space-2); /* Space between checkbox/icon and text */
+  gap: var(--finsight-space-3);
 }
-.check-item .checkmark { /* For non-interactive checkmarks */
-  font-size: 1.3em; /* Adjust size */
-  /* Themed color */
+
+.check-item .checkmark {
+  font-size: 1.4em;
+  color: #00C851;
+  text-shadow: 0 0 8px rgba(0, 200, 81, 0.3);
 }
+
 .check-item p, .progress-tracker label {
   margin: 0;
-  font-size: 1rem;
-  cursor: default; /* For non-interactive p */
+  font-size: 1.05rem;
+  cursor: default;
+  color: #e0e0e0;
+  font-weight: 500;
 }
-.progress-tracker label { cursor: pointer; }
+
+.progress-tracker label { 
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.progress-tracker label:hover {
+  color: #ffffff;
+}
 
 .progress-tracker input[type="checkbox"] {
-  width: 20px; /* Apple-like checkbox size */
-  height: 20px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
-  accent-color: var(--accent-color-primary); /* Modern way to style checkbox color */
-  /* For more custom look, would need ::before/::after pseudo-elements */
+  accent-color: #0A84FF;
+  border-radius: 4px;
 }
 
-/* Floating Help Button & Drawer - General Structure */
+/* Enhanced Section Headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--finsight-space-6);
+  padding: var(--finsight-space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--finsight-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.collapse-control { 
+  display: flex; 
+  align-items: center;
+}
+
+.collapse-control label {
+  margin-right: var(--finsight-space-3);
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--apple-font-family);
+  display: flex;
+  align-items: center;
+  user-select: none;
+  color: #c0c0c0;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.collapse-control label:hover {
+  color: #ffffff;
+}
+
+.collapse-control input[type="checkbox"] { 
+  display: none;
+}
+
+.custom-checkbox-visual {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--finsight-radius-sm);
+  margin-right: var(--finsight-space-3);
+  position: relative;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-checkbox-visual::after {
+  content: "✓";
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: #ffffff;
+}
+
+.collapse-control input[type="checkbox"]:checked + label .custom-checkbox-visual {
+  background: linear-gradient(135deg, #0A84FF, #007AFF);
+  border-color: #0A84FF;
+  box-shadow: 0 0 12px rgba(10, 132, 255, 0.3);
+}
+
+.collapse-control input[type="checkbox"]:checked + label .custom-checkbox-visual::after {
+  opacity: 1;
+}
+
+.collapse-control input[type="checkbox"]:focus-visible + label .custom-checkbox-visual {
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.3);
+}
+
+.collapse-text { 
+  line-height: 1;
+}
+
+.guide-section.collapsed .section-content { 
+  display: none;
+}
+
+/* Enhanced List Styles */
+.process-list, .standard-list {
+  font-family: var(--apple-font-family);
+  padding-left: var(--finsight-space-6);
+  margin-top: var(--finsight-space-3);
+  margin-bottom: var(--finsight-space-4);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--finsight-radius-lg);
+  padding: var(--finsight-space-4) var(--finsight-space-6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.process-list { 
+  list-style-type: decimal;
+}
+
+.standard-list { 
+  list-style-type: disc;
+}
+
+.process-list li, .standard-list li {
+  margin-bottom: var(--finsight-space-3);
+  padding-left: var(--finsight-space-2);
+  color: #c0c0c0;
+  line-height: 1.6;
+}
+
+.process-list li strong { 
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Enhanced Recommendation Section */
+.recommendation-button {
+  font-family: var(--apple-font-family);
+  padding: var(--finsight-space-4) var(--finsight-space-6);
+  border-radius: var(--finsight-radius-lg);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: var(--finsight-space-6) auto;
+  border: none;
+  background: linear-gradient(135deg, #00C851, #00A041);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 200, 81, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.recommendation-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.recommendation-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 200, 81, 0.4);
+}
+
+.recommendation-button:hover::before {
+  left: 100%;
+}
+
+.loading-recommendation, .recommendation-error, .recommendation-result {
+  margin-top: var(--finsight-space-6);
+  padding: var(--finsight-space-6);
+  border-radius: var(--finsight-radius-xl);
+  font-family: var(--apple-font-family);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loading-recommendation {
+  background: rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.loading-recommendation p { 
+  font-style: italic;
+  color: #c0c0c0;
+  font-size: 1.1em;
+}
+
+.recommendation-error {
+  background: rgba(244, 67, 54, 0.1);
+  border-color: rgba(244, 67, 54, 0.3);
+  color: #ff8a80;
+}
+
+.recommendation-result {
+  background: rgba(0, 200, 81, 0.1);
+  border-color: rgba(0, 200, 81, 0.3);
+}
+
+.recommendation-result h3 {
+  margin-top: 0;
+  margin-bottom: var(--finsight-space-4);
+  color: #00C851;
+  font-size: 1.8em;
+}
+
+.recommendation-result .stock-name {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: var(--finsight-space-4);
+  color: #ffffff;
+  background: linear-gradient(135deg, #00C851, #00A041);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.recommendation-result h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: var(--finsight-space-2);
+  color: #00C851;
+}
+
+.recommendation-result .stock-reason {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: var(--finsight-space-4);
+  color: #e0e0e0;
+}
+
+.recommendation-result .disclaimer {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: var(--finsight-space-4);
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  padding-top: var(--finsight-space-3);
+  color: #a0a0a0;
+}
+
+/* Floating Help Button & Drawer - Enhanced */
 .floating-bubble {
   position: fixed;
   bottom: var(--finsight-space-6);
   right: var(--finsight-space-6);
   z-index: 1000;
 }
+
 .help-button {
-  padding: var(--finsight-space-3) var(--finsight-space-4);
-  border-radius: var(--finsight-radius-full); /* Pill shape */
-  font-size: 1rem;
-  font-weight: 500;
+  padding: var(--finsight-space-4) var(--finsight-space-6);
+  border-radius: var(--finsight-radius-full);
+  font-size: 1.1rem;
+  font-weight: 600;
   font-family: var(--apple-font-family);
   cursor: pointer;
   border: none;
-  /* Themed background, color, shadow */
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  background: linear-gradient(135deg, #0A84FF, #007AFF);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(10, 132, 255, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
 }
+
 .help-button:hover {
-  transform: translateY(-2px);
-  /* Themed hover states */
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(10, 132, 255, 0.4);
 }
 
 .sliding-drawer {
   position: fixed;
-  top: 0; /* Full height drawer */
-  right: -450px; /* Start off-screen */
+  top: 0;
+  right: -450px;
   width: 100%;
-  max-width: 450px; /* Max width for drawer */
+  max-width: 450px;
   height: 100%;
-  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
-  z-index: 1100; /* Above floating button */
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1100;
   display: flex;
   flex-direction: column;
-  /* Themed background, shadow */
-  border-left: 1px solid transparent; /* Themed border */
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
 }
-.sliding-drawer.open { right: 0; }
+
+.sliding-drawer.open { 
+  right: 0;
+}
 
 .drawer-header {
-  padding: var(--finsight-space-3) var(--finsight-space-4);
-  /* Themed border-bottom */
+  padding: var(--finsight-space-4) var(--finsight-space-6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-shrink: 0; /* Prevent header from shrinking */
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.02);
 }
+
 .drawer-header h3 {
   margin: 0;
-  font-size: 1.2em;
-  font-weight: 600;
+  font-size: 1.3em;
+  font-weight: 700;
   font-family: var(--apple-font-family);
-  /* Themed color */
+  color: #ffffff;
 }
+
 .close-button {
   background: none;
   border: none;
-  font-size: 1.8em; /* Larger close icon */
+  font-size: 2em;
   cursor: pointer;
-  padding: var(--finsight-space-1);
-  line-height: 1; /* Ensure icon aligns well */
-  /* Themed color and hover color */
-  transition: color 0.2s ease;
+  padding: var(--finsight-space-2);
+  line-height: 1;
+  color: #c0c0c0;
+  transition: all 0.3s ease;
+  border-radius: var(--finsight-radius-md);
 }
 
-/* Chat elements within drawer - reuse styles from ChatPage.css or define simplified versions */
-.sliding-drawer .chat-container { /* Ensure this class is on the container in JS */
+.close-button:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+/* Chat elements within drawer */
+.sliding-drawer .chat-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Important for scrolling */
+  overflow: hidden;
 }
+
 .sliding-drawer .chat-messages {
   flex: 1;
   overflow-y: auto;
   padding: var(--finsight-space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--finsight-space-3); /* Spacing between messages */
+  gap: var(--finsight-space-3);
 }
-.sliding-drawer .message { /* Shared message styling */
-  max-width: 85%; /* Slightly more width */
-  padding: var(--finsight-space-2) var(--finsight-space-3);
-  border-radius: var(--finsight-radius-lg); /* Apple message bubble radius */
-  line-height: 1.45;
+
+.sliding-drawer .message {
+  max-width: 85%;
+  padding: var(--finsight-space-3) var(--finsight-space-4);
+  border-radius: var(--finsight-radius-lg);
+  line-height: 1.5;
   font-family: var(--apple-font-family);
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
+
 .sliding-drawer .message.bot {
   align-self: flex-start;
-  border-bottom-left-radius: var(--finsight-radius-sm); /* Tail effect */
-  /* Themed background, color */
+  border-bottom-left-radius: var(--finsight-radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .sliding-drawer .message.user {
   align-self: flex-end;
-  border-bottom-right-radius: var(--finsight-radius-sm); /* Tail effect */
-  /* Themed background, color */
+  border-bottom-right-radius: var(--finsight-radius-sm);
+  background: linear-gradient(135deg, #0A84FF, #007AFF);
+  color: #ffffff;
 }
 
 .sliding-drawer .suggestion-area {
-  padding: var(--finsight-space-3);
-  /* Themed border-top */
+  padding: var(--finsight-space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.02);
 }
+
 .sliding-drawer .suggestion-area-title {
-  font-size: 0.85rem;
-  margin-bottom: var(--finsight-space-2);
+  font-size: 0.9rem;
+  margin-bottom: var(--finsight-space-3);
   font-family: var(--apple-font-family);
-  font-weight: 500;
-  /* Themed color */
+  font-weight: 600;
+  color: #c0c0c0;
 }
+
 .sliding-drawer .suggestion-chips-container {
   display: flex;
   flex-wrap: wrap;
   gap: var(--finsight-space-2);
 }
+
 .sliding-drawer .suggestion-chip {
-  border: 1px solid transparent; /* Base border for layout */
-  padding: var(--finsight-space-1) var(--finsight-space-3);
-  border-radius: var(--finsight-radius-full); /* Pill shape */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--finsight-space-2) var(--finsight-space-4);
+  border-radius: var(--finsight-radius-full);
   font-size: 0.9rem;
   font-family: var(--apple-font-family);
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-  /* Themed background, color, border */
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0e0e0;
 }
 
-.sliding-drawer .chat-input { /* Renamed from .chat-input-area */
-  padding: var(--finsight-space-3);
-  /* Themed border-top */
-  display: flex;
-  gap: var(--finsight-space-2);
-  align-items: center; /* Align input and button */
-  flex-shrink: 0;
+.sliding-drawer .suggestion-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
+
+.sliding-drawer .chat-input {
+  padding: var(--finsight-space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: var(--finsight-space-3);
+  align-items: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.02);
+}
+
 .sliding-drawer .chat-input input {
   flex: 1;
-  padding: var(--finsight-space-2) var(--finsight-space-3);
-  border-radius: var(--finsight-radius-full); /* Pill shape input */
-  font-size: 0.95rem;
+  padding: var(--finsight-space-3) var(--finsight-space-4);
+  border-radius: var(--finsight-radius-full);
+  font-size: 1rem;
   font-family: var(--apple-font-family);
   outline: none;
-  /* Themed border, background, color, focus states */
-  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transition: all 0.3s ease;
 }
+
+.sliding-drawer .chat-input input:focus {
+  border-color: #0A84FF;
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sliding-drawer .chat-input input::placeholder {
+  color: #a0a0a0;
+}
+
 .sliding-drawer .chat-input button {
-  padding: var(--finsight-space-2) var(--finsight-space-3);
-  border-radius: var(--finsight-radius-full); /* Pill shape button */
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-family: var(--apple-font-family);
-  font-weight: 500;
-  border: none;
-  transition: background-color 0.2s ease;
-  /* Themed background, color, disabled states */
-}
-
-
-/* Section Collapse Controls - Refined */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--finsight-space-3); /* Consistent spacing */
-}
-.collapse-control { display: flex; align-items: center; }
-.collapse-control label {
-  margin-right: var(--finsight-space-2);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-family: var(--apple-font-family);
-  display: flex;
-  align-items: center;
-  user-select: none; /* Prevent text selection on click */
-  /* Themed color */
-}
-.collapse-control input[type="checkbox"] { display: none; /* Hide actual checkbox */ }
-
-.custom-checkbox-visual {
-  display: inline-flex; /* Changed to inline-flex */
-  align-items: center; /* Center checkmark */
-  justify-content: center; /* Center checkmark */
-  width: 20px;   /* Standard size */
-  height: 20px;
-  border-radius: var(--finsight-radius-sm); /* Softer radius */
-  margin-right: var(--finsight-space-2);
-  position: relative;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-  /* Themed border, background */
-}
-.custom-checkbox-visual::after { /* Checkmark */
-  content: "✓";
-  font-size: 14px; /* Adjust checkmark size */
-  font-weight: bold;
-  opacity: 0; /* Hidden by default */
-  transition: opacity 0.2s ease;
-  /* Themed color (white) */
-}
-.collapse-control input[type="checkbox"]:checked + label .custom-checkbox-visual {
-  /* Themed checked background, border */
-}
-.collapse-control input[type="checkbox"]:checked + label .custom-checkbox-visual::after {
-  opacity: 1;
-}
-.collapse-control input[type="checkbox"]:focus-visible + label .custom-checkbox-visual {
-  /* Themed focus ring, e.g., box-shadow */
-}
-.collapse-text { line-height: 1; } /* Ensure text aligns with checkbox */
-.guide-section.collapsed .section-content { display: none; }
-
-
-/* List Styles */
-.process-list, .standard-list {
-  font-family: var(--apple-font-family);
-  padding-left: var(--finsight-space-6); /* Consistent indent */
-  margin-top: var(--finsight-space-2);
-  margin-bottom: var(--finsight-space-4);
-}
-.process-list { list-style-type: decimal; }
-.standard-list { list-style-type: disc; } /* Use disc for unordered */
-.process-list li, .standard-list li {
-  margin-bottom: var(--finsight-space-2);
-  padding-left: var(--finsight-space-1); /* Small padding for bullet alignment */
-}
-.process-list li strong { font-weight: 600; }
-
-
-/* Recommendation Button & Results */
-.recommendation-button {
-  font-family: var(--apple-font-family);
   padding: var(--finsight-space-3) var(--finsight-space-4);
-  border-radius: var(--finsight-radius-md);
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: var(--finsight-radius-full);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  display: block;
-  margin: var(--finsight-space-4) auto;
-  border: none;
-  /* Themed background, color, disabled states */
-}
-.recommendation-button:hover { transform: translateY(-1px); }
-
-.loading-recommendation, .recommendation-error, .recommendation-result {
-  margin-top: var(--finsight-space-4);
-  padding: var(--finsight-space-4);
-  border-radius: var(--finsight-radius-md);
+  font-size: 1rem;
   font-family: var(--apple-font-family);
-}
-.loading-recommendation p { font-style: italic; /* Themed color */ }
-.recommendation-error { /* Themed error bg, border, text */ }
-.recommendation-result { /* Themed success bg, border */ }
-.recommendation-result h3 { margin-top: 0; margin-bottom: var(--finsight-space-2); /* Themed color */ }
-.recommendation-result .stock-name { font-size: 1.3em; font-weight: 600; margin-bottom: var(--finsight-space-2); /* Themed color */ }
-.recommendation-result h4 { font-size: 1rem; font-weight: 600; margin-bottom: var(--finsight-space-1); /* Themed color */ }
-.recommendation-result .stock-reason { font-size: 0.95rem; line-height: 1.5; margin-bottom: var(--finsight-space-3); }
-.recommendation-result .disclaimer {
-  font-size: 0.8rem; font-style: italic; margin-top: var(--finsight-space-3);
-  border-top: 1px dashed; /* Themed border color */
-  padding-top: var(--finsight-space-2); /* Themed color */
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #0A84FF, #007AFF);
+  color: #ffffff;
 }
 
-
-/* --- Theme Specific Variables & Styles for GuidePage --- */
-.page-theme-newtimer {
-  --guide-text-color: var(--text-color-primary-newtimer);
-  --guide-text-secondary-color: var(--text-color-secondary-newtimer);
-  --guide-section-bg: #f9f9f9;
-  --guide-section-border: #e0e0e0;
-  --guide-section-title-border: var(--accent-color-primary-newtimer);
-  --guide-dropdown-bg: #ffffff;
-  --guide-dropdown-border: #ced4da;
-  --guide-dropdown-text: var(--text-color-primary-newtimer);
-  --guide-tooltip-bg: #333333;
-  --guide-tooltip-text-color: #ffffff;
-  --guide-tooltip-icon-bg: #f0f0f0;
-  --guide-tooltip-icon-border: #ccc;
-  --guide-tooltip-icon-text: #555;
-  --guide-checkmark-color: #28a745;
-  --guide-checkbox-border: var(--accent-color-primary-newtimer);
-  --guide-checkbox-checked-bg: var(--accent-color-primary-newtimer);
-  --guide-checkbox-focus-shadow: rgba(0, 122, 255, 0.3);
-  --guide-help-button-bg: var(--button-primary-bg-newtimer);
-  --guide-help-button-text: var(--button-primary-text-newtimer);
-  --guide-help-button-hover-bg: #0056b3;
-  --guide-help-button-shadow: var(--finsight-shadow-md);
-  --guide-drawer-bg: #ffffff;
-  --guide-drawer-border: #e0e0e0;
-  --guide-drawer-header-text: var(--text-color-primary-newtimer);
-  --guide-drawer-close-text: #777;
-  --guide-drawer-close-hover-text: #333;
-  --guide-drawer-message-bot-bg: #f0f2f5;
-  --guide-drawer-message-bot-text: var(--text-color-primary-newtimer);
-  --guide-drawer-message-user-bg: var(--accent-color-primary-newtimer);
-  --guide-drawer-message-user-text: #ffffff;
-  --guide-drawer-suggestion-bg: #f0f2f5;
-  --guide-drawer-suggestion-text: var(--text-color-primary-newtimer);
-  --guide-drawer-suggestion-hover-bg: #e4e6eb;
-  --guide-drawer-input-bg: #ffffff;
-  --guide-drawer-input-border: #d1d1d1;
-  --guide-drawer-input-focus-border: var(--accent-color-primary-newtimer);
-  --guide-drawer-input-text: var(--text-color-primary-newtimer);
-  --guide-drawer-send-button-bg: var(--button-primary-bg-newtimer);
-  --guide-drawer-send-button-text: var(--button-primary-text-newtimer);
-  --guide-drawer-send-button-hover-bg: #0056b3;
-  --guide-recommendation-button-bg: #27ae60;
-  --guide-recommendation-button-text: #ffffff;
-  --guide-recommendation-button-hover-bg: #229954;
-  --guide-recommendation-error-bg: #ffebee;
-  --guide-recommendation-error-border: #e57373;
-  --guide-recommendation-error-text: #c62828;
-  --guide-recommendation-success-bg: #e8f5e9;
-  --guide-recommendation-success-border: #a5d6a7;
-  --guide-recommendation-title-color: #2e7d32;
-  --guide-recommendation-stock-name-color: #1b5e20;
+.sliding-drawer .chat-input button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.3);
 }
 
+.sliding-drawer .chat-input button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Theme-specific overrides for dark design */
+.page-theme-newtimer,
 .page-theme-veteran {
-  --guide-text-color: var(--text-color-primary-veteran);
-  --guide-text-secondary-color: var(--text-color-secondary-veteran);
-  --guide-section-bg: #1c1c1e;
-  --guide-section-border: #38383a;
-  --guide-section-title-border: var(--accent-color-primary-veteran);
-  --guide-dropdown-bg: #2c2c2e;
-  --guide-dropdown-border: #444446;
-  --guide-dropdown-text: var(--text-color-primary-veteran);
-  --guide-tooltip-bg: #f0f0f0; /* Light tooltip for dark theme for contrast */
-  --guide-tooltip-text-color: #1d1d1f;
-  --guide-tooltip-icon-bg: #3a3a3c;
-  --guide-tooltip-icon-border: #555;
-  --guide-tooltip-icon-text: #ccc;
-  --guide-checkmark-color: #238636; /* GitHub green */
-  --guide-checkbox-border: var(--accent-color-primary-veteran);
-  --guide-checkbox-checked-bg: var(--accent-color-primary-veteran);
-  --guide-checkbox-focus-shadow: rgba(10, 132, 255, 0.4);
-  --guide-help-button-bg: var(--button-primary-bg-veteran);
-  --guide-help-button-text: var(--button-primary-text-veteran);
-  --guide-help-button-hover-bg: #0A78E8;
-  --guide-help-button-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  --guide-drawer-bg: #1c1c1e;
-  --guide-drawer-border: #38383a;
-  --guide-drawer-header-text: var(--text-color-primary-veteran);
-  --guide-drawer-close-text: #aaa;
-  --guide-drawer-close-hover-text: #eee;
-  --guide-drawer-message-bot-bg: #2c2c2e;
-  --guide-drawer-message-bot-text: var(--text-color-primary-veteran);
-  --guide-drawer-message-user-bg: var(--accent-color-primary-veteran);
-  --guide-drawer-message-user-text: #ffffff;
-  --guide-drawer-suggestion-bg: #2c2c2e;
-  --guide-drawer-suggestion-text: var(--text-color-primary-veteran);
-  --guide-drawer-suggestion-hover-bg: #3a3a3c;
-  --guide-drawer-input-bg: #121212; /* Even darker for input field */
-  --guide-drawer-input-border: #444446;
-  --guide-drawer-input-focus-border: var(--accent-color-primary-veteran);
-  --guide-drawer-input-text: var(--text-color-primary-veteran);
-  --guide-drawer-send-button-bg: var(--button-primary-bg-veteran);
-  --guide-drawer-send-button-text: var(--button-primary-text-veteran);
-  --guide-drawer-send-button-hover-bg: #0A78E8;
-  --guide-recommendation-button-bg: #238636;
-  --guide-recommendation-button-text: #ffffff;
-  --guide-recommendation-button-hover-bg: #2ea043;
-  --guide-recommendation-error-bg: #422525;
-  --guide-recommendation-error-border: #723939;
-  --guide-recommendation-error-text: #ffcccc;
-  --guide-recommendation-success-bg: #1e3626;
-  --guide-recommendation-success-border: #387048;
-  --guide-recommendation-title-color: #6cc689;
-  --guide-recommendation-stock-name-color: #a5d6a7;
+  --guide-page-bg: #0D1117;
+  --guide-text-color: #f5f5f7;
+  --guide-text-secondary-color: #c0c0c0;
 }
 
-/* Apply themed styles */
-.guide-page { color: var(--guide-text-color); }
-.country-dropdown { background-color: var(--guide-dropdown-bg); border: 1px solid var(--guide-dropdown-border); color: var(--guide-dropdown-text); }
-.tooltip-icon { background-color: var(--guide-tooltip-icon-bg); border: 1px solid var(--guide-tooltip-icon-border); color: var(--guide-tooltip-icon-text); }
-.tooltip-text { background-color: var(--guide-tooltip-bg); color: var(--guide-tooltip-text-color); }
-.tooltip-text::after { border-top-color: var(--guide-tooltip-bg); }
-.guide-intro { color: var(--guide-text-secondary-color); } /* Use secondary for less emphasis */
-.guide-section { background-color: var(--guide-section-bg); border: 1px solid var(--guide-section-border); }
-.guide-section h2 { border-bottom: 1px solid var(--guide-section-title-border); } /* Thinner border */
-.guide-section h3 { color: var(--guide-text-color); }
-.check-item .checkmark { color: var(--guide-checkmark-color); }
-.collapse-control label { color: var(--guide-text-secondary-color); }
-.custom-checkbox-visual { border: 2px solid var(--guide-checkbox-border); background-color: var(--guide-page-bg); } /* Use page bg for unchecked */
-.custom-checkbox-visual::after { border-color: var(--guide-page-bg); } /* Checkmark color should contrast with checked bg */
-.collapse-control input[type="checkbox"]:checked + label .custom-checkbox-visual { background-color: var(--guide-checkbox-checked-bg); border-color: var(--guide-checkbox-checked-bg); }
-.collapse-control input[type="checkbox"]:checked + label .custom-checkbox-visual::after { border-color: var(--guide-page-bg); } /* Checkmark contrasts with checked bg */
-.collapse-control input[type="checkbox"]:focus-visible + label .custom-checkbox-visual { box-shadow: 0 0 0 2px var(--guide-checkbox-focus-shadow); }
-.help-button { background-color: var(--guide-help-button-bg); color: var(--guide-help-button-text); box-shadow: var(--guide-help-button-shadow); }
-.help-button:hover { background-color: var(--guide-help-button-hover-bg); }
-.sliding-drawer { background-color: var(--guide-drawer-bg); border-left-color: var(--guide-drawer-border); box-shadow: var(--finsight-shadow-lg); } /* Use global shadow */
-.drawer-header { border-bottom-color: var(--guide-drawer-border); }
-.drawer-header h3 { color: var(--guide-drawer-header-text); }
-.close-button { color: var(--guide-drawer-close-text); }
-.close-button:hover { color: var(--guide-drawer-close-hover-text); }
-.sliding-drawer .message.bot { background-color: var(--guide-drawer-message-bot-bg); color: var(--guide-drawer-message-bot-text); }
-.sliding-drawer .message.user { background-color: var(--guide-drawer-message-user-bg); color: var(--guide-drawer-message-user-text); }
-.sliding-drawer .suggestion-area { border-top-color: var(--guide-drawer-border); }
-.sliding-drawer .suggestion-area-title { color: var(--guide-text-secondary-color); } /* Use secondary text color */
-.sliding-drawer .suggestion-chip { background-color: var(--guide-drawer-suggestion-bg); color: var(--guide-drawer-suggestion-text); border: 1px solid var(--guide-drawer-border); }
-.sliding-drawer .suggestion-chip:hover { background-color: var(--guide-drawer-suggestion-hover-bg); }
-.sliding-drawer .chat-input { border-top-color: var(--guide-drawer-border); }
-.sliding-drawer .chat-input input { background-color: var(--guide-drawer-input-bg); border: 1px solid var(--guide-drawer-input-border); color: var(--guide-drawer-input-text); }
-.sliding-drawer .chat-input input:focus { border-color: var(--guide-drawer-input-focus-border); }
-.sliding-drawer .chat-input button { background-color: var(--guide-drawer-send-button-bg); color: var(--guide-drawer-send-button-text); }
-.sliding-drawer .chat-input button:hover { background-color: var(--guide-drawer-send-button-hover-bg); }
-.sliding-drawer .chat-input button:disabled { background-color: #555; color: #aaa; } /* Generic disabled */
-.recommendation-button { background-color: var(--guide-recommendation-button-bg); color: var(--guide-recommendation-button-text); }
-.recommendation-button:hover { background-color: var(--guide-recommendation-button-hover-bg); }
-.loading-recommendation p { color: var(--guide-text-secondary-color); }
-.recommendation-error { background-color: var(--guide-recommendation-error-bg); border: 1px solid var(--guide-recommendation-error-border); color: var(--guide-recommendation-error-text); }
-.recommendation-result { background-color: var(--guide-recommendation-success-bg); border: 1px solid var(--guide-recommendation-success-border); }
-.recommendation-result h3 { color: var(--guide-recommendation-title-color); }
-.recommendation-result .stock-name { color: var(--guide-recommendation-stock-name-color); }
-.recommendation-result h4 { color: var(--guide-recommendation-title-color); } /* Use title color for consistency */
-.recommendation-result .disclaimer { border-top-color: var(--guide-drawer-border); color: var(--guide-text-secondary-color); }
+/* Apply dark theme styles */
+.guide-page { 
+  background-color: var(--guide-page-bg);
+  color: var(--guide-text-color);
+}
 
-@media (max-width: 480px) {
+/* Responsive Design */
+@media (max-width: 768px) {
   .sliding-drawer {
-    max-width: 100%; /* Full width on very small screens */
+    max-width: 100%;
     right: -100%;
   }
-  .guide-page { padding: var(--finsight-space-4) var(--finsight-space-2); }
+  
+  .guide-page { 
+    padding: var(--finsight-space-4) var(--finsight-space-2);
+  }
+  
+  .guide-section {
+    padding: var(--finsight-space-6);
+  }
+  
+  .guide-content h1 {
+    font-size: 2.5em;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--finsight-space-3);
+  }
+  
+  .country-selector-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--finsight-space-3);
+  }
+}
+
+@media (max-width: 480px) {
+  .guide-content h1 {
+    font-size: 2em;
+  }
+  
+  .guide-section h2 {
+    font-size: 1.8em;
+  }
+  
+  .guide-section {
+    padding: var(--finsight-space-4);
+  }
 }
