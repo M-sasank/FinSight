@@ -175,6 +175,7 @@ function ChatPage({ currentTheme }) {
           setMessages(data.messages);
           setConversationId(chatId);
           setSelectedChat(chatId);
+          setShowSuggestions(false);
         }
       } catch (error) {
         console.error('Error loading chat:', error);
