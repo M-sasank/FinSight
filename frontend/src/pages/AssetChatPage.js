@@ -345,7 +345,7 @@ function AssetChatPage() {
       setIsChatLoading(true);
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/asset-chat`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/asset-chat/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_query: currentInput, symbol: symbol, conversation_id: conversationId })
