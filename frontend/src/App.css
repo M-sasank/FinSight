@@ -17,11 +17,8 @@ body {
   line-height: 1.5; /* Base line height */
   -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
   -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
-  /* Subtle global background pattern */
-  background-image: linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01)),
-                    linear-gradient(45deg, rgba(0,0,0,0.01) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.01) 75%, rgba(0,0,0,0.01));
-  background-size: 50px 50px; /* Adjust size for subtlety */
-  background-position: 0 0, 25px 25px; /* Adjust position for interleaving */
+  /* Remove direct background styling from body, will be handled by .App theme */
+  background: transparent; 
 }
 
 .App {
@@ -55,7 +52,7 @@ body {
 /* --- Base Theme Variables (applied via theme classes on body or .App) --- */
 :root {
   /* Light Theme Defaults (Newtimer) */
-  --page-bg-newtimer: #f0f2f5; /* Existing light page bg */
+  --page-bg-newtimer: #f0f2f5; /* Restored original light page bg */
   --text-color-primary-newtimer: #1d1d1f; 
   --text-color-secondary-newtimer: #555555; 
   --link-color-newtimer: #007aff; 
@@ -70,12 +67,12 @@ body {
   --button-primary-bg-newtimer: #007aff;
   --button-primary-text-newtimer: #ffffff;
   /* Glass effect backgrounds for Newtimer */
-  --hero-glass-bg-newtimer: rgba(251, 251, 253, 0.75); /* Based on --hero-bg-newtimer: #fbfbfd */
-  --how-it-works-glass-bg-newtimer: rgba(255, 255, 255, 0.75); /* Based on --how-it-works-bg-newtimer: #ffffff */
+  --hero-glass-bg-newtimer: transparent; /* Was rgba(251, 251, 253, 0.75) */
+  --how-it-works-glass-bg-newtimer: transparent; /* Was rgba(255, 255, 255, 0.75) */
 
 
   /* Dark Theme Defaults (Veteran) */
-  --page-bg-veteran: #0D1117; /* Existing dark page bg */
+  --page-bg-veteran: #0D1117; /* Restored original dark page bg */
   --text-color-primary-veteran: #f5f5f7; 
   --text-color-secondary-veteran: #888888; 
   --link-color-veteran: #0A84FF; 
@@ -90,19 +87,31 @@ body {
   --button-primary-bg-veteran: #0A84FF;
   --button-primary-text-veteran: #ffffff;
   /* Glass effect backgrounds for Veteran */
-  --hero-glass-bg-veteran: rgba(21, 21, 23, 0.75); /* Based on --hero-bg-veteran: #151517 */
-  --how-it-works-glass-bg-veteran: rgba(13, 17, 23, 0.75); /* Based on --how-it-works-bg-veteran: #0D1117 */
+  --hero-glass-bg-veteran: transparent; /* Was rgba(21, 21, 23, 0.75) */
+  --how-it-works-glass-bg-veteran: transparent; /* Was rgba(13, 17, 23, 0.75) */
 }
 
 /* Apply base theme styles */
 .app-theme-newtimer {
-  background-color: var(--page-bg-newtimer); /* This will be the base color under the pattern */
+  background-color: var(--page-bg-newtimer);
   color: var(--text-color-primary-newtimer);
+  background-image: url('../public/images/bg.png'); /* Apply image directly */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh; /* Ensure .App covers viewport height */
 }
 
 .app-theme-veteran {
-  background-color: var(--page-bg-veteran); /* This will be the base color under the pattern */
+  background-color: var(--page-bg-veteran);
   color: var(--text-color-primary-veteran);
+  background-image: url('../public/images/bg.png'); /* Apply image directly */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh; /* Ensure .App covers viewport height */
 }
 
 /* Global Heading Styles */
@@ -183,6 +192,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* Hero Section */
 .hero-section {
+  background-image: url('../public/images/bg.png'); /* Apply image directly */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh; /* Ensure .App covers viewport height */
   width: 100%;
   min-height: 85vh; /* Increased height */
   padding: 100px 20px 60px 20px; /* Generous vertical padding */
@@ -192,6 +207,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   justify-content: center; 
   position: relative;
   overflow: hidden;
+  z-index: 1;
   text-align: center; 
   /* Apply glass effect */
   backdrop-filter: blur(12px);
@@ -365,7 +381,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* Theme-specific variables for Features Section */
 .page-theme-newtimer {
-  --features-section-bg: #ffffff; /* Clean white for light theme */
+  --features-section-bg: transparent; /* Was #ffffff */
   --section-title-color: #1d1d1f;
   --feature-card-bg: #f9f9f9; /* Slightly off-white for cards */
   --feature-card-shadow: 0 12px 24px rgba(0,0,0,0.05), 0 8px 16px rgba(0,0,0,0.04);
@@ -384,7 +400,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .page-theme-veteran {
-  --features-section-bg: #000000; /* True black for dark theme */
+  --features-section-bg: transparent; /* Was #000000 */
   --section-title-color: #f5f5f7;
   --feature-card-bg: #1c1c1e; /* Dark grey for cards */
   --feature-card-shadow: 0 12px 24px rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.15);
@@ -561,10 +577,6 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   text-align: center; 
 }
 
-.mode-card:hover {
-  /* No specific hover for mode cards unless desired */
-}
-
 .mode-title {
   font-family: var(--apple-font-family);
   font-weight: 600;
@@ -658,10 +670,6 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   background: var(--carousel-dot-active-bg);
 }
 
-.carousel-dot:hover {
-  /* No specific hover effect, active state is enough */
-  /* transform: scale(1.3); */ /* Removed scale */
-}
 .carousel-dot::after { display: none; } /* Remove ::after element */
 
 
@@ -801,7 +809,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .cta-section {
   width: 100%;
   padding: 80px 40px; /* Increased padding for consistency */
-  background-color: var(--hero-bg); /* Reuse hero bg for consistency or define new */
+  background-color: va;
   color: var(--hero-title-color); /* Reuse hero text color */
   text-align: center;
   display: flex;
@@ -810,11 +818,11 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 /* Theme-specific styling for CTA section backgrounds and text */
 .page-theme-newtimer .cta-section {
-  background-color: var(--hero-bg-newtimer); /* Or a dedicated CTA section bg */
+  background-color: transparent; /* Was var(--hero-bg-newtimer) */
   color: var(--hero-title-color-newtimer);
 }
 .page-theme-veteran .cta-section {
-  background-color: var(--hero-bg-veteran); /* Or a dedicated CTA section bg */
+  background-color: transparent; /* Was var(--hero-bg-veteran) */
   color: var(--hero-title-color-veteran);
 }
 
@@ -1154,12 +1162,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* Theme Variables - Chat Interface */
 :root {
   /* Newtimer Theme */
-  --chat-bg-newtimer: #f8fafc;
+  --chat-bg-newtimer: transparent; /* Was #f8fafc */
   --chat-gradient-newtimer: var(--finsight-gradient-light);
   --chat-header-bg-newtimer: rgba(255, 255, 255, 0.8);
-  --chat-sidebar-bg-newtimer: rgba(255, 255, 255, 0.9);
+  --chat-sidebar-bg-newtimer: transparent; /* Was rgba(255, 255, 255, 0.9) */
   --chat-sidebar-header-bg-newtimer: rgba(255, 255, 255, 0.95);
-  --chat-main-bg-newtimer: rgba(255, 255, 255, 0.9);
+  --chat-main-bg-newtimer: transparent; /* Was rgba(255, 255, 255, 0.9) */
   --chat-messages-bg-newtimer: rgba(255, 255, 255, 0.95);
   --chat-border-newtimer: rgba(0, 0, 0, 0.08);
   --chat-text-newtimer: #1e293b;
@@ -1186,12 +1194,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   --chat-input-focus-ring-newtimer: rgba(37, 99, 235, 0.1);
 
   /* Veteran Theme */
-  --chat-bg-veteran: #0f172a;
+  --chat-bg-veteran: transparent; /* Was #0f172a */
   --chat-gradient-veteran: var(--finsight-gradient-dark);
   --chat-header-bg-veteran: rgba(15, 23, 42, 0.8);
-  --chat-sidebar-bg-veteran: rgba(30, 41, 59, 0.9);
+  --chat-sidebar-bg-veteran: transparent; /* Was rgba(30, 41, 59, 0.9) */
   --chat-sidebar-header-bg-veteran: rgba(30, 41, 59, 0.95);
-  --chat-main-bg-veteran: rgba(30, 41, 59, 0.9);
+  --chat-main-bg-veteran: transparent; /* Was rgba(30, 41, 59, 0.9) */
   --chat-messages-bg-veteran: rgba(30, 41, 59, 0.95);
   --chat-border-veteran: rgba(255, 255, 255, 0.08);
   --chat-text-veteran: #e2e8f0;
@@ -1551,7 +1559,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* Theme Variables - Apple-inspired */
 :root {
   /* Newtimer (Light) Theme */
-  --nav-bg-newtimer: rgba(251, 251, 253, 0.8); /* Light, slightly transparent */
+  --nav-bg-newtimer: transparent; /* Was rgba(251, 251, 253, 0.8) */
   --nav-border-newtimer: rgba(0, 0, 0, 0.1); /* Subtle border */
   --nav-text-newtimer: #333; /* Darker grey for text */
   --nav-text-hover-newtimer: #000; /* Black on hover */
@@ -1561,7 +1569,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 
   /* Veteran (Dark) Theme */
-  --nav-bg-veteran: rgba(29, 29, 31, 0.8); /* Dark, slightly transparent */
+  --nav-bg-veteran: transparent; /* Was rgba(29, 29, 31, 0.8) */
   --nav-border-veteran: rgba(255, 255, 255, 0.15); /* Subtle border */
   --nav-text-veteran: #ddd; /* Lighter grey for text */
   --nav-text-hover-veteran: #fff; /* White on hover */
@@ -1617,11 +1625,6 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   .nav-item {
     padding: 6px 8px; /* Smaller padding */
     font-size: 0.9rem; /* Smaller font size for nav items */
-  }
-  
-  .nav-item span {
-    /* display: none; */ /* This was from previous design with icons, ensure it's not needed */
-    /* If nav items become too crowded, consider hiding text or using icons for mobile */
   }
 
   .nav-brand {
@@ -2378,7 +2381,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* Asset Info Sidebar */
 .asset-info-sidebar {
   width: 320px;
-  background: rgba(255, 255, 255, 0.95);
+  background: transparent; /* Was rgba(255, 255, 255, 0.95) */
   backdrop-filter: blur(12px);
   border-radius: var(--radius-lg); /* Ensure --radius-lg is defined or use a fallback */
   padding: 24px;
@@ -2445,7 +2448,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.95);
+  background: transparent; /* Was rgba(255, 255, 255, 0.95) */
   backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
   border: 1px solid rgba(33, 150, 243, 0.1);
