@@ -59,20 +59,55 @@ function GuidePage({ currentTheme }) {
 
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
+        console.log('Observer entry:', entry); // Log the full entry
+
         if (entry.isIntersecting) {
-          if (entry.target === prerequisitesRef.current) {
+          console.log('Intersecting target:', entry.target);
+          console.log('Target classList:', entry.target.classList);
+
+          if (prerequisitesRef.current && entry.target === prerequisitesRef.current) {
             setCurrentSectionName('Prerequisites');
-          } else if (entry.target === accountOpeningRef.current) {
+            console.log('setCurrentSectionName called with: Prerequisites (Target matched prerequisitesRef)');
+          } else if (accountOpeningRef.current && entry.target === accountOpeningRef.current) {
             setCurrentSectionName('Account Opening');
-          } else if (entry.target === stockFundamentalsRef.current) {
+            console.log('setCurrentSectionName called with: Account Opening (Target matched accountOpeningRef)');
+          } else if (stockFundamentalsRef.current && entry.target === stockFundamentalsRef.current) {
             setCurrentSectionName('Stock Fundamentals');
-          } else if (entry.target === investmentPlanningRef.current) {
+            console.log('setCurrentSectionName called with: Stock Fundamentals (Target matched stockFundamentalsRef)');
+          } else if (investmentPlanningRef.current && entry.target === investmentPlanningRef.current) {
             setCurrentSectionName('Investment Planning');
-          } else if (entry.target === brokerSelectionRef.current) {
+            console.log('setCurrentSectionName called with: Investment Planning (Target matched investmentPlanningRef)');
+          } else if (brokerSelectionRef.current && entry.target === brokerSelectionRef.current) {
             setCurrentSectionName('Broker Selection');
-          } else if (entry.target === investmentJourneyRef.current) {
+            console.log('setCurrentSectionName called with: Broker Selection (Target matched brokerSelectionRef)');
+          } else if (investmentJourneyRef.current && entry.target === investmentJourneyRef.current) {
             setCurrentSectionName('Investment Journey');
+            console.log('setCurrentSectionName called with: Investment Journey (Target matched investmentJourneyRef)');
+          } else {
+            // This case helps identify if an observed element is intersecting but not matching any known ref
+            // Or if a ref is null when it's its turn for comparison (though the checks above handle null refs before comparison)
+            let matchedKnownRef = false;
+            if (!prerequisitesRef.current && entry.target.classList.contains('prerequisites')) console.warn('prerequisitesRef.current is null for intersecting target with class prerequisites');
+            if (!accountOpeningRef.current && entry.target.classList.contains('account-opening')) console.warn('accountOpeningRef.current is null for intersecting target with class account-opening');
+            if (!stockFundamentalsRef.current && entry.target.classList.contains('stock-fundamentals')) console.warn('stockFundamentalsRef.current is null for intersecting target with class stock-fundamentals');
+            if (!investmentPlanningRef.current && entry.target.classList.contains('investment-planning')) console.warn('investmentPlanningRef.current is null for intersecting target with class investment-planning');
+            if (!brokerSelectionRef.current && entry.target.classList.contains('broker-selection')) console.warn('brokerSelectionRef.current is null for intersecting target with class broker-selection');
+            if (!investmentJourneyRef.current && entry.target.classList.contains('investment-journey')) console.warn('investmentJourneyRef.current is null for intersecting target with class investment-journey');
+            
+            // Check if the target *should* have matched a ref but didn't
+            if (entry.target === prerequisitesRef.current || entry.target === accountOpeningRef.current || entry.target === stockFundamentalsRef.current || entry.target === investmentPlanningRef.current || entry.target === brokerSelectionRef.current || entry.target === investmentJourneyRef.current){
+                // This means it matched a ref, but the specific if/else if above didn't trigger it, implies ref was null at that point in the chain.
+                 // The individual ref checks above already log this.
+            } else {
+                console.log('Intersecting target did NOT match any known section ref:', entry.target);
+            }
           }
+        } else {
+          // Optional: Clear currentSectionName if no specific section is prominently in view
+          // This depends on desired behavior: if you want the text to revert to 'Need Help?'
+          // when scrolling *between* sections or to the very top/bottom.
+          // For now, let's not add a setCurrentSectionName('') here, as the prompt is about *setting* it.
+          // console.log('Target stopped intersecting:', entry.target);
         }
       });
     };
@@ -757,15 +792,7 @@ function GuidePage({ currentTheme }) {
       <div className="floating-bubble">
         <button className="help-button" onClick={toggleDrawer}>
           {
-            currentSectionName &&
-            ((
-              currentSectionName === 'Prerequisites' && !isPrerequisitesCollapsed) ||
-              (currentSectionName === 'Account Opening' && !isAccountOpeningCollapsed) ||
-              (currentSectionName === 'Stock Fundamentals' && !isStockFundamentalsCollapsed) ||
-              (currentSectionName === 'Investment Planning' && !isInvestmentPlanningCollapsed) ||
-              (currentSectionName === 'Broker Selection' && !isBrokerSelectionCollapsed) ||
-              (currentSectionName === 'Investment Journey' && !isInvestmentJourneyCollapsed)
-            )
+            currentSectionName
             ? `Stuck in ${currentSectionName}?` 
             : 'Need Help?'
           }
@@ -824,4 +851,4 @@ function GuidePage({ currentTheme }) {
   );
 }
 
-export default GuidePage; 
+export default GuidePage;
