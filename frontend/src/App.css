@@ -199,29 +199,32 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   background-attachment: fixed;
   min-height: 100vh; /* Ensure .App covers viewport height */
   width: 100%;
-  min-height: 85vh; /* Increased height */
-  padding: 100px 20px 60px 20px; /* Generous vertical padding */
+  padding: 0px 40px 60px 40px; /* Reduced top padding from 100px to 60px */
   display: flex;
-  flex-direction: column; /* Stack content vertically */
   align-items: center;
   justify-content: center; 
   position: relative;
   overflow: hidden;
   z-index: 1;
-  text-align: center; 
   /* Apply glass effect */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Remove desktop-specific flex-direction override */
-/* @media (min-width: 1024px) { ... } */
+.hero-container {
+  max-width: 85vw;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+}
 
 .hero-content {
-  max-width: 80vw; /* Increased max-width */
-  /* text-align: center; */ /* Already centered by hero-section */
-  z-index: 2; /* Keep if necessary for layering */
-  margin-bottom: 40px; /* Space for visual below */
+  flex: 1;
+  max-width: 600px;
+  text-align: left;
+  z-index: 2;
 }
 
 /* Remove desktop-specific text-align override */
@@ -229,25 +232,21 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 .hero-title {
   font-family: var(--apple-font-family);
-  font-size: 4em; /* Significantly larger title */
+  font-size: 3.5em; /* Adjusted for side-by-side layout */
   font-weight: 700;
   line-height: 1.15;
   margin-bottom: 28px;
   color: var(--hero-title-color); /* Theme variable for color */
-  /* Remove gradient text styling */
   text-shadow: none; /* Remove existing text shadow */
 }
 
 .hero-subtitle {
-  width: 60vw;
   font-family: var(--apple-font-family);
-  font-size: 1.4em; /* Larger subtitle */
+  font-size: 1.3em; /* Adjusted subtitle size */
   line-height: 1.5;
   margin-bottom: 40px;
   color: var(--hero-subtitle-color); /* Theme variable for color */
-  max-width: 600px; /* Constrain line length for readability */
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 500px; /* Constrain line length for readability */
 }
 
 .hero-cta-buttons {
@@ -255,12 +254,61 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   flex-direction: row; /* Keep buttons in a row */
   gap: 20px; /* Increased gap */
   align-items: center;
-  justify-content: center; /* Center buttons */
+  justify-content: flex-start; /* Align to left for left-aligned content */
   margin-top: 40px;
 }
 
-/* Remove responsive overrides for button direction if always row */
-/* @media (min-width: 768px) { ... } */
+/* Responsive styles for hero section */
+@media (max-width: 1024px) {
+  .hero-container {
+    gap: 40px;
+  }
+  
+  .hero-content {
+    max-width: 500px;
+  }
+  
+  .hero-svg {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 20px 40px 20px; /* Reduced top padding for mobile too */
+  }
+  
+  .hero-container {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .hero-content {
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .hero-cta-buttons {
+    justify-content: center;
+  }
+  
+  .hero-visual {
+    max-width: 350px;
+  }
+  
+  .hero-svg {
+    max-width: 300px;
+  }
+  
+  .hero-title {
+    font-size: 2.5em;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1em;
+  }
+}
 
 .cta-button {
   padding: 16px 32px; /* Apple-like padding */
@@ -350,20 +398,20 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 
 .hero-visual {
-  width: 100%;
-  max-width: 800px; /* Larger visual */
-  height: auto; /* Auto height based on aspect ratio */
-  margin: 40px auto 0 auto; /* Centered with top margin */
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  z-index: 1; /* Below content if text needs to overlay, but for stacked it's fine */
+  z-index: 1;
 }
 
-.hero-image {
+.hero-svg {
   width: 100%;
-  height: 450px; /* Fixed height for the visual container */
-  background: url('../public/hero-illustration.svg') no-repeat center center;
-  background-size: contain;
-  filter: none; /* Remove drop shadow */
+  height: auto;
+  max-width: 450px;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
 }
 
 /* Features Section */
@@ -423,13 +471,14 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   position: relative;
   max-width: 1200px; 
   margin: 0 auto;
-  height: 750px; 
+  min-height: 920px; /* Minimum height instead of fixed, increased from 600px */
+  height: auto; /* Dynamic height based on content */
   perspective: 2000px;
   transform-style: preserve-3d;
   display: flex; 
   justify-content: center; 
-  align-items: center; 
-  padding-bottom: 60px; /* Ensure space for carousel nav dots below */
+  align-items: flex-start; /* Align to top instead of center */
+  padding-bottom: 80px; /* More space for carousel nav dots */
 }
 
 .features-carousel {
@@ -445,11 +494,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .feature-card {
   position: absolute;
   width: 100%; /* Will be overridden by active/prev/next */
-  height: 100%; /* Will be overridden by active/prev/next */
+  height: auto; /* Dynamic height based on content */
+  min-height: 500px; /* Minimum height for consistency */
   background-color: var(--feature-card-bg);
   border-radius: 24px; /* Apple-like rounded corners */
   box-shadow: var(--feature-card-shadow);
-  overflow: hidden;
+  overflow: visible; /* Allow content to be visible */
   display: flex;
   flex-direction: column; /* Image above text */
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -458,20 +508,21 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   opacity: 0;
   pointer-events: none;
   left: 50%;
-  top: 50%;
-  transform-origin: center center;
+  top: 20px; /* Fixed top position instead of centering */
+  transform-origin: center top; /* Change origin to top */
 }
 
 .feature-card.active {
   opacity: 1;
-  transform: translate(-50%, -50%) translateZ(0) scale(1);
+  transform: translateX(-50%) translateZ(0) scale(1); /* Remove Y translation */
   z-index: 3;
   pointer-events: auto;
-  width: 60vw; /* Increased width for active card */
-  height: auto; /* Auto height based on content */
-  min-height: 600px; /* Minimum height for more presence */
-  max-height: 95%;
-  box-shadow: var(--feature-card-shadow); 
+  width: 85vw; /* Increased width for better text space, was 65vw */
+  height: auto; /* Fully dynamic height */
+  min-height: auto; /* Remove minimum height constraint */
+  max-height: none; /* Remove maximum height constraint */
+  box-shadow: var(--feature-card-shadow);
+  overflow: visible; /* Allow content to expand naturally */
 }
 
 .feature-card.previous,
@@ -480,15 +531,15 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   z-index: 2;
   pointer-events: none;
   width: 480px; /* Adjusted size for prev/next */
-  height: auto;
-  min-height: 550px;
-  max-height: 90%;
+  height: auto; /* Dynamic height */
+  min-height: auto; /* Remove minimum height */
+  max-height: none; /* Remove maximum height */
 }
 .feature-card.previous {
-  transform: translate(-50%, -50%) translateZ(-150px) translateX(-70%) scale(0.80) rotateY(15deg); 
+  transform: translateX(-50%) translateZ(-150px) translateX(-70%) scale(0.80) rotateY(15deg); /* Remove Y translation */
 }
 .feature-card.next {
-  transform: translate(-50%, -50%) translateZ(-150px) translateX(70%) scale(0.80) rotateY(-15deg); 
+  transform: translateX(-50%) translateZ(-150px) translateX(70%) scale(0.80) rotateY(-15deg); /* Remove Y translation */
 }
 
 
@@ -518,109 +569,147 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 
 .feature-card-content {
-  flex-grow: 1; 
-  padding: 40px; /* Increased padding */
+  flex: 1; 
+  padding: 28px 24px; /* Consistent padding */
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Align content to top */
-  text-align: center; /* Center text */
-  /* transform: translateZ(0); */ /* Removed 3D transform */
+  justify-content: flex-start;
+  text-align: center;
+  gap: 18px; /* Comfortable spacing between elements */
+  overflow: visible; /* Allow content to expand */
+  min-height: 0; /* Allow shrinking if needed */
 }
 
 .feature-card-header {
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Remove margin since we're using gap */
 }
 
 .feature-card-title {
   font-family: var(--apple-font-family);
-  font-size: 1.7em;
-  font-weight: 600;
+  font-size: 1.8em; /* Slightly larger for better hierarchy */
+  font-weight: 700; /* Bolder for better contrast */
   color: var(--feature-card-title-color);
-  margin-bottom: 10px;
-  line-height: 1.25;
+  margin-bottom: 12px;
+  line-height: 1.2; /* Tighter line height for titles */
+  letter-spacing: -0.02em; /* Subtle letter spacing for modern look */
 }
 
 .feature-card-subtitle {
   font-family: var(--apple-font-family);
-  font-size: 1em;
-  font-weight: 400;
+  font-size: 1.1em; /* Slightly larger for better readability */
+  font-weight: 500; /* Medium weight for better hierarchy */
   color: var(--feature-card-subtitle-color);
-  line-height: 1.4;
-  margin-bottom: 16px;
+  line-height: 1.3;
+  margin-bottom: 0; /* Remove margin since we're using gap */
+  opacity: 0.9; /* Subtle opacity for visual hierarchy */
 }
 
 .feature-description {
   font-family: var(--apple-font-family);
-  font-size: 0.95em;
-  line-height: 1.6;
+  font-size: 1em; /* Restore readable size */
+  line-height: 1.6; /* Comfortable line height */
   color: var(--feature-card-text-color);
-  margin-bottom: 24px;
-  flex-grow: 1; /* Allow description to push CTA to bottom */
+  margin-bottom: 0; /* Remove margin since we're using gap */
+  max-width: 95%; /* Good width utilization */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left; /* Left align for better readability */
+  padding: 0 12px; /* Horizontal padding for breathing room */
+  flex: 0 0 auto; /* Don't grow or shrink, natural size */
 }
 
 .feature-modes {
   display: flex;
   flex-direction: column; 
-  gap: 16px; /* Increased gap */
-  margin-bottom: 24px;
-  align-items: center; /* Center mode cards if they don't fill width */
+  gap: 18px; /* Comfortable gap for separation */
+  margin-bottom: 0; /* Remove margin since we're using gap in parent */
+  align-items: stretch; /* Stretch mode cards to full width */
+  width: 100%;
+  flex: 0 0 auto; /* Don't grow or shrink, natural size */
 }
 
 .mode-card {
-  flex-basis: auto; /* Let content decide width, up to max */
   width: 100%;
-  max-width: 220px; /* Max width for mode cards */
-  padding: 20px; /* Increased padding */
+  max-width: none; /* Remove max-width constraint */
+  padding: 20px 18px; /* Comfortable padding */
   background: var(--mode-card-bg);
-  border-radius: 12px; 
-  border: none; 
-  text-align: center; 
+  border-radius: 14px; /* Slightly larger radius */
+  border: 1px solid rgba(0, 0, 0, 0.08); /* Subtle border for definition */
+  text-align: left; /* Left align for better readability */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* Subtle shadow for depth */
+  transition: all 0.3s ease; /* Smooth hover transition */
+  flex: 0 0 auto; /* Don't grow or shrink, natural size */
+}
+
+.mode-card:hover {
+  transform: translateY(-2px); /* Subtle lift on hover */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* Enhanced shadow on hover */
 }
 
 .mode-title {
   font-family: var(--apple-font-family);
-  font-weight: 600;
+  font-weight: 700; /* Bolder for better hierarchy */
   color: var(--feature-card-title-color); 
-  margin-bottom: 8px; /* Increased margin */
-  font-size: 1.05em; /* Slightly larger */
+  margin-bottom: 8px; /* Reduced space below title */
+  font-size: 1.1em; /* Slightly smaller to save space */
+  letter-spacing: -0.01em; /* Subtle letter spacing */
 }
 
 .mode-description {
   font-family: var(--apple-font-family);
-  font-size: 0.9em;
+  font-size: 0.9em; /* Smaller to fit better */
   color: var(--feature-card-text-color); 
-  line-height: 1.5;
+  line-height: 1.4; /* Reduced line height to save space */
+  opacity: 0.9; /* Subtle opacity for hierarchy */
 }
 
 .feature-list {
   list-style-type: none;
-  padding-left: 0; /* Will be centered by text-align on parent */
-  margin-bottom: 24px;
-  text-align: center; /* Center list items */
+  padding-left: 0;
+  margin-bottom: 0; /* Remove margin since we're using gap in parent */
+  text-align: left; /* Left align for better readability */
+  background: rgba(0, 0, 0, 0.02); /* Very subtle background */
+  border-radius: 12px;
+  padding: 18px; /* Comfortable padding */
+  border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border */
+  flex: 0 0 auto; /* Don't grow or shrink, natural size */
 }
+
 .feature-list li {
   font-family: var(--apple-font-family);
-  font-size: 0.95em;
+  font-size: 0.9em; /* Smaller to fit better */
   color: var(--feature-card-text-color);
-  margin-bottom: 10px;
-  /* position: relative; */ /* Not needed for centered text */
-  /* padding-left: 25px; */ /* Not needed for centered text */
+  margin-bottom: 8px; /* Reduced space between items */
+  position: relative;
+  padding-left: 24px; /* Reduced space for custom bullet */
+  line-height: 1.4; /* Reduced line height */
+  display: flex;
+  align-items: flex-start; /* Align items to top for multi-line text */
 }
+
+.feature-list li:last-child {
+  margin-bottom: 0; /* Remove margin from last item */
+}
+
 .feature-list li::before {
-  /* content: "✓"; */ /* Removed, as centering text is simpler */
-  /* position: absolute; */
-  /* left: 0; */
-  /* color: var(--feature-list-bullet-color); */
-  /* font-weight: 600; */
-  display: inline-block; /* Could use this for custom bullets if needed */
-  margin-right: 8px;
+  content: "✓"; /* Checkmark bullet */
+  position: absolute;
+  left: 0;
+  top: 2px; /* Slight offset for better alignment */
+  color: var(--feature-list-bullet-color);
+  font-weight: 700;
+  font-size: 1.1em; /* Slightly larger bullet */
+  width: 20px; /* Fixed width for alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
 .feature-cta {
   margin-top: auto; /* Push CTA to bottom */
-  padding: 12px 24px;
-  font-size: 0.95em;
+  padding: 10px 20px; /* Slightly smaller padding */
+  font-size: 0.9em; /* Smaller font size */
   font-weight: 500;
   border-radius: 8px;
   background-color: var(--feature-cta-primary-bg);
@@ -631,6 +720,8 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   text-decoration: none; /* Ensure links look like buttons */
   display: inline-block; /* Proper button behavior */
   align-self: center; /* Center CTA button */
+  flex-shrink: 0; /* Prevent button from shrinking */
+  min-height: 40px; /* Ensure minimum clickable area */
 }
 
 .feature-cta:hover {
@@ -676,44 +767,59 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* Responsive Design */
 @media (max-width: 1024px) {
   .features-grid {
+    min-height: 500px; /* Reduced minimum height */
     height: auto; /* Auto height based on content */
-    padding-bottom: 80px; /* Space for dots */
+    padding-bottom: 100px; /* More space for dots */
   }
 
-  .feature-card.active { width: 90%; max-width: 650px; }
+  .feature-card.active { 
+    width: 90%; 
+    max-width: 700px; /* Increased from 650px */
+    transform: translateX(-50%) translateZ(0) scale(1); /* Ensure proper positioning */
+  }
   .feature-card.previous,
   .feature-card.next {
      /* Stack behind active card, or hide */
     opacity: 0;
-    transform: translateZ(-200px) scale(0.8);
+    transform: translateX(-50%) translateZ(-200px) scale(0.8);
   }
   .feature-card-image { height: 220px; }
-  .feature-card-content { padding: 24px; }
-  .feature-card-title { font-size: 1.5em; }
-  .feature-card-subtitle { font-size: 0.95em; }
-  .feature-description { font-size: 0.9em; }
+  .feature-card-content { padding: 24px; gap: 16px; }
+  .feature-card-title { font-size: 1.6em; }
+  .feature-card-subtitle { font-size: 1em; }
+  .feature-description { font-size: 0.95em; }
 }
 
 @media (max-width: 768px) {
   .features-section {
     padding: 60px 15px;
   }
-  .features-grid { height: auto; } /* Auto height */
+  .features-grid { 
+    min-height: 400px; /* Smaller minimum height for mobile */
+    height: auto; /* Auto height */
+    padding-bottom: 120px; /* More space for navigation */
+  }
 
-  .feature-card.active { width: 95%; max-width: 500px; }
+  .feature-card.active { 
+    width: 95%; 
+    max-width: 550px; /* Increased from 500px */
+    transform: translateX(-50%) translateZ(0) scale(1); /* Ensure proper positioning */
+  }
   .feature-card.previous,
   .feature-card.next {
     display: none; /* Hide side cards on mobile for simplicity */
   }
-  .carousel-nav { bottom: -60px; } /* Adjust dot position */
+  .carousel-nav { bottom: -80px; } /* Adjust dot position */
   .feature-card-image { height: 200px; }
-  .feature-card-title { font-size: 1.4em; }
+  .feature-card-content { padding: 20px; gap: 14px; }
+  .feature-card-title { font-size: 1.5em; }
+  .feature-card-subtitle { font-size: 0.95em; }
+  .feature-description { font-size: 0.9em; }
 }
 
 /* How It Works Section */
 .how-it-works-section {
   width: 85vw;
-  padding: 80px 40px; /* Increased padding for consistency */
   transition: background-color 0.3s ease;
   /* Apply glass effect */
   backdrop-filter: blur(12px);
@@ -807,9 +913,9 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* CTA Section */
 .cta-section {
-  width: 100%;
-  padding: 80px 40px; /* Increased padding for consistency */
-  background-color: va;
+  width: 85vw;
+  padding: 40px; /* Increased padding for consistency */
+  background-color: var(--hero-bg);
   color: var(--hero-title-color); /* Reuse hero text color */
   text-align: center;
   display: flex;

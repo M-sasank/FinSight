@@ -127,23 +127,25 @@ function LandingPage({ currentTheme }) {
     <div className="landing-page">
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-content">
-          <h1 className="hero-title">Your AI-Powered Financial Companion</h1>
-          <p className="hero-subtitle">
-            FinSight combines cutting-edge AI with financial expertise to help you make smarter investment decisions. 
-            Whether you're new to investing or a seasoned trader, get personalized insights and real-time market analysis.
-          </p>
-          <div className="hero-cta-buttons">
-            <button onClick={() => navigate('/chat')} className="cta-button primary">
-              Start Chatting
-            </button>
-            <button onClick={() => navigate('/tracker')} className="cta-button secondary">
-              Track Stocks
-            </button>
+        <div className="hero-container">
+          <div className="hero-content">
+            <h1 className="hero-title">Your AI-Powered Financial Companion</h1>
+            <p className="hero-subtitle">
+              FinSight combines cutting-edge AI with financial expertise to help you make smarter investment decisions. 
+              Whether you're new to investing or a seasoned trader, get personalized insights and real-time market analysis.
+            </p>
+            <div className="hero-cta-buttons">
+              <button onClick={() => navigate('/chat')} className="cta-button primary">
+                Start Chatting
+              </button>
+              <button onClick={() => navigate('/tracker')} className="cta-button secondary">
+                Track Stocks
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="hero-visual">
-          <div className="hero-image"></div>
+          <div className="hero-visual">
+            <img src="/images/chat-assistant.svg" alt="AI Financial Assistant" className="hero-svg" />
+          </div>
         </div>
       </section>
 
