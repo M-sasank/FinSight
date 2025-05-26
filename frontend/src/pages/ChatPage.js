@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FiSend, FiPlus, FiClock } from 'react-icons/fi';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import './ChatPage.css';
 
 function ChatPage({ currentTheme }) {
@@ -206,7 +208,9 @@ function ChatPage({ currentTheme }) {
     }
     return (
       <div className="message-content">
-        <div className="message-text">{message.text}</div>
+        <div className="message-text">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
+        </div>
         <div className="message-timestamp">
           {new Date(message.timestamp).toLocaleTimeString([], { 
             hour: '2-digit', 

@@ -715,3 +715,37 @@
 .page-theme-veteran .chat-history-list::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 0.3);
 } 
+
+/* Table Styling for Markdown */
+.message-text table {
+  border-collapse: collapse;
+  margin: var(--finsight-space-4) 0;
+  font-size: 0.9rem;
+  width: auto; /* Or 100% if you want full width tables */
+  border: 1px solid var(--chat-border-veteran); /* Default border, can be themed */
+}
+
+.message-text th,
+.message-text td {
+  border: 1px solid var(--chat-border-veteran); /* Default border, can be themed */
+  padding: var(--finsight-space-2) var(--finsight-space-3);
+  text-align: left;
+}
+
+.message-text th {
+  font-weight: 600;
+  /* background-color: can be themed if needed */
+}
+
+/* Theme-specific table overrides if necessary */
+.page-theme-newtimer .message-text table,
+.page-theme-newtimer .message-text th,
+.page-theme-newtimer .message-text td {
+  border-color: var(--chat-border-newtimer);
+}
+
+.page-theme-veteran .message-text table,
+.page-theme-veteran .message-text th,
+.page-theme-veteran .message-text td {
+  border-color: var(--chat-border-veteran); /* Ensure veteran theme uses its border color */
+} 

@@ -1,0 +1,126 @@
+/* frontend/src/components/ChatAssistAnimation.css */
+.chat-assist-animation-container.mind-blowing {
+  width: 100%;
+  max-width: 260px; /* Or adjust to fit your card, e.g., 100% of .feature-card-image */
+  height: 200px;    /* Match viewBox aspect ratio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* For debugging visibility against dark theme: */
+  /* background: #111;  */
+}
+
+.chat-assist-animation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* Allow glows to extend slightly */
+}
+
+/* --- Re-using Veteran Theme Colors from App.css ---
+  --accent-color-primary-veteran: #0A84FF; (Bright Blue)
+  --text-color-primary-veteran: #f5f5f7; (Near White)
+  --text-color-secondary-veteran: #888888; (Gray)
+  --card-bg-veteran: #1c1c1e; (Card Background)
+  --nav-text-veteran: #ddd (Lighter Gray / Off-white)
+*/
+
+/* Subtle Background Plexus */
+.caa-background-plexus line {
+  stroke: rgba(136, 136, 136, 0.1); /* very faint var(--text-color-secondary-veteran) */
+  stroke-width: 0.5px;
+  animation: caaPlexusShift 30s linear infinite alternate;
+}
+.caa-background-plexus line:nth-child(even) {
+  animation-delay: -15s; /* Offset animation for some lines */
+}
+
+@keyframes caaPlexusShift {
+  from { transform: translate(-5px, -2px) rotate(-1deg); }
+  to { transform: translate(5px, 2px) rotate(1deg); }
+}
+
+
+/* Central AI Core Styling & Animation */
+.caa-core-atmosphere {
+  fill: var(--accent-color-primary-veteran, #0A84FF);
+  opacity: 0; /* Start with 0 opacity */
+  animation: caaAtmospherePulse 5s infinite ease-in-out;
+}
+
+.caa-core-shimmer {
+  /* fill is url(#coreShimmerGradient) from JS */
+  opacity: 0.8;
+  animation: caaShimmerRotate 15s linear infinite;
+  transform-origin: center;
+}
+
+/* Gradient stops animation for shimmer */
+.caa-core-shimmer .grad-stop-inner { /*Bound to <radialGradient> in JS*/
+  stop-color: rgba(245, 245, 247, 0.5); /* --text-color-primary-veteran with alpha */
+  animation: caaChangeStopInner 7s infinite alternate ease-in-out;
+}
+.caa-core-shimmer .grad-stop-mid {
+  stop-color: rgba(10, 132, 255, 0.3); /* --accent-color-primary-veteran with alpha */
+  animation: caaChangeStopMid 7s infinite alternate ease-in-out;
+  animation-delay: -3.5s; /* Offset */
+}
+.caa-core-shimmer .grad-stop-outer {
+  stop-color: rgba(10, 132, 255, 0.1); /* --accent-color-primary-veteran with more alpha */
+}
+
+
+.caa-core-kernel {
+  fill: var(--text-color-primary-veteran, #f5f5f7);
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-width: 1px;
+  opacity: 0.9;
+  transform-origin: center;
+  animation: caaKernelPulse 3s infinite ease-in-out;
+}
+
+
+/* Particles Styling & Animation */
+.caa-particle {
+  fill: var(--text-color-primary-veteran, #f5f5f7);
+  /* Opacity and transform are handled by animateMotion + CSS for fade effect */
+  animation: caaParticleFade 0s linear infinite; /* duration/delay set by animateMotion */
+}
+
+/* Individual particle animation delays are set on <animateMotion> 'begin' attribute in JS */
+/* The 'dur' for animateMotion also comes from JS */
+/* We sync CSS fade with animateMotion timing */
+@keyframes caaParticleFade {
+  0% { opacity: 0; transform: scale(0.5); } /* Start small and faded */
+  15% { opacity: 0.8; transform: scale(1); }  /* Fade in as it starts moving */
+  85% { opacity: 0.8; transform: scale(1); } /* Visible for most of its path */
+  100% { opacity: 0; transform: scale(0.5); } /* Fade out at the end of its path */
+}
+
+
+/* --- Keyframe Animations for Core --- */
+@keyframes caaAtmospherePulse {
+  0%, 100% { opacity: 0.05; transform: scale(1); }
+  50% { opacity: 0.15; transform: scale(1.1); }
+}
+
+@keyframes caaShimmerRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes caaKernelPulse {
+  0%, 100% { transform: scale(0.95); opacity: 0.8; filter: brightness(90%);}
+  50% { transform: scale(1.05); opacity: 1; filter: brightness(120%);}
+}
+
+/* Keyframes for gradient stop animations */
+@keyframes caaChangeStopInner {
+  0% { stop-color: rgba(245, 245, 247, 0.3); } /* Light */
+  50% { stop-color: rgba(10, 132, 255, 0.4); } /* Accent */
+  100% { stop-color: rgba(245, 245, 247, 0.3); }
+}
+@keyframes caaChangeStopMid {
+  0% { stop-color: rgba(10, 132, 255, 0.2); } /* Accent */
+  50% { stop-color: rgba(245, 245, 247, 0.1); } /* Light */
+  100% { stop-color: rgba(10, 132, 255, 0.2); }
+}

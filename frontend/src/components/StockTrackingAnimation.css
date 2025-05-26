@@ -1,0 +1,162 @@
+/* frontend/src/components/StockTrackingAnimation.css */
+.stock-tracking-animation-container.mind-blowing {
+  width: 100%;
+  max-width: 260px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stock-tracking-animation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Clip elements moving outside viewBox for this one */
+}
+
+/* --- Using Veteran Theme Colors --- */
+/*
+  --accent-color-primary-veteran: #0A84FF;
+  --text-color-primary-veteran: #f5f5f7;
+  --text-color-secondary-veteran: #888888;
+*/
+
+/* Background Grid */
+.sta-background-grid line {
+  stroke: rgba(136, 136, 136, 0.07); /* Faint --text-color-secondary-veteran */
+  stroke-width: 0.5px;
+  animation: staGridFade 8s infinite alternate ease-in-out;
+}
+.sta-background-grid line:nth-child(odd) {
+  animation-delay: -4s;
+}
+
+@keyframes staGridFade {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* Stylized Chart Line */
+.sta-chart-line {
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-dasharray: 500; /* Approximate length */
+  stroke-dashoffset: 500;
+  animation: staDrawChart 3s ease-out forwards, staChartPulse 4s 3.5s infinite ease-in-out;
+  filter: url(#reticleGlow); /* Subtle glow on the line itself */
+}
+
+@keyframes staDrawChart {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes staChartPulse { /* Subtle "digital signal" pulse */
+  0%, 100% { stroke-opacity: 0.7; filter: brightness(80%); }
+  50% { stroke-opacity: 1; filter: brightness(120%); }
+}
+
+/* Data Points */
+.sta-data-point {
+  fill: var(--text-color-primary-veteran, #f5f5f7);
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-width: 0.5px;
+  opacity: 0;
+  transform-origin: center;
+  animation: staAppearPoint 0.5s ease-out forwards, staPointIdlePulse 3s infinite ease-in-out;
+  /* Individual animation-delay for appear is set inline in JS */
+  /* Stagger idle pulse */
+}
+.sta-data-point:nth-child(1) { animation-delay: 1s, 1.5s; } /* appearDelay, idlePulseDelay */
+.sta-data-point:nth-child(2) { animation-delay: 1.3s, 1.8s; }
+.sta-data-point:nth-child(3) { animation-delay: 1.6s, 2.1s; } /* Focus point */
+.sta-data-point:nth-child(4) { animation-delay: 1.9s, 2.4s; }
+
+
+@keyframes staAppearPoint {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes staPointIdlePulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Specific animation for the focused data point */
+.sta-data-point.focus-point-target {
+  /* Override idle pulse with a more pronounced "analyzed" pulse when reticle is on it */
+  /* This needs to be timed with reticle's arrival */
+  animation: staAppearPoint 0.5s ease-out forwards, staFocusPulse 1.5s 3s infinite ease-in-out;
+  animation-delay: 1.6s, 3s; /* Ensure it appears, then starts focus pulse */
+}
+
+@keyframes staFocusPulse {
+  0%, 100% { r: 3.5px; filter: url(#pointFocusGlow) brightness(150%); }
+  50% { r: 4.5px; filter: url(#pointFocusGlow) brightness(200%); }
+}
+
+
+/* Analysis Reticle / Scanner */
+.sta-reticle-group {
+  /* Initial position set by JS if needed, or animate from off-screen */
+  transform: translate(var(--focusX), var(--focusY)); /* Centered on focus point */
+  animation: staReticleScan 8s infinite ease-in-out, staReticleAppear 1s 2s ease-out forwards;
+  opacity: 0; /* Start hidden */
+  filter: url(#reticleGlow);
+}
+
+.sta-reticle-ring {
+  fill: none;
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-width: 1px;
+  transform-origin: center;
+}
+.sta-reticle-ring.outer {
+  stroke-opacity: 0.3;
+  animation: staRotateRing 10s linear infinite, staRingPulseOuter 4s infinite ease-in-out;
+}
+.sta-reticle-ring.mid {
+  stroke-opacity: 0.6;
+  animation: staRotateRing 8s linear infinite reverse, staRingPulseMid 4s infinite ease-in-out;
+  animation-delay: 0s, -1s;
+}
+.sta-reticle-ring.inner {
+  stroke-opacity: 0.9;
+  animation: staRotateRing 6s linear infinite, staRingPulseInner 4s infinite ease-in-out;
+  animation-delay: 0s, -2s;
+}
+
+.sta-reticle-crosshair {
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-width: 0.75px;
+  stroke-opacity: 0.7;
+}
+
+.sta-reticle-highlight {
+  opacity: 0;
+  animation: staReticleFocusHighlight 1.5s 3s infinite ease-in-out; /* Timed with focus point pulse */
+}
+
+
+@keyframes staReticleAppear {
+  to { opacity: 1; }
+}
+
+@keyframes staReticleScan { /* Subtle scanning movement around the focal point */
+  0% { transform: translate(var(--focusX), var(--focusY)) rotate(0deg); }
+  25% { transform: translate(calc(var(--focusX) - 2px), calc(var(--focusY) + 2px)) rotate(5deg); }
+  50% { transform: translate(var(--focusX), var(--focusY)) rotate(0deg); }
+  75% { transform: translate(calc(var(--focusX) + 2px), calc(var(--focusY) - 2px)) rotate(-5deg); }
+  100% { transform: translate(var(--focusX), var(--focusY)) rotate(0deg); }
+}
+
+@keyframes staRotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes staRingPulseOuter { 0%, 100% { r: 30px; stroke-opacity: 0.3;} 50% { r: 32px; stroke-opacity: 0.5;} }
+@keyframes staRingPulseMid { 0%, 100% { r: 20px; stroke-opacity: 0.6;} 50% { r: 22px; stroke-opacity: 0.8;} }
+@keyframes staRingPulseInner { 0%, 100% { r: 10px; stroke-opacity: 0.9;} 50% { r: 11px; stroke-opacity: 1;} }
+
+@keyframes staReticleFocusHighlight { /* Highlights when focused on the point */
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.7; transform: scale(1); }
+}

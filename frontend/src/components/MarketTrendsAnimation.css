@@ -1,0 +1,128 @@
+/* frontend/src/components/MarketTrendsAnimation.css */
+.market-trends-animation-container.mind-blowing {
+  width: 100%;
+  max-width: 260px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.market-trends-animation-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* --- Using Veteran Theme Colors from App.css ---
+  --accent-color-primary-veteran: #0A84FF; (Bright Blue)
+  --text-color-primary-veteran: #f5f5f7; (Near White)
+  --text-color-secondary-veteran: #888888; (Gray)
+  --card-bg-veteran: #1c1c1e;
+*/
+
+/* Subtle Background Elements */
+.mta-bg-circle {
+  fill: var(--text-color-secondary-veteran, #888888);
+  opacity: 0;
+  animation: mtaBgCircleFloat 10s infinite ease-in-out alternate;
+}
+.mta-bg-circle:nth-child(odd) { animation-duration: 12s; animation-delay: -5s; }
+.mta-bg-circle:nth-child(3n) { animation-duration: 8s; }
+
+@keyframes mtaBgCircleFloat {
+  0% { opacity: 0.05; transform: translate(0,0) scale(0.8); }
+  50% { opacity: 0.15; transform: translate(5px, -5px) scale(1.1); }
+  100% { opacity: 0.05; transform: translate(0,0) scale(0.8); }
+}
+
+/* Central Data Orb */
+.mta-data-orb {
+  fill: rgba(10, 132, 255, 0.1); /* Transparent accent - var(--accent-color-primary-veteran) with alpha */
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-width: 1px;
+  animation: mtaOrbBreathe 6s infinite ease-in-out;
+}
+
+.mta-orb-texture-fill {
+  /* The feTurbulence effect is CPU intensive. 
+     To animate it via CSS, we can animate attributes on the filter itself if they are presentation attributes,
+     or use JS. A simpler CSS approach is to animate the opacity of this layer or its transform. */
+  animation: mtaOrbTextureShift 20s linear infinite alternate;
+  opacity: 0.4; /* Control intensity of texture */
+}
+
+@keyframes mtaOrbBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.03); opacity: 1; }
+}
+
+@keyframes mtaOrbTextureShift {
+  0% { transform: translate(0px, 0px) scale(1); }
+  25% { transform: translate(2px, -1px) scale(1.01); }
+  50% { transform: translate(-2px, 1px) scale(1); }
+  75% { transform: translate(1px, 2px) scale(1.01); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+
+/* Trend Streams */
+.mta-trend-stream {
+  stroke-dasharray: 200; /* Average length, adjust if paths differ greatly */
+  stroke-dashoffset: 200;
+  animation: mtaDrawStream 6s infinite ease-in-out;
+  opacity: 0.7;
+}
+.ts-stream-1 { animation-delay: 0s; }
+.ts-stream-2 { animation-delay: -2s; } /* Negative delay makes it start partway through cycle */
+.ts-stream-3 { animation-delay: -4s; }
+
+/* Animate gradient for streams */
+.mta-trend-stream .ts-grad-stop1 { /*Bound to <linearGradient> in JS*/
+  stop-color: rgba(10, 132, 255, 0); /* Transparent --accent-color-primary-veteran */
+  animation: mtaStreamGrad1 3s infinite linear alternate;
+}
+.mta-trend-stream .ts-grad-stop2 {
+  stop-color: var(--accent-color-primary-veteran, #0A84FF);
+  animation: mtaStreamGrad2 3s infinite linear alternate;
+  animation-delay: -1.5s;
+}
+.mta-trend-stream .ts-grad-stop3 {
+  stop-color: rgba(10, 132, 255, 0); /* Transparent --accent-color-primary-veteran */
+   animation: mtaStreamGrad1 3s infinite linear alternate; /* Reuse for symmetry */
+   animation-direction: alternate-reverse;
+}
+
+@keyframes mtaDrawStream {
+  0% { stroke-dashoffset: 200; opacity: 0.3; }
+  50% { stroke-dashoffset: 0; opacity: 0.8; }
+  100% { stroke-dashoffset: -200; opacity: 0.3; } /* Continue drawing "through" */
+}
+
+@keyframes mtaStreamGrad1 {
+  from { stop-opacity: 0; }
+  to { stop-opacity: 0.6; }
+}
+@keyframes mtaStreamGrad2 {
+  from { stop-opacity: 0.8; }
+  to { stop-opacity: 0.3; }
+}
+
+
+/* News Pings */
+.mta-news-ping {
+  fill: var(--text-color-primary-veteran, #f5f5f7); /* Bright pings */
+  stroke: var(--accent-color-primary-veteran, #0A84FF);
+  stroke-width: 0.5px;
+  animation: mtaPingPulse 6s infinite ease-out;
+  /* Individual delays are set inline in the JS via `style` prop */
+  transform-origin: center;
+}
+
+@keyframes mtaPingPulse {
+  0%, 100% { r: 0; opacity: 0; transform: scale(0.5); }
+  10% { r: 3.5; opacity: 1; transform: scale(1.2); } /* Appears and expands */
+  20% { r: 2.5; opacity: 0.7; transform: scale(1); } /* Settles */
+  80% { r: 2.5; opacity: 0.5; transform: scale(1); } /* Holds */
+  95% { r: 0; opacity: 0; transform: scale(0.8);} /* Fades out */
+}
