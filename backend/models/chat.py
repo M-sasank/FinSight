@@ -8,4 +8,5 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     type: str
     user_query: str
-    conversation_id: Optional[str] = None 
+    conversation_id: Optional[str] = None
+    section_name: Optional[str] = None 
