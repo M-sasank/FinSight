@@ -318,4 +318,46 @@
 
 [data-theme='dark'] .risk-modal-close {
   color: #999;
+}
+
+.asset-card {
+  position: relative;
+  border-radius: 16px;
+  background: var(--card-bg, #000000);
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+  margin-bottom: 24px;
+  transition: box-shadow 0.3s, border 0.3s;
+  border: 0.7px solid transparent;
+}
+
+.asset-card.risk-low {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.18), 0 2px 12px 0 rgba(0,0,0,0.10);
+}
+
+.asset-card.risk-moderate {
+  border-color: #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.18), 0 2px 12px 0 rgba(0,0,0,0.10);
+}
+
+.asset-card.risk-high {
+  border-color: #f44336;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.18), 0 2px 12px 0 rgba(0,0,0,0.10);
+}
+
+[data-theme='dark'] .asset-card {
+  background: #181a20;
+}
+
+[data-theme='dark'] .asset-card.risk-low {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.28), 0 2px 12px 0 rgba(0,0,0,0.18);
+}
+[data-theme='dark'] .asset-card.risk-moderate {
+  border-color: #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.28), 0 2px 12px 0 rgba(0,0,0,0.18);
+}
+[data-theme='dark'] .asset-card.risk-high {
+  border-color: #f44336;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.28), 0 2px 12px 0 rgba(0,0,0,0.18);
 } 
