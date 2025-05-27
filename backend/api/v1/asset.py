@@ -35,6 +35,12 @@ async def delete_asset(asset_id: str, current_user: UserModel = Depends(get_curr
     logger.info(f"Deleting asset with ID: {asset_id}, User ID: {current_user.id}")
     return asset_service.delete_asset(asset_id, current_user.id)
 
+@router.put("/refresh/{asset_id}", response_model=AssetResponse)
+async def refresh_asset(asset_id: str, current_user: UserModel = Depends(get_current_user)):
+    """Manually refresh asset details for a specific asset."""
+    logger.info(f"Manually refreshing asset with ID: {asset_id}, User ID: {current_user.id}")
+    return asset_service.refresh_asset_details(asset_id, current_user.id)
+
 @router.get("/analyze-risk/{asset_symbol}", response_model=RiskAnalysisResponse)
 async def analyze_asset_risk(asset_symbol: str, current_user: UserModel = Depends(get_current_user)):
     """
