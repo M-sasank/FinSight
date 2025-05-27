@@ -1,4 +1,4 @@
-from openai import OpenAI
+from openai import AsyncOpenAI
 import os
 from typing import Dict, Any, List
 from fastapi import HTTPException
@@ -9,6 +9,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from datetime import datetime, timezone
 import sqlite3
+import asyncio
 
 # Configure logging
 logging.basicConfig(
@@ -36,13 +37,13 @@ class NewsService:
     def __init__(self):
         logger.info("Initializing NewsService")
         try:
-            self.client = OpenAI(
+            self.client = AsyncOpenAI(
                 api_key=os.getenv("PERPLEXITY_API_KEY"),
                 base_url="https://api.perplexity.ai",
             )
-            logger.info("OpenAI client initialized successfully")
+            logger.info("AsyncOpenAI client initialized successfully")
         except Exception as e:
-            logger.error(f"Failed to initialize OpenAI client: {str(e)}")
+            logger.error(f"Failed to initialize AsyncOpenAI client: {str(e)}")
             raise
 
         self.model = "sonar-pro"
@@ -85,31 +86,37 @@ class NewsService:
             # Depending on desired behavior, you might want to raise an error here
             # or allow the service to run without caching if directory creation fails.
 
-    def _get_tracked_assets(self, user_id: str) -> List[Dict[str, Any]]:
+    async def _get_tracked_assets(self, user_id: str) -> List[Dict[str, Any]]:
         """Fetch tracked assets for a given user from the database."""
         if not self.conn:
             logger.error("Database connection not available, cannot fetch tracked assets.")
             return []
         try:
-            cursor = self.conn.execute("SELECT symbol, name, price, price_history, movement FROM tracked_assets WHERE user_id = ?", (user_id,))
-            assets = []
-            for row in cursor.fetchall():
-                asset_data = {
-                    "symbol": row["symbol"], 
-                    "name": row["name"],
-                    "price": row["price"],
-                    "movement": row["movement"]
-                }
-                try:
-                    # price_history is stored as a JSON string, so parse it
-                    asset_data["price_history"] = json.loads(row["price_history"]) if row["price_history"] else []
-                except json.JSONDecodeError:
-                    logger.warning(f"Failed to parse price_history for asset {row['symbol']}. Setting to empty list.")
-                    asset_data["price_history"] = []
-                except TypeError: # Handles if row["price_history"] is None or not a string
-                    logger.warning(f"price_history for asset {row['symbol']} is None or not a string. Setting to empty list.")
-                    asset_data["price_history"] = []
-                assets.append(asset_data)
+            # Run synchronous DB call in a thread pool
+            def db_call():
+                cursor = self.conn.execute("SELECT symbol, name, price, price_history, movement FROM tracked_assets WHERE user_id = ?", (user_id,))
+                fetched_rows = cursor.fetchall()
+                assets = []
+                for row in fetched_rows:
+                    asset_data = {
+                        "symbol": row["symbol"], 
+                        "name": row["name"],
+                        "price": row["price"],
+                        "movement": row["movement"]
+                    }
+                    try:
+                        asset_data["price_history"] = json.loads(row["price_history"]) if row["price_history"] else []
+                    except json.JSONDecodeError:
+                        logger.warning(f"Failed to parse price_history for asset {row['symbol']}. Setting to empty list.")
+                        asset_data["price_history"] = []
+                    except TypeError: 
+                        logger.warning(f"price_history for asset {row['symbol']} is None or not a string. Setting to empty list.")
+                        asset_data["price_history"] = []
+                    assets.append(asset_data)
+                return assets
+
+            loop = asyncio.get_event_loop()
+            assets = await loop.run_in_executor(None, db_call)
             
             logger.info(f"Fetched {len(assets)} assets for user_id: {user_id}")
             return assets
@@ -118,47 +125,39 @@ class NewsService:
             return []
 
     def _get_cache_file_for_user(self, user_id: str) -> Path:
-        # Ensure user_id is a string and sanitize if necessary, though FastAPI/Pydantic should handle type.
-        # For example, to prevent directory traversal if user_id could be malicious:
-        # safe_user_id = "".join(c for c in str(user_id) if c.isalnum() or c in ('-', '_'))
-        # For now, assuming user_id is a safe identifier (e.g., UUID or email from auth).
         return self.CACHE_DIR / f"news_cache_{user_id}.json"
 
-    def _load_from_cache(self, requested_topics: str, user_id: str) -> Dict[str, Any] | None:
+    async def _load_from_cache(self, requested_topics: str, user_id: str) -> Dict[str, Any] | None:
         cache_file = self._get_cache_file_for_user(user_id)
         logger.info(f"Attempting to load news from cache for user \'{user_id}\' from \'{cache_file}\' for topics: {requested_topics}")
         if not cache_file.exists():
             logger.info(f"Cache file \'{cache_file}\' does not exist for user \'{user_id}\'.")
             return None
         try:
-            with open(cache_file, "r") as f:
-                cache_content = json.load(f)
+            # Run synchronous file I/O in a thread pool
+            def file_read():
+                with open(cache_file, "r") as f:
+                    return json.load(f)
+            
+            loop = asyncio.get_event_loop()
+            cache_content = await loop.run_in_executor(None, file_read)
             
             if not (isinstance(cache_content, dict) and \
                     "news_data" in cache_content and \
                     "topics_cached_for" in cache_content):
                 logger.warning(f"Cache file \'{cache_file}\' for user \'{user_id}\' has invalid structure. Ignoring cache.")
-                # Optionally, delete the invalid cache file: cache_file.unlink(missing_ok=True)
                 return None
 
-            # For now, we assume any cached data is potentially usable if the structure is okay.
-            # A more advanced check could be:
-            # if cache_content.get("topics_cached_for") != requested_topics:
-            #     logger.info(f"Cache found for user \'{user_id}\', but for different topics (\'{cache_content.get(\'topics_cached_for\')}\' vs \'{requested_topics}\'). Ignoring cache.")
-            #     return None
-
             logger.info(f"Successfully loaded news from cache for user \'{user_id}\' (cached for topics: \'{cache_content.get('topics_cached_for')}\')")
-            # The data stored in "news_data" should be compatible with NewsResponse
             return cache_content["news_data"]
         except json.JSONDecodeError:
             logger.warning(f"Failed to decode JSON from cache file \'{cache_file}\' for user \'{user_id}\'. Ignoring cache.")
-            # Optionally, delete the corrupt cache file: cache_file.unlink(missing_ok=True)
             return None
         except Exception as e:
             logger.error(f"Error loading from cache for user \'{user_id}\' from \'{cache_file}\': {str(e)}")
             return None
 
-    def _save_to_cache(self, data: Dict[str, Any], topics_for_cache: str, user_id: str):
+    async def _save_to_cache(self, data: Dict[str, Any], topics_for_cache: str, user_id: str):
         cache_file = self._get_cache_file_for_user(user_id)
         logger.info(f"Saving news to cache for user \'{user_id}\' at \'{cache_file}\' for topics: {topics_for_cache}")
         cache_content = {
@@ -167,8 +166,13 @@ class NewsService:
             "news_data": data 
         }
         try:
-            with open(cache_file, "w") as f:
-                json.dump(cache_content, f, indent=4)
+            # Run synchronous file I/O in a thread pool
+            def file_write():
+                with open(cache_file, "w") as f:
+                    json.dump(cache_content, f, indent=4)
+            
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, file_write)
             logger.info(f"Successfully saved news to cache for user \'{user_id}\' at {cache_file}.")
         except Exception as e:
             logger.error(f"Error saving to cache for user \'{user_id}\' at \'{cache_file}\': {str(e)}")
@@ -264,11 +268,12 @@ class NewsService:
             logger.error(f"Error creating messages: {str(e)}")
             raise
 
-    def _handle_completion_response(
+    async def _handle_completion_response(
         self, messages: list, model: str = "sonar-pro"
     ) -> Dict[str, Any]:
         """Handle non-streaming response from the API."""
         logger.info("Handling completion response")
+        api_response = None
         try:
             if model == "sonar-pro":
                 logger.debug(
@@ -277,7 +282,7 @@ class NewsService:
 
                 print("messages:", messages)
                 self.model = "sonar-pro"
-                response = self.client.chat.completions.create(
+                response = await self.client.chat.completions.create(
                     extra_body={
                         "search_domain_filter": [
                             "bloomberg.com",
@@ -295,33 +300,20 @@ class NewsService:
                     },
                 )
                 logger.info("Successfully received response from API")
-                response = response.model_dump(exclude_none=True)
+                response_dict = response.model_dump(exclude_none=True)
                 logger.debug(
-                    f"API response dictionary: {json.dumps(response, indent=2)}"
+                    f"API response dictionary: {json.dumps(response_dict, indent=2)}"
                 )
 
-                parsed_json_content = self._extract_valid_json(response)
+                parsed_json_content = self._extract_valid_json(response_dict)
                 print("sonar pro parsed_json_content:", parsed_json_content)
-                # try:
-                #     json.loads(parsed_json_content)
-                #     logger.info("Response is valid JSON")
-                # except json.JSONDecodeError as e:
-                #     logger.error(
-                #         f"Invalid JSON response from Sonar API when fetching news: {str(e)}"
-                #     )
-                #     logger.error(f"Raw response content: {parsed_json_content}")
-                #     raise HTTPException(
-                #         status_code=500,
-                #         detail="Invalid JSON response from Sonar API when fetching news",
-                #     )
-
                 return parsed_json_content
             else:
                 logger.debug(
                     f"Sending request to API with messages: {json.dumps(messages, indent=2)}, model: {model}"
                 )
                 self.model = "sonar-deep-research"
-                api_response = self.client.chat.completions.create(
+                api_response = await self.client.chat.completions.create(
                     extra_body={"return_images": True},
                     model=self.model,
                     messages=messages,
@@ -347,7 +339,10 @@ class NewsService:
             logger.error(f"JSON extraction/parsing error: {str(ve)}")
             raw_content_for_logging = "Could not retrieve raw content for logging."
             try:
-                raw_content_for_logging = api_response.choices[0].message.content
+                if api_response:
+                    raw_content_for_logging = api_response.choices[0].message.content
+                elif response:
+                    raw_content_for_logging = response.choices[0].message.content
             except Exception:
                 pass
             logger.error(
@@ -363,7 +358,7 @@ class NewsService:
                 status_code=500, detail=f"Completion error: {str(e)}, model: {model}"
             )
 
-    def process_news_request(
+    async def process_news_request(
         self, topics: str, user_id: str, model: str = "sonar-pro", force_reload: bool = False
     ) -> Dict[str, Any]:
         logger.info(
@@ -371,33 +366,30 @@ class NewsService:
         )
 
         if not force_reload:
-            cached_news_data = self._load_from_cache(requested_topics=topics, user_id=user_id)
+            cached_news_data = await self._load_from_cache(requested_topics=topics, user_id=user_id)
             if cached_news_data:
                 try:
-                    # Validate that cached data conforms to NewsResponse model
                     NewsResponse(**cached_news_data) 
                     logger.info(f"Returning news from cache for user '{user_id}'.")
                     return {"news_data": cached_news_data, "retrieved_from_cache": True}
-                except Exception as e: # Catches Pydantic ValidationError primarily
+                except Exception as e: 
                     logger.warning(f"Cached data for user '{user_id}' is not valid NewsResponse structure: {e}. Fetching fresh data.")
-                    # Optionally, delete invalid cache: self._get_cache_file_for_user(user_id).unlink(missing_ok=True)
 
         logger.info(f"Cache miss for user '{user_id}', invalid cache, or force_reload=True. Fetching fresh news for topics: {topics}.")
         try:
-            tracked_assets = self._get_tracked_assets(user_id) # Fetch tracked assets
-            messages = self._create_messages(topics, tracked_assets) # Pass assets to _create_messages
+            tracked_assets = await self._get_tracked_assets(user_id)
+            messages = self._create_messages(topics, tracked_assets)
             logger.info(f"Messages created successfully for API call for user '{user_id}'.")
 
-            result = self._handle_completion_response(messages, model)
+            result = await self._handle_completion_response(messages, model)
             logger.info(f"Successfully received news from API for user '{user_id}'.")
             
-            # Save the fresh result to cache
-            self._save_to_cache(result, topics_for_cache=topics, user_id=user_id)
+            await self._save_to_cache(result, topics_for_cache=topics, user_id=user_id)
             
             return {"news_data": result, "retrieved_from_cache": False}
 
         except HTTPException: 
-            raise # Re-raise HTTPException to be handled by FastAPI
+            raise 
         except Exception as e:
             logger.error(f"Critical error processing news request for user '{user_id}': {str(e)}")
             raise HTTPException(status_code=500, detail=f"Failed to process news request for user '{user_id}': {str(e)}")

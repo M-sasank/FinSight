@@ -192,9 +192,7 @@ const NewsPage = () => {
                 <span style={{ fontSize: 14, color: '#555', fontWeight: 500 }}>{article.source || 'Unknown Source'}</span>
               </div>
               <h2 style={{ fontSize: 28, fontWeight: 700, margin: 0, marginBottom: 8 }}>
-                <a href={article.url} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                  {article.title || 'Untitled Article'}
-                </a>
+                {article.title || 'Untitled Article'}
               </h2>
               <div style={{ fontSize: 18, color: '#555', marginBottom: 18 }}>{article.summary || 'No summary available.'}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 15, color: '#888' }}>
