@@ -100,7 +100,7 @@ class ChatService:
         self.conn.commit()
 
 
-    def clear_database(self, user_id: int | None = None):
+    def clear_database(self, user_id: Union[int, None] = None):
         """Clear data from the database. If user_id is provided, clears only for that user."""
         try:
             if user_id is not None:
