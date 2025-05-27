@@ -1695,15 +1695,20 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   .tracker-page .ask-about-button,
   .tracker-page .retry-button,
   .tracker-page .modal-buttons .primary-button {
-    background-color: var(--button-primary-bg-newtimer);
-    color: #000000; /* CHANGED - Explicitly black text for Add Asset & other primary buttons */
-    border: 1px solid transparent;
+    /* For Newtimer Theme: White button, dark text */
+    background-color: #FFFFFF;
+    color: #000000 !important; /* Hardcoded black text for the button itself */
+    border: 1px solid var(--input-border-newtimer);
   }
-  .tracker-page .add-asset-button:hover,
-  .tracker-page .ask-about-button:hover,
-  .tracker-page .retry-button:hover,
-  .tracker-page .modal-buttons .primary-button:hover {
-    background-color: var(--link-hover-color-newtimer); /* Slightly darker accent */
+
+  .page-theme-newtimer .tracker-page .add-asset-button span {
+    color: #000000 !important; /* Hardcoded black text for any span inside */
+  }
+
+  .page-theme-newtimer .tracker-page .add-asset-button .button-icon svg, /* Target SVG within .button-icon */
+  .page-theme-newtimer .tracker-page .add-asset-button > svg { /* Target direct SVG child */
+    fill: #000000 !important; /* Hardcoded black fill for SVG */
+    stroke: #000000 !important; /* Hardcoded black stroke for SVG */
   }
 
   .tracker-page .delete-button {
@@ -1776,7 +1781,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
     gap: var(--finsight-space-3); /* Adjust gap as needed */
     height: 100%; /* Fill the parent card padding area */
   }
-}
+} /* ADDED MISSING CLOSING BRACE FOR .page-theme-newtimer */
 
 .page-theme-veteran {
   --chat-bg: var(--chat-bg-veteran);
@@ -1858,15 +1863,20 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   .tracker-page .ask-about-button,
   .tracker-page .retry-button,
   .tracker-page .modal-buttons .primary-button {
-    background-color: var(--button-primary-bg-veteran);
-    color: #000000; /* CHANGED - Explicitly black text for Add Asset & other primary buttons */
-    border: 1px solid transparent;
+    /* For Veteran Theme: White button, dark text (from newtimer primary text for good contrast) */
+    background-color: #FFFFFF;
+    color: #000000 !important; /* Hardcoded black text for the button itself */
+    border: 1px solid #D1D1D1; /* Light grey border */
   }
-  .tracker-page .add-asset-button:hover,
-  .tracker-page .ask-about-button:hover,
-  .tracker-page .retry-button:hover,
-  .tracker-page .modal-buttons .primary-button:hover {
-    background-color: var(--link-hover-color-veteran); /* Slightly darker accent */
+
+  .page-theme-veteran .tracker-page .add-asset-button span {
+    color: #000000 !important; /* Hardcoded black text for any span inside */
+  }
+
+  .page-theme-veteran .tracker-page .add-asset-button .button-icon svg, /* Target SVG within .button-icon */
+  .page-theme-veteran .tracker-page .add-asset-button > svg { /* Target direct SVG child */
+    fill: #000000 !important; /* Hardcoded black fill for SVG */
+    stroke: #000000 !important; /* Hardcoded black stroke for SVG */
   }
 
   .tracker-page .delete-button {

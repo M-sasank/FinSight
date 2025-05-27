@@ -5,6 +5,18 @@ import remarkGfm from 'remark-gfm';
 import './ChatPage.css';
 import { useAuth } from '../contexts/AuthContext';
 
+const LOADING_MESSAGES = [
+  "Perplexity is thinking...",
+  "Analyzing your query...",
+  "Accessing knowledge base...",
+  "Perplexity is searching for information...",
+  "Gathering relevant data points...",
+  "Compiling insights...",
+  "Perplexity is crafting your response...",
+  "Formatting the details...",
+  "Almost ready..."
+];
+
 function ChatPage({ currentTheme }) {
   const { authFetch, token } = useAuth();
 
@@ -24,6 +36,8 @@ function ChatPage({ currentTheme }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [currentLoadingText, setCurrentLoadingText] = useState(LOADING_MESSAGES[0]);
+  const loadingMessageIndexRef = useRef(0);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -85,6 +99,28 @@ function ChatPage({ currentTheme }) {
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
+
+  useEffect(() => {
+    let loadingInterval;
+    if (isLoading) {
+      loadingMessageIndexRef.current = 0; // Reset index when loading starts
+      setCurrentLoadingText(LOADING_MESSAGES[loadingMessageIndexRef.current]);
+      
+      loadingInterval = setInterval(() => {
+        if (loadingMessageIndexRef.current < LOADING_MESSAGES.length - 1) {
+          loadingMessageIndexRef.current += 1;
+          setCurrentLoadingText(LOADING_MESSAGES[loadingMessageIndexRef.current]);
+        } else {
+          // Optionally, clear interval if you want it to stop on the last message
+          // clearInterval(loadingInterval);
+          // Or just let it stay on the last message
+        }
+      }, 1800); // Change message every 1.8 seconds (adjust as needed)
+    } else {
+      clearInterval(loadingInterval);
+    }
+    return () => clearInterval(loadingInterval); // Cleanup on unmount or when isLoading changes
+  }, [isLoading]);
 
   const processAndAddMessage = async (text, sender) => {
     const newMessage = {
@@ -282,6 +318,15 @@ function ChatPage({ currentTheme }) {
                 {renderMessageContent(message)}
               </div>
             ))}
+            {isLoading && (
+              <div className="message bot typing-indicator">
+                <div className="message-content">
+                  <div className="message-text">
+                    <em>{currentLoadingText}</em>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
