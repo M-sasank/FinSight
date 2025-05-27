@@ -2338,13 +2338,14 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .search-input {
   padding: 8px 16px;
   padding-left: 36px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle white border */
   border-radius: 8px;
   font-size: 0.9rem;
   width: 240px;
   background: var(--input-bg);
   color: var(--text-primary);
   transition: all 0.3s ease;
+  height: 45px; /* Added to make height uniform with add-asset-button */
 }
 
 .search-input:focus {
@@ -2365,7 +2366,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 .add-asset-button {
   /* background: linear-gradient(135deg, #2196F3, #4CAF50); */ /* REMOVED - Will use theme variables */
-  color: white; /* Will be overridden by theme text color variable */
+ /* Will be overridden by theme text color variable */
   padding: 12px 24px;
   border-radius: 12px;
   border: none; /* Will be overridden by theme border if any */
