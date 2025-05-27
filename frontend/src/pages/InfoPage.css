@@ -1,0 +1,66 @@
+/* Styles for informational pages like Terms of Service and Privacy Policy */
+
+.info-page-container {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 40px auto; /* Add some margin from the navbar */
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+.info-page-card {
+    /* If container itself is the card, no extra styles needed here yet */
+}
+
+.info-page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1c1c1e;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-page-content h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.info-page-content p,
+.info-page-content ul,
+.info-page-content ol {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #374151;
+}
+
+.info-page-content strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+.info-page-content ul,
+.info-page-content ol {
+    padding-left: 25px;
+}
+
+.info-page-content ul li,
+.info-page-content ol li {
+    margin-bottom: 8px;
+}
+
+.info-page-content a {
+    color: #007aff;
+    text-decoration: none;
+}
+
+.info-page-content a:hover {
+    text-decoration: underline;
+} 

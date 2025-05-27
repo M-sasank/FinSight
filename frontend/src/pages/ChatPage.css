@@ -198,6 +198,33 @@
   margin-bottom: var(--finsight-space-2);
 }
 
+/* Markdown specific styles */
+.message-text ul,
+.message-text ol {
+  margin-left: 0; /* Reset browser default */
+  padding-left: var(--finsight-space-6); /* Indent the list items including bullets */
+  list-style-position: outside; /* Ensures bullets are outside the text flow */
+}
+
+.message-text li {
+  margin-bottom: var(--finsight-space-1); /* Space between list items */
+}
+
+/* Typing indicator styles */
+.typing-indicator .message-content {
+  opacity: 0.7;
+  font-style: italic;
+  /* You can add a subtle animation here if desired */
+  /* e.g., a blinking cursor or subtle pulse */
+}
+
+.typing-indicator .message-text em {
+  /* Removed animation: typingDots and related properties */
+  /* The text content is now dynamic via JavaScript */
+  display: inline-block; /* Ensures em takes up space correctly */
+  vertical-align: bottom;
+}
+
 .message-timestamp {
   font-size: 0.75rem;
   opacity: 0.7;

@@ -10,6 +10,8 @@ import GuidePage from './pages/GuidePage';
 import HeroAnimation from './components/HeroAnimation';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 // Import ALL animation components
 import ChatAssistAnimation from './components/ChatAssistAnimation';
@@ -35,6 +37,8 @@ function App() {
             <Route path="/" element={<LandingPage currentTheme={currentTheme} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/terms" element={<TermsOfServicePage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} />} />
             <Route path="/news" element={<NewsPage currentTheme={currentTheme} />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />

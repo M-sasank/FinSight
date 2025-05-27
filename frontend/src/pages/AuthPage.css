@@ -1,0 +1,184 @@
+/* General Body Styles - Apply to your main app or index.css if preferred */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f2f5; /* Light grey background like the image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333; /* Default text color */
+}
+
+.auth-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-card {
+    background-color: #ffffff; /* White card */
+    padding: 40px;
+    border-radius: 8px; /* Rounded corners for the card */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%;
+    max-width: 400px; /* Max width of the login form card */
+    text-align: left; /* Align text to the left within the card */
+}
+
+.auth-card .auth-title {
+    font-size: 24px; /* Larger title text */
+    font-weight: 600; /* Semi-bold */
+    margin-bottom: 8px; /* Space below title */
+    color: #080808; /* User requested color */
+}
+
+.auth-title-register {
+    color: #007aff; /* Blue color for register page title */
+}
+
+.auth-subtitle {
+    font-size: 16px;
+    color: #6b7280; /* Greyish text for subtitle */
+    margin-bottom: 30px; /* Space below subtitle */
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px; /* Space between form groups */
+}
+
+.auth-form label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px; /* Space between label and input */
+    color: #374151; /* Slightly darker label text */
+}
+
+.label-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.forgot-password-link {
+    font-size: 13px;
+    color: #007aff; /* Blue link color */
+    text-decoration: none;
+}
+
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db; /* Light grey border */
+    border-radius: 6px; /* Rounded input fields */
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.auth-form input[type="email"]:focus,
+.auth-form input[type="password"]:focus {
+    outline: none;
+    border-color: #007aff; /* Blue border on focus */
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2); /* Subtle glow on focus */
+}
+
+.auth-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #1c1c1e; /* Dark button background */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.auth-button:hover {
+    background-color: #333333; /* Slightly lighter on hover */
+}
+
+.auth-button:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #ef4444; /* Red for error messages */
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.switch-auth-text {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.signup-link-text {
+    color: #007aff; /* Blue link */
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.signup-link-text:hover {
+    text-decoration: underline;
+}
+
+.auth-footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280; /* Grey for footer text */
+}
+
+.auth-footer a {
+    color: #374151; /* Slightly darker links in footer */
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Styles for the placeholder image on the right (optional) */
+/* You would need to add a div in your JSX for this to apply */
+/*
+.image-placeholder-container {
+    display: none; // Hidden by default, shown on larger screens
+    width: 50%;
+    background-color: #f9f9f9; // Very light grey for the placeholder area
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) { // Example breakpoint for larger screens
+    .auth-page-container {
+        flex-direction: row;
+        max-width: 900px; // Max width for the two-column layout
+        margin: auto; // Center it on the page
+    }
+    .auth-form-card {
+        width: 50%;
+        border-radius: 8px 0 0 8px; // Adjust border radius if it's side-by-side
+    }
+    .image-placeholder-container {
+        display: flex;
+        border-radius: 0 8px 8px 0;
+    }
+}
+*/ 

@@ -201,6 +201,15 @@ const styles = {
   }
 };
 
+// Define loading phrases outside the component or memoize if inside
+const getLoadingPhrases = (assetName = "the asset") => [
+  `Researching market trends for ${assetName}...`,
+  `Analyzing ${assetName}'s performance data...`,
+  `Gathering the latest financial insights on ${assetName}...`,
+  `Comparing ${assetName} with industry benchmarks...`,
+  `Compiling your detailed analysis for ${assetName}...`,
+  `Cross-referencing data sources for ${assetName}...`
+];
 
 function AssetChatPage({ currentTheme }) {
   const { symbol } = useParams();
@@ -218,6 +227,8 @@ function AssetChatPage({ currentTheme }) {
   const [isLoadingAsset, setIsLoadingAsset] = useState(true);
   const [assetError, setAssetError] = useState(null);
   const [currentSuggestionPrompts, setCurrentSuggestionPrompts] = useState([]);
+  const [currentLoadingPhraseIndex, setCurrentLoadingPhraseIndex] = useState(0);
+  const [activeLoadingPhrases, setActiveLoadingPhrases] = useState(getLoadingPhrases());
 
   useEffect(() => {
     const fetchAssetData = async () => {
@@ -270,9 +281,22 @@ function AssetChatPage({ currentTheme }) {
     } else if (assetDetails && assetDetails.name) {
       welcomeText = `Welcome! You are viewing ${assetDetails.name}. How can I assist you?`;
       prompts = [
-        { text: `Analyze ${assetDetails.symbol} performance`, query: `What's driving ${assetDetails.name}'s recent price movement?` },
-        { text: `Compare ${assetDetails.symbol} to competitors`, query: `How does ${assetDetails.name} compare to its main competitors?` },
-        { text: `Future outlook for ${assetDetails.symbol}`, query: `What's the future outlook for ${assetDetails.name}?` },
+        { 
+          text: `Research ${assetDetails.name} (${assetDetails.symbol}) behavior`, 
+          query: `Can you provide an analysis of ${assetDetails.name}'s recent market behavior and performance?` 
+        },
+        { 
+          text: `Check trends for ${assetDetails.name} (${assetDetails.symbol})`, 
+          query: `What are the current notable trends affecting ${assetDetails.name}?` 
+        },
+        { 
+          text: `Compare ${assetDetails.symbol} with competitors`, 
+          query: `How does ${assetDetails.name} stack up against its main competitors in the market?` 
+        },
+        {
+          text: `What's the future outlook for ${assetDetails.name}?`,
+          query: `What is the future outlook for ${assetDetails.name} (${assetDetails.symbol})?`
+        }
       ];
     } else {
       welcomeText = `Information for ${symbol} is limited. You can ask general questions.`;
@@ -283,6 +307,32 @@ function AssetChatPage({ currentTheme }) {
     setCurrentSuggestionPrompts(prompts);
 
   }, [assetDetails, symbol, isLoadingAsset, assetError]);
+
+  // Effect to update active loading phrases when assetDetails change
+  useEffect(() => {
+    if (assetDetails && assetDetails.name) {
+      setActiveLoadingPhrases(getLoadingPhrases(assetDetails.name));
+    } else {
+      setActiveLoadingPhrases(getLoadingPhrases(symbol || "the asset"));
+    }
+    setCurrentLoadingPhraseIndex(0); // Reset index when phrases change
+  }, [assetDetails, symbol]);
+
+  // Effect for cycling through loading phrases
+  useEffect(() => {
+    let phraseInterval;
+    if (isChatLoading) {
+      setCurrentLoadingPhraseIndex(0); // Start from the first phrase each time loading starts
+      phraseInterval = setInterval(() => {
+        setCurrentLoadingPhraseIndex(prevIndex => 
+          (prevIndex + 1) % activeLoadingPhrases.length
+        );
+      }, 2500); // Change phrase every 2.5 seconds
+    } else {
+      clearInterval(phraseInterval);
+    }
+    return () => clearInterval(phraseInterval); // Cleanup on unmount or when isChatLoading changes
+  }, [isChatLoading, activeLoadingPhrases]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -388,9 +438,9 @@ function AssetChatPage({ currentTheme }) {
               key={message.id} 
               style={{
                 ...styles.messageBubble(message.sender === 'user'),
-                ...(message.type === 'error' ? styles.errorMessage : {})
+                ...(message.type === 'error' ? styles.errorMessage : {}) 
               }}
-              className={`message-bubble-component ${message.sender}`}
+              className={`message-bubble-component ${message.sender} ${message.type === 'error' ? 'error-message' : ''}`}
             >
               <div className="message-text-content">
                 {message.sender === 'bot' ? (
@@ -402,6 +452,22 @@ function AssetChatPage({ currentTheme }) {
               </div>
             </div>
           ))}
+
+          {isChatLoading && (
+            <div
+              style={{
+                ...styles.messageBubble(false),
+                alignSelf: 'flex-start', 
+              }}
+              className={`message-bubble-component bot thinking-bubble`} 
+            >
+              <div className="message-text-content">
+                <FiLoader style={{ marginRight: '8px', verticalAlign: 'middle' }} className="loading-spinner-animation" /> 
+                {activeLoadingPhrases[currentLoadingPhraseIndex]}<span className="thinking-dots"><span>.</span><span>.</span><span>.</span></span>
+              </div>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
 

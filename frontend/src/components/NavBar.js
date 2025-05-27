@@ -73,9 +73,9 @@ function NavBar({ currentTheme }) {
               <Link to="/login" className={`nav-item auth-button login-button ${isActive('/login') ? 'active' : ''}`}>
                 <span>Login</span>
               </Link>
-              <Link to="/register" className={`nav-item auth-button register-button ${isActive('/register') ? 'active' : ''}`}>
+              {/* <Link to="/register" className={`nav-item auth-button register-button ${isActive('/register') ? 'active' : ''}`}>
                 <span>Register</span>
-              </Link>
+              </Link> */}
             </>
           )}
         </div>

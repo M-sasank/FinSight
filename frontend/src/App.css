@@ -1695,15 +1695,20 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   .tracker-page .ask-about-button,
   .tracker-page .retry-button,
   .tracker-page .modal-buttons .primary-button {
-    background-color: var(--button-primary-bg-newtimer);
-    color: #000000; /* CHANGED - Explicitly black text for Add Asset & other primary buttons */
-    border: 1px solid transparent;
+    /* For Newtimer Theme: White button, dark text */
+    background-color: #FFFFFF;
+    color: #000000 !important; /* Hardcoded black text for the button itself */
+    border: 1px solid var(--input-border-newtimer);
   }
-  .tracker-page .add-asset-button:hover,
-  .tracker-page .ask-about-button:hover,
-  .tracker-page .retry-button:hover,
-  .tracker-page .modal-buttons .primary-button:hover {
-    background-color: var(--link-hover-color-newtimer); /* Slightly darker accent */
+
+  .page-theme-newtimer .tracker-page .add-asset-button span {
+    color: #000000 !important; /* Hardcoded black text for any span inside */
+  }
+
+  .page-theme-newtimer .tracker-page .add-asset-button .button-icon svg, /* Target SVG within .button-icon */
+  .page-theme-newtimer .tracker-page .add-asset-button > svg { /* Target direct SVG child */
+    fill: #000000 !important; /* Hardcoded black fill for SVG */
+    stroke: #000000 !important; /* Hardcoded black stroke for SVG */
   }
 
   .tracker-page .delete-button {
@@ -1776,7 +1781,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
     gap: var(--finsight-space-3); /* Adjust gap as needed */
     height: 100%; /* Fill the parent card padding area */
   }
-}
+} /* ADDED MISSING CLOSING BRACE FOR .page-theme-newtimer */
 
 .page-theme-veteran {
   --chat-bg: var(--chat-bg-veteran);
@@ -1858,15 +1863,20 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   .tracker-page .ask-about-button,
   .tracker-page .retry-button,
   .tracker-page .modal-buttons .primary-button {
-    background-color: var(--button-primary-bg-veteran);
-    color: #000000; /* CHANGED - Explicitly black text for Add Asset & other primary buttons */
-    border: 1px solid transparent;
+    /* For Veteran Theme: White button, dark text (from newtimer primary text for good contrast) */
+    background-color: #FFFFFF;
+    color: #000000 !important; /* Hardcoded black text for the button itself */
+    border: 1px solid #D1D1D1; /* Light grey border */
   }
-  .tracker-page .add-asset-button:hover,
-  .tracker-page .ask-about-button:hover,
-  .tracker-page .retry-button:hover,
-  .tracker-page .modal-buttons .primary-button:hover {
-    background-color: var(--link-hover-color-veteran); /* Slightly darker accent */
+
+  .page-theme-veteran .tracker-page .add-asset-button span {
+    color: #000000 !important; /* Hardcoded black text for any span inside */
+  }
+
+  .page-theme-veteran .tracker-page .add-asset-button .button-icon svg, /* Target SVG within .button-icon */
+  .page-theme-veteran .tracker-page .add-asset-button > svg { /* Target direct SVG child */
+    fill: #000000 !important; /* Hardcoded black fill for SVG */
+    stroke: #000000 !important; /* Hardcoded black stroke for SVG */
   }
 
   .tracker-page .delete-button {
@@ -1965,6 +1975,41 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   100% {
     opacity: 0;
     transform: scale(1.05);
+  }
+}
+
+/* Animation for "Perplexity is thinking..." bubble */
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span,
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span {
+  animation: pulsingDots 1.4s infinite;
+  opacity: 0;
+  display: inline-block; /* Ensure spans behave correctly for animation */
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(1),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(2),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(3),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulsingDots {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -2328,13 +2373,14 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .search-input {
   padding: 8px 16px;
   padding-left: 36px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle white border */
   border-radius: 8px;
   font-size: 0.9rem;
   width: 240px;
   background: var(--input-bg);
   color: var(--text-primary);
   transition: all 0.3s ease;
+  height: 45px; /* Added to make height uniform with add-asset-button */
 }
 
 .search-input:focus {
@@ -2355,7 +2401,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 .add-asset-button {
   /* background: linear-gradient(135deg, #2196F3, #4CAF50); */ /* REMOVED - Will use theme variables */
-  color: white; /* Will be overridden by theme text color variable */
+ /* Will be overridden by theme text color variable */
   padding: 12px 24px;
   border-radius: 12px;
   border: none; /* Will be overridden by theme border if any */

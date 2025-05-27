@@ -14,7 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Create database tables
+# Create database table
 # This should ideally be called once, perhaps managed by Alembic for migrations in production
 UserBase.metadata.create_all(bind=engine) # Create tables defined in User model
 # If you have other Bases for other models (like from chat.py if they become SQLAlchemy models),
