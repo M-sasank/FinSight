@@ -57,16 +57,7 @@ class ChatService:
 
     def _init_db(self):
         """Initialize SQLite database and create necessary tables."""
-        # Ensure this path matches the DATABASE_URL target in .env for a unified database.
-        # For example, if DATABASE_URL="sqlite:///./finsight.db" (for a db in the backend/ dir),
-        # then db_path should be "finsight.db" assuming uvicorn is run from backend/.
-        #
-        # IMPORTANT: Changed from os.path.expanduser(\"~/perplexity_hack.db\")
-        # to align with the SQLAlchemy database file.
-        # This assumes DATABASE_URL in your .env points to a file named 'finsight.db'
-        # in the directory where the app is run (e.g., the 'backend' directory).
-        db_path = "finsight.db"  # Ensure this resolves to the same file as DATABASE_URL
-        
+        db_path = "finsight.db"
         logger.info(f"ChatService is connecting to database at: {os.path.abspath(db_path)}")
 
         # Connect to database
