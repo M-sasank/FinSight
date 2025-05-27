@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-// You might want to create a specific CSS file for login/register pages
-// import './AuthPage.css'; 
+import './AuthPage.css';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -26,39 +25,47 @@ function LoginPage() {
     };
 
     return (
-        <div className="auth-page-container"> {/* Use a consistent container class */}
-            <div className="auth-form-card"> {/* Card styling */}
-                <h2>Login</h2>
-                <form onSubmit={handleSubmit}>
+        <div className="auth-page">
+            <div className="auth-card">
+                <h1 className="auth-title">Welcome to FinSight</h1>
+                {/* <p className="auth-subtitle">Login to your Acme Inc account</p> */}
+                <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)} 
-                            required 
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="m@example.com"
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            value={password} 
-                            onChange={(e) => setPassword(e.target.value)} 
-                            required 
+                        <div className="label-container">
+                            <label htmlFor="password">Password</label>
+                            <Link to="/forgot-password" className="forgot-password-link">Forgot your password?</Link>
+                        </div>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </div>
                     {error && <p className="error-message">{error}</p>}
-                    <button type="submit" className="auth-button primary" disabled={loading}>
+                    <button type="submit" className="auth-button" disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
                 </form>
-                <p className="switch-auth-link">
-                    Don't have an account? <Link to="/register">Register here</Link>
+                <p className="switch-auth-text">
+                    Don't have an account? <Link to="/register" className="signup-link-text">Sign up</Link>
                 </p>
             </div>
+            <footer className="auth-footer">
+                <p>By clicking continue, you agree to our <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.</p>
+            </footer>
         </div>
     );
 }
