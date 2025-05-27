@@ -96,28 +96,25 @@ class AssetService:
             logger.error(f"Error fetching asset details: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Failed to fetch asset details: {str(e)}")
 
-    def create_asset(self, asset: AssetCreate) -> AssetResponse:
-        """Create a new tracked asset."""
-        logger.info(f"Creating new asset with symbol: {asset.symbol}")
+    def create_asset(self, asset: AssetCreate, user_id: int) -> AssetResponse:
+        """Create a new tracked asset for a specific user."""
+        logger.info(f"Creating new asset with symbol: {asset.symbol} for user_ID: {user_id}")
         try:
             asset_id = str(uuid.uuid4())
             logger.debug(f"Generated asset ID: {asset_id}")
             
-            # Fetch initial data from Sonar API
             initial_data = self._fetch_asset_details(asset.symbol, asset.name)
             
-            # Ensure price history is ordered with oldest price first
             price_history = initial_data["price_history"]
             if not isinstance(price_history, list) or len(price_history) != 6:
                 logger.warning(f"Invalid price history format from API. Expected 6 prices, got {len(price_history) if isinstance(price_history, list) else 'non-list'}")
                 price_history = [initial_data["price"]] * 6
             
-            # Store the asset in the database
             logger.debug("Storing asset in database")
             cursor = self.conn.execute("""
                 INSERT INTO tracked_assets (
-                    id, symbol, name, price, movement, reason, sector, news, price_history, created_at, last_updated
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    id, symbol, name, price, movement, reason, sector, news, price_history, created_at, last_updated, user_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 asset_id,
                 asset.symbol,
@@ -129,10 +126,11 @@ class AssetService:
                 initial_data["news"],
                 json.dumps(price_history),
                 datetime.now(timezone.utc),
-                datetime.now(timezone.utc)
+                datetime.now(timezone.utc),
+                user_id
             ))
             self.conn.commit()
-            logger.info(f"Successfully created asset with ID: {asset_id}")
+            logger.info(f"Successfully created asset with ID: {asset_id} for user_ID: {user_id}")
             
             # Return the created asset
             return {
@@ -144,17 +142,18 @@ class AssetService:
                 "last_updated": datetime.now(timezone.utc)
             }
         except Exception as e:
-            logger.error(f"Error creating asset: {str(e)}")
+            logger.error(f"Error creating asset for user_ID {user_id}: {str(e)}")
             raise HTTPException(status_code=500, detail=str(e))
 
-    def get_assets(self) -> List[AssetResponse]:
-        """Get all tracked assets."""
-        logger.info("Fetching all tracked assets")
+    def get_assets(self, user_id: int) -> List[AssetResponse]:
+        """Get all tracked assets for a specific user."""
+        logger.info(f"Fetching all tracked assets for user_ID: {user_id}")
         try:
             cursor = self.conn.execute("""
                 SELECT * FROM tracked_assets
+                WHERE user_id = ?
                 ORDER BY created_at DESC
-            """)
+            """, (user_id,))
             
             assets = []
             for row in cursor.fetchall():
@@ -172,30 +171,30 @@ class AssetService:
                     "last_updated": row["last_updated"]
                 })
             
-            logger.info(f"Successfully retrieved {len(assets)} assets")
+            logger.info(f"Successfully retrieved {len(assets)} assets for user_ID: {user_id}")
             return assets
         except Exception as e:
-            logger.error(f"Error fetching assets: {str(e)}")
+            logger.error(f"Error fetching assets for user_ID {user_id}: {str(e)}")
             raise HTTPException(status_code=500, detail=str(e))
 
-    def delete_asset(self, asset_id: str) -> dict:
-        """Delete a tracked asset."""
-        logger.info(f"Deleting asset with ID: {asset_id}")
+    def delete_asset(self, asset_id: str, user_id: int) -> dict:
+        """Delete a tracked asset for a specific user."""
+        logger.info(f"Deleting asset with ID: {asset_id} for user_ID: {user_id}")
         try:
             cursor = self.conn.execute("""
                 DELETE FROM tracked_assets
-                WHERE id = ?
-            """, (asset_id,))
+                WHERE id = ? AND user_id = ?
+            """, (asset_id, user_id))
             self.conn.commit()
             
             if cursor.rowcount == 0:
-                logger.warning(f"Asset not found with ID: {asset_id}")
-                raise HTTPException(status_code=404, detail="Asset not found")
+                logger.warning(f"Asset not found with ID: {asset_id} for user_ID: {user_id} or user does not own asset")
+                raise HTTPException(status_code=404, detail="Asset not found or not owned by user")
             
-            logger.info(f"Successfully deleted asset with ID: {asset_id}")
+            logger.info(f"Successfully deleted asset with ID: {asset_id} for user_ID: {user_id}")
             return {"message": "Asset deleted successfully"}
         except HTTPException as e:
             raise e
         except Exception as e:
-            logger.error(f"Error deleting asset: {str(e)}")
+            logger.error(f"Error deleting asset for user_ID {user_id}: {str(e)}")
             raise HTTPException(status_code=500, detail=str(e)) 

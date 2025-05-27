@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from services.asset_chat_service import AssetChatService
 from models.asset_chat import AssetChatRequest
+from .auth import get_current_user
+from models.user import User as UserModel
 import uuid
 import logging
 
@@ -11,8 +13,8 @@ router = APIRouter()
 asset_chat_service = AssetChatService()
 
 @router.post("/")
-async def asset_chat_completion(request: AssetChatRequest):
-    logger.info(f"Asset chat completion request received - Symbol: {request.symbol}, Conversation ID: {request.conversation_id}")
+async def asset_chat_completion(request: AssetChatRequest, current_user: UserModel = Depends(get_current_user)):
+    logger.info(f"Asset chat completion request received - Symbol: {request.symbol}, Conversation ID: {request.conversation_id}, User: {current_user.email}")
     try:
         # Generate a new conversation ID if none provided
         if request.conversation_id is None:
@@ -32,9 +34,9 @@ async def asset_chat_completion(request: AssetChatRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{symbol}/history")
-async def get_asset_chat_history(symbol: str):
+async def get_asset_chat_history(symbol: str, current_user: UserModel = Depends(get_current_user)):
     """Get chat history for a specific asset."""
-    logger.info(f"Fetching chat history for asset: {symbol}")
+    logger.info(f"Fetching chat history for asset: {symbol}, User: {current_user.email}")
     try:
         history = asset_chat_service.get_chat_history(symbol)
         logger.info(f"Successfully retrieved {len(history)} conversations for asset: {symbol}")
@@ -44,9 +46,9 @@ async def get_asset_chat_history(symbol: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{symbol}/{conversation_id}")
-async def get_asset_chat_messages(symbol: str, conversation_id: str):
+async def get_asset_chat_messages(symbol: str, conversation_id: str, current_user: UserModel = Depends(get_current_user)):
     """Get all messages for a specific asset chat conversation."""
-    logger.info(f"Fetching messages for asset chat - Symbol: {symbol}, Conversation ID: {conversation_id}")
+    logger.info(f"Fetching messages for asset chat - Symbol: {symbol}, Conversation ID: {conversation_id}, User: {current_user.email}")
     try:
         messages = asset_chat_service.get_chat_messages(conversation_id, symbol)
         logger.info(f"Successfully retrieved {len(messages)} messages for conversation: {conversation_id}")
@@ -56,9 +58,9 @@ async def get_asset_chat_messages(symbol: str, conversation_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/clear")
-async def clear_asset_chat_database():
+async def clear_asset_chat_database(current_user: UserModel = Depends(get_current_user)):
     """Clear all data from the asset chat database."""
-    logger.info("Clearing asset chat database")
+    logger.info(f"Clearing asset chat database for user: {current_user.email}")
     try:
         success = asset_chat_service.clear_database()
         if success:
