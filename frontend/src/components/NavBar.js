@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 function NavBar({ currentTheme }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { token, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +27,11 @@ function NavBar({ currentTheme }) {
     return location.pathname === path;
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // Redirect to home page after logout
+  };
+
   return (
     <nav className={`nav-bar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="nav-content">
@@ -37,18 +45,39 @@ function NavBar({ currentTheme }) {
           <Link to="/" className={`nav-item ${isActive('/') ? 'active' : ''}`}>
             <span>Home</span>
           </Link>
-          <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
-            <span>Chat</span>
-          </Link>
-          <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
-            <span>News</span>
-          </Link>
-          <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
-            <span>Tracker</span>
-          </Link>
+          {token && (
+            <>
+              <Link to="/chat" className={`nav-item ${isActive('/chat') ? 'active' : ''}`}>
+                <span>Chat</span>
+              </Link>
+              <Link to="/news" className={`nav-item ${isActive('/news') ? 'active' : ''}`}>
+                <span>News</span>
+              </Link>
+              <Link to="/tracker" className={`nav-item ${isActive('/tracker') ? 'active' : ''}`}>
+                <span>Tracker</span>
+              </Link>
+            </>
+          )}
           <Link to="/guide" className={`nav-item ${isActive('/guide') ? 'active' : ''}`}>
             <span>Guide</span>
           </Link>
+        </div>
+
+        <div className="nav-auth-actions">
+          {token ? (
+            <button onClick={handleLogout} className="nav-item auth-button logout-button">
+              <span>Logout</span>
+            </button>
+          ) : (
+            <>
+              <Link to="/login" className={`nav-item auth-button login-button ${isActive('/login') ? 'active' : ''}`}>
+                <span>Login</span>
+              </Link>
+              <Link to="/register" className={`nav-item auth-button register-button ${isActive('/register') ? 'active' : ''}`}>
+                <span>Register</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

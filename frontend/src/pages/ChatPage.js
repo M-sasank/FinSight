@@ -3,8 +3,11 @@ import { FiSend, FiPlus, FiClock } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './ChatPage.css';
+import { useAuth } from '../contexts/AuthContext';
 
 function ChatPage({ currentTheme }) {
+  const { authFetch, token } = useAuth();
+
   const initialChatMessages = useCallback(() => [ 
     {
       id: 'chatmsg-initial-1',
@@ -54,24 +57,26 @@ function ChatPage({ currentTheme }) {
     }
   ];
 
-  useEffect(() => {
-    fetchChatHistory();
-    // Initialize with a new chat on first load
-    setMessages(initialChatMessages());
-  }, [initialChatMessages]);
-
-  const fetchChatHistory = async () => {
+  const fetchChatHistory = useCallback(async () => {
+    if (!token) return;
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/history`);
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/history`);
       if (response.ok) {
         const data = await response.json();
         setChatHistory(data.history || []);
         setSelectedChat(null);
+      } else {
+        console.error('Failed to fetch chat history:', response.statusText);
       }
     } catch (error) {
       console.error('Error fetching chat history:', error);
     }
-  };
+  }, [authFetch, token]);
+
+  useEffect(() => {
+    fetchChatHistory();
+    setMessages(initialChatMessages());
+  }, [fetchChatHistory, initialChatMessages]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -94,10 +99,9 @@ function ChatPage({ currentTheme }) {
     if (sender === 'user') {
       setIsLoading(true);
       try {
-        // Always use 'chat' backend type since we're using veteran theme
         const backendType = 'chat';
         
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +114,12 @@ function ChatPage({ currentTheme }) {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to get response from server');
+          let errorDetail = 'Failed to get response from server';
+          try {
+            const errorData = await response.json();
+            errorDetail = errorData.detail || errorDetail;
+          } catch (e) { /* ignore if response is not json */ }
+          throw new Error(errorDetail);
         }
 
         const data = await response.json();
@@ -169,13 +178,15 @@ function ChatPage({ currentTheme }) {
   const handleChatSelect = async (chatId) => {
     if (chatId !== selectedChat) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/${chatId}`);
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/${chatId}`);
         if (response.ok) {
           const data = await response.json();
           setMessages(data.messages);
           setConversationId(chatId);
           setSelectedChat(chatId);
           setShowSuggestions(false);
+        } else {
+          console.error('Failed to load chat:', response.statusText);
         }
       } catch (error) {
         console.error('Error loading chat:', error);

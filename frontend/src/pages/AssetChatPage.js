@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FiSend, FiAlertTriangle, FiLoader, FiArrowLeft } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useAuth } from '../contexts/AuthContext';
 
 // Simulated API responses for asset details
 const SIMULATED_ASSET_DATA = {
@@ -205,6 +206,7 @@ function AssetChatPage({ currentTheme }) {
   const { symbol } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { authFetch, token } = useAuth();
   
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -295,8 +297,14 @@ function AssetChatPage({ currentTheme }) {
     if (chatInputElement) chatInputElement.focus();
   };
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = useCallback(async () => {
     if (input.trim() && !isChatLoading) {
+      if (!token) {
+        setMessages(prev => [...prev, { id: `chatmsg-error-${Date.now()}`, sender: 'bot', text: "Authentication error. Please log in again.", type: 'error', timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+        setIsChatLoading(false);
+        return;
+      }
+
       const userMessage = {
         id: `chatmsg-${Date.now()}`,
         text: input,
@@ -309,7 +317,7 @@ function AssetChatPage({ currentTheme }) {
       setIsChatLoading(true);
 
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/asset-chat/`, {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/asset-chat/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_query: currentInput, symbol: symbol, conversation_id: conversationId })
@@ -330,7 +338,7 @@ function AssetChatPage({ currentTheme }) {
         setIsChatLoading(false);
       }
     }
-  };
+  }, [input, isChatLoading, token, authFetch, symbol, conversationId]);
   
   if (isLoadingAsset && !assetDetails && !assetError) {
     return (

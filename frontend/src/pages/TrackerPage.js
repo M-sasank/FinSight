@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiTrash2, FiTrendingUp, FiTrendingDown, FiInfo } from 'react-icons/fi';
@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { useAuth } from '../contexts/AuthContext';
 
 ChartJS.register(
   CategoryScale,
@@ -25,6 +26,7 @@ ChartJS.register(
 
 function TrackerPage({ currentTheme }) {
   const navigate = useNavigate();
+  const { authFetch, token } = useAuth();
   const [assets, setAssets] = useState([]);
   const [showAddAssetModal, setShowAddAssetModal] = useState(false);
   const [newAsset, setNewAsset] = useState({ symbol: '', name: '' });
@@ -32,30 +34,44 @@ function TrackerPage({ currentTheme }) {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    fetchAssets();
-  }, []);
-
-  const fetchAssets = async () => {
+  const fetchAssets = useCallback(async () => {
+    if (!token) {
+      setLoading(false);
+      setError("Please log in to view tracked assets.");
+      setAssets([]);
+      return;
+    }
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/get`);
+      setError(null);
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/get`);
       if (!response.ok) {
-        throw new Error('Failed to fetch assets');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to fetch assets');
       }
       const data = await response.json();
       setAssets(data);
     } catch (err) {
       setError(err.message);
+      setAssets([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [authFetch, token]);
+
+  useEffect(() => {
+    fetchAssets();
+  }, [fetchAssets]);
 
   const handleAddAsset = async () => {
     if (newAsset.symbol && newAsset.name) {
+      if (!token) {
+        setError("Authentication required to add assets.");
+        return;
+      }
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/create`, {
+        setError(null);
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -64,7 +80,8 @@ function TrackerPage({ currentTheme }) {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to create asset');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Failed to create asset');
         }
 
         const createdAsset = await response.json();
@@ -78,13 +95,19 @@ function TrackerPage({ currentTheme }) {
   };
 
   const handleDeleteAsset = async (assetId) => {
+    if (!token) {
+        setError("Authentication required to delete assets.");
+        return;
+    }
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete?asset_id=${assetId}`, {
+      setError(null);
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete?asset_id=${assetId}`, {
         method: 'DELETE',
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete asset');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to delete asset');
       }
 
       setAssets(assets.filter(asset => asset.id !== assetId));
