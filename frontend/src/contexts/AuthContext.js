@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await fetch('/api/v1/auth/token', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/auth/token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (email, password) => {
         try {
-            const response = await fetch('/api/v1/auth/register', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,8 @@ export const AuthProvider = ({ children }) => {
             headers['Authorization'] = `Bearer ${currentToken}`;
         }
 
-        const response = await fetch(url, { ...options, headers });
+        const fullUrl = url.startsWith('http') ? url : `${process.env.REACT_APP_API_URL}${url}`;
+        const response = await fetch(fullUrl, { ...options, headers });
 
         if (response.status === 401) {
             logout(); // Clear token and user state
