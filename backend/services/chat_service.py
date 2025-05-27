@@ -48,6 +48,11 @@ class ChatService:
                     "role": "system",
                     "content": prompts['chat_service']['system_message_newbie']
                 }
+                self.system_message_guide = {
+                    "role": "system",
+                    "content": prompts['chat_service']['system_message_guide']
+                }
+                self.guide_content = prompts['chat_service']['guide_content']
             logger.info("Successfully loaded prompts from YAML")
         except Exception as e:
             logger.error(f"Failed to load prompts from YAML: {str(e)}")
@@ -208,6 +213,19 @@ class ChatService:
         messages.append({"role": "user", "content": user_content})
         return messages
 
+    async def _create_messages_guide(self, user_content: str, conversation_id: str, user_id: int) -> list:
+        """Create message list with guide-specific system message, section context, and user content, including conversation history."""
+        # Format the system message with the current section name
+        system_message_content = self.system_message_guide["content"].format(guide_text=yaml.dump(self.guide_content))
+        print(system_message_content)
+        messages = [{"role": "system", "content": system_message_content}]
+        
+        history = await self._get_conversation_history(conversation_id, "guide", user_id)
+        messages.extend(history)
+        messages.append({"role": "user", "content": user_content})
+        logger.info(f"Created messages for guide: {pprint.pformat(messages)}")
+        return messages
+
     async def _update_conversation_history(self, conversation_id: str, messages: List[Dict[str, str]], response: Dict[str, Any], type: str, user_id: int):
         """Update conversation history with both user message and assistant response."""
         await self._save_message(conversation_id, "user", messages[-1]["content"], type, user_id)
@@ -243,8 +261,8 @@ class ChatService:
         Process the chat request and return appropriate response.
 
         Args:
-            type (str): The type of request, either "chat" or "newbie"
-            user_content (str): The user's message content
+            type (str): The type of request, either "chat", "newbie", or "guide"
+            user_content (str): The user's message content. For "guide" type, this is the user's query.
             stream (bool): Whether to stream the response
             conversation_id (str): Unique identifier for the conversation
             user_id (int): Unique identifier for the user
@@ -252,26 +270,33 @@ class ChatService:
         Returns:
             Dict[str, Any]: Response containing either stream or completion data
         """
+        messages: list = []
         try:
             if type == "chat":
                 messages = await self._create_messages_chat(user_content, conversation_id, user_id)
             elif type == "newbie":
                 messages = await self._create_messages_newbie(user_content, conversation_id, user_id)
+            elif type == "guide":
+                messages = await self._create_messages_guide(user_content, conversation_id, user_id)
             else:
                 raise HTTPException(status_code=400, detail="Invalid request type")
 
-            print("Context messages: ", pprint.pformat(messages))
+            logger.info(f"Context messages for conversation {conversation_id} (type: {type}): {pprint.pformat(messages)}")
 
             if stream:
                 result = await self._handle_streaming_response(messages)
             else:
                 result = await self._handle_completion_response(messages)
                 await self._update_conversation_history(conversation_id, messages, result, type, user_id)
-            print("Result: ", result)
+            
+            logger.info(f"Result for conversation {conversation_id} (type: {type}): {result}")
             return result
             
+        except HTTPException as he:
+            logger.error(f"HTTPException in process_chat_request: {he.detail}")
+            raise he
         except Exception as e:
-            print("Error: ", e)
+            logger.error(f"Error in process_chat_request: {e}", exc_info=True)
             raise HTTPException(status_code=500, detail=str(e))
 
     def __del__(self):

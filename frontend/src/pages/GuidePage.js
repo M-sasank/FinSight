@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/GuidePage.css';
+import { useAuth } from '../contexts/AuthContext';
 
 function GuidePage({ currentTheme }) {
+  const { authFetch, token } = useAuth();
   const [selectedCountry, setSelectedCountry] = useState('IN');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -145,6 +147,16 @@ function GuidePage({ currentTheme }) {
 
   const handleSendMessage = async () => {
     if (input.trim() && !isLoading) {
+      if (!token) {
+        setMessages(prev => [...prev, {
+          id: `chatmsg-error-${Date.now()}`,
+          sender: 'bot',
+          text: "Please log in to use the chat feature.",
+          type: 'error'
+        }]);
+        return;
+      }
+
       const userMessage = {
         id: `chatmsg-${Date.now()}`,
         text: input,
@@ -155,7 +167,7 @@ function GuidePage({ currentTheme }) {
       setIsLoading(true);
 
       try {
-        const response = await fetch('http://localhost:8000/api/v1/chat', {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -163,12 +175,12 @@ function GuidePage({ currentTheme }) {
           body: JSON.stringify({
             type: 'guide',
             user_query: input,
-            country: selectedCountry
           })
         });
 
         if (!response.ok) {
-          throw new Error('Failed to get response from server');
+          const errorData = await response.json().catch(() => ({ detail: 'Failed to get response from server' }));
+          throw new Error(errorData.detail || 'Failed to get response from server');
         }
 
         const data = await response.json();
@@ -184,7 +196,8 @@ function GuidePage({ currentTheme }) {
         const errorMessage = {
           id: `chatmsg-${Date.now() + 1}`,
           sender: 'bot',
-          text: 'Sorry, I encountered an error while processing your request. Please try again.'
+          text: 'Sorry, I encountered an error while processing your request. Please try again.',
+          type: 'error'
         };
         setMessages(prev => [...prev, errorMessage]);
       } finally {
