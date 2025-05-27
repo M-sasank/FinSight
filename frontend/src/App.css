@@ -1978,6 +1978,41 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   }
 }
 
+/* Animation for "Perplexity is thinking..." bubble */
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span,
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span {
+  animation: pulsingDots 1.4s infinite;
+  opacity: 0;
+  display: inline-block; /* Ensure spans behave correctly for animation */
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(1),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(2),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(3),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulsingDots {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .chat-layout {
