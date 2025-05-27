@@ -57,6 +57,95 @@ class RiskAnalysisService:
             logger.error(f"Failed to load prompts from YAML: {str(e)}")
             raise
 
+    async def _store_risk_analysis(self, asset_symbol: str, analysis: RiskAnalysisResponse):
+        """Store risk analysis results in the tracked_assets table."""
+        try:
+            def db_call():
+                self.conn.execute("""
+                    UPDATE tracked_assets 
+                    SET 
+                        risk_level = ?,
+                        volatility_score = ?,
+                        sector_trend_score = ?,
+                        dip_count_last_month = ?,
+                        sentiment_class = ?,
+                        volatility_breakdown = ?,
+                        sector_breakdown = ?,
+                        sentiment_breakdown = ?,
+                        risk_confidence = ?,
+                        risk_recommendation = ?,
+                        risk_analysis_updated_at = CURRENT_TIMESTAMP
+                    WHERE symbol = ?
+                """, (
+                    analysis.risk_level,
+                    analysis.factors.volatility_score,
+                    analysis.factors.sector_trend_score,
+                    analysis.factors.dip_count_last_month,
+                    analysis.factors.sentiment_class,
+                    analysis.risk_breakdown.volatility,
+                    analysis.risk_breakdown.sector,
+                    analysis.risk_breakdown.sentiment,
+                    analysis.confidence,
+                    analysis.recommendation,
+                    asset_symbol
+                ))
+                self.conn.commit()
+
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, db_call)
+            logger.info(f"Stored risk analysis for asset {asset_symbol}")
+        except Exception as e:
+            logger.error(f"Failed to store risk analysis for {asset_symbol}: {str(e)}")
+            raise HTTPException(status_code=500, detail="Failed to store risk analysis")
+
+    async def _get_latest_risk_analysis(self, asset_symbol: str) -> Dict[str, Any]:
+        """Get the latest risk analysis for an asset from tracked_assets table."""
+        try:
+            def db_call():
+                cursor = self.conn.execute("""
+                    SELECT 
+                        risk_level,
+                        volatility_score,
+                        sector_trend_score,
+                        dip_count_last_month,
+                        sentiment_class,
+                        volatility_breakdown,
+                        sector_breakdown,
+                        sentiment_breakdown,
+                        risk_confidence,
+                        risk_recommendation,
+                        risk_analysis_updated_at
+                    FROM tracked_assets 
+                    WHERE symbol = ?
+                """, (asset_symbol,))
+                row = cursor.fetchone()
+                if not row or not row["risk_level"]:
+                    return None
+                
+                return {
+                    "risk_level": row["risk_level"],
+                    "factors": {
+                        "volatility_score": row["volatility_score"],
+                        "sector_trend_score": row["sector_trend_score"],
+                        "dip_count_last_month": row["dip_count_last_month"],
+                        "sentiment_class": row["sentiment_class"]
+                    },
+                    "risk_breakdown": {
+                        "volatility": row["volatility_breakdown"],
+                        "sector": row["sector_breakdown"],
+                        "sentiment": row["sentiment_breakdown"]
+                    },
+                    "confidence": row["risk_confidence"],
+                    "recommendation": row["risk_recommendation"],
+                    "updated_at": row["risk_analysis_updated_at"]
+                }
+
+            loop = asyncio.get_event_loop()
+            return await loop.run_in_executor(None, db_call)
+        except Exception as e:
+            logger.error(f"Failed to get risk analysis for {asset_symbol}: {str(e)}")
+            return None
+
     async def _get_asset_data(self, asset_symbol: str) -> Dict[str, Any]:
         """Fetch asset data from the database."""
         if not self.conn:
@@ -157,17 +246,12 @@ class RiskAnalysisService:
         logger.info(f"Analyzing risk for asset: {asset_symbol}")
         
         try:
-            # Get asset data
             asset_data = await self._get_asset_data(asset_symbol)
-            
-            # Create messages for Sonar
             messages = self._create_messages(asset_data)
-            
-            # Get analysis from Sonar
             analysis_result = await self._handle_completion_response(messages)
-            
-            # Validate and return the response
-            return RiskAnalysisResponse(**analysis_result)
+            analysis = RiskAnalysisResponse(**analysis_result)
+            await self._store_risk_analysis(asset_symbol, analysis)  
+            return analysis
             
         except HTTPException:
             raise

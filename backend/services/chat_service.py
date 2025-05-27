@@ -85,7 +85,6 @@ class ChatService:
         """)
 
         # Create tracked_assets table if it doesn't exist
-        # Note: Assets should ideally be linked to users too.
         self.conn.execute("""
             CREATE TABLE IF NOT EXISTS tracked_assets (
                 id TEXT PRIMARY KEY,
@@ -98,11 +97,79 @@ class ChatService:
                 sector TEXT NOT NULL,
                 news TEXT NOT NULL,
                 price_history TEXT NOT NULL,
+                risk_level TEXT,
+                volatility_score REAL,
+                sector_trend_score REAL,
+                dip_count_last_month INTEGER,
+                sentiment_class TEXT,
+                volatility_breakdown TEXT,
+                sector_breakdown TEXT,
+                sentiment_breakdown TEXT,
+                risk_confidence REAL,
+                risk_recommendation TEXT,
+                risk_analysis_updated_at DATETIME,
                 created_at DATETIME NOT NULL,
                 last_updated DATETIME NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users (id)
             )
         """)
+        print("tracked_assets table created with risk analysis columns")
+        # Add risk analysis columns if they don't exist
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN risk_level TEXT")
+        except sqlite3.OperationalError:
+            pass  # Column already exists
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN volatility_score REAL")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN sector_trend_score REAL")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN dip_count_last_month INTEGER")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN sentiment_class TEXT")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN volatility_breakdown TEXT")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN sector_breakdown TEXT")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN sentiment_breakdown TEXT")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN risk_confidence REAL")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN risk_recommendation TEXT")
+        except sqlite3.OperationalError:
+            pass
+
+        try:
+            self.conn.execute("ALTER TABLE tracked_assets ADD COLUMN risk_analysis_updated_at DATETIME")
+        except sqlite3.OperationalError:
+            pass
+
         self.conn.commit()
 
 
@@ -150,6 +217,17 @@ class ChatService:
                             price_history TEXT NOT NULL,
                             created_at DATETIME NOT NULL,
                             last_updated DATETIME NOT NULL,
+                            risk_level TEXT,
+                            volatility_score REAL,
+                            sector_trend_score REAL,
+                            dip_count_last_month INTEGER,
+                            sentiment_class TEXT,
+                            volatility_breakdown TEXT,
+                            sector_breakdown TEXT,
+                            sentiment_breakdown TEXT,
+                            risk_confidence REAL,
+                            risk_recommendation TEXT,
+                            risk_analysis_updated_at DATETIME,
                             FOREIGN KEY (user_id) REFERENCES users (id)
                         )
                     """)
