@@ -104,6 +104,8 @@ class RiskAnalysisService:
             def db_call():
                 cursor = self.conn.execute("""
                     SELECT 
+                        symbol,
+                        name,
                         risk_level,
                         volatility_score,
                         sector_trend_score,
@@ -123,6 +125,8 @@ class RiskAnalysisService:
                     return None
                 
                 return {
+                    "asset_symbol": row["symbol"],
+                    "asset_name": row["name"],
                     "risk_level": row["risk_level"],
                     "factors": {
                         "volatility_score": row["volatility_score"],
@@ -137,7 +141,7 @@ class RiskAnalysisService:
                     },
                     "confidence": row["risk_confidence"],
                     "recommendation": row["risk_recommendation"],
-                    "updated_at": row["risk_analysis_updated_at"]
+                    "risk_analysis_updated_at": row["risk_analysis_updated_at"]
                 }
 
             loop = asyncio.get_event_loop()
@@ -246,6 +250,20 @@ class RiskAnalysisService:
         logger.info(f"Analyzing risk for asset: {asset_symbol}")
         
         try:
+            # First check if we have a recent analysis in the database
+            cached_analysis = await self._get_latest_risk_analysis(asset_symbol)
+            
+            if cached_analysis:
+                # Check if the analysis is less than 1 day old
+                updated_at = datetime.fromisoformat(cached_analysis["risk_analysis_updated_at"].replace('Z', '+00:00')).replace(tzinfo=timezone.utc)
+                now = datetime.now(timezone.utc)
+                if (now - updated_at) < timedelta(days=1):
+                    logger.info(f"Using cached risk analysis for {asset_symbol} from {updated_at}")
+                    return RiskAnalysisResponse(**cached_analysis)
+                else:
+                    logger.info(f"Cached analysis for {asset_symbol} is older than 1 day, proceeding with new analysis")
+            
+            # If no cached analysis or it's too old, proceed with new analysis
             asset_data = await self._get_asset_data(asset_symbol)
             messages = self._create_messages(asset_data)
             analysis_result = await self._handle_completion_response(messages)
