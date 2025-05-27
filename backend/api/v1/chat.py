@@ -56,6 +56,7 @@ async def get_chat_history(current_user: UserModel = Depends(get_current_user)):
                     ) as first_message
                 FROM messages m1
                 WHERE m1.user_id = ?  -- Filter by user_id
+                AND m1.type != 'guide'  -- Exclude guide type messages
                 GROUP BY conversation_id
                 ORDER BY first_message_time DESC
             """, (current_user.id, current_user.id))
