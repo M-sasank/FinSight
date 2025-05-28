@@ -233,6 +233,31 @@ function LandingPage({ currentTheme }) {
         <p>Join thousands of investors who trust FinSight for smarter financial decisions</p>
         <button onClick={() => navigate('/chat')} className="cta-button primary large">Get Started Now</button>
       </section>
+
+      <section className="contact-us-section">
+        <div className="contact-us-content">
+          <h2 className="contact-us-title">Get in Touch</h2>
+          <div className="contact-us-intro">
+            We're here to help and answer any question you might have. We look forward to hearing from you!
+          </div>
+          <div className="contact-methods">
+            <div className="contact-method">
+              <div>
+                <h3>Sasank Madati</h3>
+                <p>For direct inquiries or project discussions, please reach out to Sasank.</p>
+              </div>
+              <a href="mailto:sasankmadati@gmail.com" className="email-button">sasankmadati@gmail.com</a>
+            </div>
+            <div className="contact-method">
+              <div>
+                <h3>Hruthik Madati</h3>
+                <p>For alternative contact or specific queries, you can connect with Hruthik.</p>
+              </div>
+              <a href="mailto:hruthikmadati@gmail.com" className="email-button">hruthikmadati@gmail.com</a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

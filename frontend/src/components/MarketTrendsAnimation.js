@@ -9,14 +9,14 @@ const MarketTrendsAnimation = () => {
 
   // Combined data for asteroids and their text
   const financeDataNodes = useMemo(() => [
-    { id: 'node1', text: "Alpha Gen", x: centerX - 90, y: centerY - 70, accent: true, size: "small", asteroidR: 3.5 },
-    { id: 'node2', text: "Gamma Hedge", x: centerX + 60, y: centerY - 55, accent: false, size: "medium", asteroidR: 4 },
-    { id: 'node3', text: "FX Arbitrage", x: centerX - 80, y: centerY + 50, accent: true, size: "small", asteroidR: 3 },
-    { id: 'node4', text: "Quant Easing", x: centerX + 40, y: centerY + 70, accent: false, size: "medium", asteroidR: 4.5 },
-    { id: 'node5', text: "Vol Skew", x: centerX - 40, y: viewBoxHeight - 25, accent: true, size: "small", asteroidR: 3.5 },
-    { id: 'node6', text: "ESG Mandates", x: centerX + 70, y: centerY + 10, accent: false, size: "small", asteroidR: 3 },
-    { id: 'node7', text: "Duration Risk", x: centerX + 10, y: centerY - 20, accent: true, size: "medium", asteroidR: 4 },
-    { id: 'node8', text: "Sovereign Debt", x: centerX - 100, y: centerY + 15, accent: false, size: "small", asteroidR: 3.5 },
+    { id: 'node1', text: "", x: centerX - 90, y: centerY - 70, accent: true, size: "small", asteroidR: 3.5 },
+    { id: 'node2', text: "", x: centerX + 60, y: centerY - 55, accent: false, size: "medium", asteroidR: 4 },
+    { id: 'node3', text: "", x: centerX - 80, y: centerY + 50, accent: true, size: "small", asteroidR: 3 },
+    { id: 'node4', text: "", x: centerX + 40, y: centerY + 70, accent: false, size: "medium", asteroidR: 4.5 },
+    { id: 'node5', text: "", x: centerX - 40, y: viewBoxHeight - 25, accent: true, size: "small", asteroidR: 3.5 },
+    { id: 'node6', text: "", x: centerX + 70, y: centerY + 10, accent: false, size: "small", asteroidR: 3 },
+    { id: 'node7', text: "", x: centerX + 10, y: centerY - 20, accent: true, size: "medium", asteroidR: 4 },
+    { id: 'node8', text: "", x: centerX - 100, y: centerY + 15, accent: false, size: "small", asteroidR: 3.5 },
   ], [centerX, centerY, viewBoxHeight]);
 
   const [visibleDataNodes, setVisibleDataNodes] = useState([]);
