@@ -1,0 +1,70 @@
+{
+    "cached_at_iso": "2025-05-27T16:42:57.955716+00:00",
+    "topics_cached_for": "",
+    "news_data": {
+        "news_items": [
+            {
+                "title": "Apple Unveils New AI Features at WWDC 2025",
+                "summary": "Apple announced a suite of new artificial intelligence features at its annual Worldwide Developers Conference, aiming to bolster its competitive stance against Microsoft and Google. These include 'Apple Intelligence' integrated into Siri and system apps, deepening the company's push into AI and enhancing device capabilities.",
+                "source": "The Wall Street Journal",
+                "url": "https://www.wsj.com/tech/apple-wwdc-2025-ai-features-7cfae4a7",
+                "published_date": "2025-05-27",
+                "effect_on_you": "For Apple shareholders, these AI announcements may drive future device demand and improve the company's product ecosystem, potentially boosting long-term growth.",
+                "affected_asset_symbol": "AAPL",
+                "impact_on_asset": "Apple's integration of advanced AI features could enhance its product offerings, strengthen brand loyalty, and open new revenue streams, supporting the stock's value."
+            },
+            {
+                "title": "U.S. Stock Market Edges Higher Amid Optimism on Interest Rate Cuts",
+                "summary": "Major U.S. stock indexes rose modestly as investors grew increasingly hopeful that the Federal Reserve may lower interest rates later this year, following softer inflation readings and signals from policymakers.",
+                "source": "Reuters",
+                "url": "https://www.reuters.com/markets/us/wall-street-opens-higher-hopes-fed-cut-2025-05-27/",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Rate cut expectations typically support higher equity valuations, which could benefit investors across most sectors.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Global Oil Prices Drop on Supply Outlook",
+                "summary": "Oil prices fell for a second consecutive day, pressured by rising supply forecasts and concerns over global demand. Brent crude dropped below $81 a barrel as traders weighed OPEC+ and U.S. production trends.",
+                "source": "Bloomberg",
+                "url": "https://www.bloomberg.com/news/articles/2025-05-27/oil-drops-as-supply-outlook-weighs-on-market",
+                "published_date": "2025-05-27",
+                "effect_on_you": "If oil remains cheaper, it could lower input costs for manufacturers and transportation, potentially boosting profits and consumer spending.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "U.S. Consumer Confidence Hits 18-Month High in May",
+                "summary": "The U.S. consumer confidence index soared to its highest level since November 2023, reflecting growing optimism about the economy and labor market. This bodes well for retail, tech, and travel sectors.",
+                "source": "CNBC",
+                "url": "https://www.cnbc.com/2025/05/27/us-consumer-confidence-rises.html",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Stronger consumer confidence suggests potentially higher spending, benefiting sectors reliant on discretionary income such as technology and retail.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Nvidia Stock Hits Record High After Strong Earnings",
+                "summary": "Nvidia shares surged to an all-time high after the chipmaker reported better-than-expected quarterly results and robust outlook, driven by continued AI demand and data center growth.",
+                "source": "Financial Times",
+                "url": "https://www.ft.com/content/a819c120-2025-47ee-9987-41d3ffc2d028",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Nvidia's growth highlights AI's central role in the market and may have positive spillover effects on related tech stocks.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Eurozone Inflation Ticks Higher, Clouding ECB Rate Cut Hopes",
+                "summary": "Inflation in the eurozone rose slightly in May, raising concerns that the European Central Bank may delay its anticipated interest rate cuts. Markets reacted with caution following the report.",
+                "source": "Reuters",
+                "url": "https://www.reuters.com/markets/europe/eurozone-inflation-increases-may-2025-05-27/",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Persistent inflation could impact global markets, strengthening the euro and affecting export-driven companies globally.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            }
+        ],
+        "total_items": 6,
+        "last_updated": "2025-05-27T16:40:49Z"
+    }
+}

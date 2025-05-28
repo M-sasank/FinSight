@@ -9,6 +9,10 @@
   padding: 0;
 }
 
+html {
+  overflow-x: hidden; /* Prevent horizontal scroll on html */
+}
+
 body {
   overscroll-behavior-y: contain;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -19,6 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
   /* Remove direct background styling from body, will be handled by .App theme */
   background: transparent; 
+  overflow-x: hidden; /* Prevent horizontal scroll on body */
 }
 
 .App {
@@ -29,6 +34,8 @@ body {
   /* line-height: 1.6; */ /* Inherit from body or set more specifically */
   transition: background-color 0.3s ease, color 0.3s ease;
   /* background-color and color will be set by theme classes on body/App */
+  overflow-x: hidden; /* Prevent horizontal scroll on App */
+  width: 100%;
 }
 
 /* Remove old .App-header, it's replaced by NavBar */
@@ -51,41 +58,52 @@ body {
 
 /* --- Base Theme Variables (applied via theme classes on body or .App) --- */
 :root {
-  /* Light Theme Defaults (Newtimer) */
-  --page-bg-newtimer: #f0f2f5; /* Restored original light page bg */
+  /* Light Theme Defaults (Newtimer) - Will be commented out later if unused */
+  --page-bg-newtimer: #f0f2f5; 
   --text-color-primary-newtimer: #1d1d1f; 
   --text-color-secondary-newtimer: #555555; 
   --link-color-newtimer: #007aff; 
   --link-hover-color-newtimer: #0056b3; 
   --accent-color-primary-newtimer: #007aff;
   --card-bg-newtimer: #ffffff;
-  --card-border-newtimer: #e5e5e5;
-  --card-shadow-newtimer: 0 1px 3px rgba(0,0,0,0.04);
+  --card-border-newtimer: #d1d1d1; 
+  --card-shadow-newtimer: 0 2px 5px rgba(0,0,0,0.08); 
   --input-bg-newtimer: #f9f9f9;
   --input-border-newtimer: #d1d1d1;
   --input-focus-border-newtimer: #007aff;
   --button-primary-bg-newtimer: #007aff;
   --button-primary-text-newtimer: #ffffff;
-  /* Glass effect backgrounds for Newtimer */
-  --hero-glass-bg-newtimer: transparent; /* Was rgba(251, 251, 253, 0.75) */
-  --how-it-works-glass-bg-newtimer: transparent; /* Was rgba(255, 255, 255, 0.75) */
+  --button-secondary-bg-newtimer: #e9ecef;
+  --button-secondary-text-newtimer: #495057;
+  --button-secondary-hover-bg-newtimer: #d3d9df;
+  --button-danger-bg-newtimer: #f8d7da;
+  --button-danger-text-newtimer: #721c24;
+  --button-danger-hover-bg-newtimer: #f1b0b7;
+  --hero-glass-bg-newtimer: transparent; 
+  --how-it-works-glass-bg-newtimer: transparent; 
 
 
   /* Dark Theme Defaults (Veteran) */
-  --page-bg-veteran: #0D1117; /* Restored original dark page bg */
+  --page-bg-veteran: #0D1117; 
   --text-color-primary-veteran: #f5f5f7; 
   --text-color-secondary-veteran: #888888; 
   --link-color-veteran: #0A84FF; 
   --link-hover-color-veteran: #0A78E8; 
   --accent-color-primary-veteran: #0A84FF;
   --card-bg-veteran: #1c1c1e; 
-  --card-border-veteran: #38383a;
-  --card-shadow-veteran: 0 1px 3px rgba(0,0,0,0.1);
+  --card-border-veteran: rgba(255, 255, 255, 0.35); /* WAS rgba(255, 255, 255, 0.12) - Made more opaque white */
+  --card-shadow-veteran: 0 3px 7px rgba(0,0,0,0.15); 
   --input-bg-veteran: #2c2c2e;
   --input-border-veteran: #444446;
   --input-focus-border-veteran: #0A84FF;
   --button-primary-bg-veteran: #0A84FF;
   --button-primary-text-veteran: #ffffff;
+  --button-secondary-bg-veteran: #3A3A3C;
+  --button-secondary-text-veteran: var(--text-color-primary-veteran);
+  --button-secondary-hover-bg-veteran: #4A4A4C;
+  --button-danger-bg-veteran: #5E2E31; /* Darker red for veteran */
+  --button-danger-text-veteran: #F5C6CB; /* Lighter text for contrast */
+  --button-danger-hover-bg-veteran: #72383B;
   /* Glass effect backgrounds for Veteran */
   --hero-glass-bg-veteran: transparent; /* Was rgba(21, 21, 23, 0.75) */
   --how-it-works-glass-bg-veteran: transparent; /* Was rgba(13, 17, 23, 0.75) */
@@ -181,9 +199,343 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 /* ... other insights related page-theme-veteran overrides ... */
 
 
+/* --- AssetChatPage Veteran Theme Styles (iMessage Inspired) --- */
+.app-theme-veteran .asset-chat-container {
+  background-color: var(--page-bg-veteran); /* Base dark background */
+  /* display: flex; is already handled by inline styles or component structure */
+}
+
+.app-theme-veteran .asset-info-sidebar-component {
+  background-color: #1A1A1A; /* Slightly darker than page-bg for iMessage pane separation */
+  color: var(--text-color-primary-veteran);
+  border-right: 1px solid #2D2D2D; /* Subtle border for definition */
+  padding: 20px;
+  display: flex; /* Added for flex controls */
+  flex-direction: column; /* Stack items vertically */
+  gap: 20px; /* Spacing between sections in sidebar */
+}
+
+.app-theme-veteran .asset-info-sidebar-component .sidebar-header { /* For Symbol and Name container */
+    padding-bottom: 15px; /* Space below name */
+    border-bottom: 1px solid #2D2D2D; /* Separator for header */
+    margin-bottom: 10px; /* Space after separator */
+}
+
+.app-theme-veteran .asset-info-sidebar-component .asset-info-symbol, /* from inline */
+.app-theme-veteran .asset-info-sidebar-component h2 { /* Assuming h2 is asset symbol */
+  color: var(--text-color-primary-veteran);
+  font-size: 1.8em; /* Retained from inline */
+  font-weight: bold; /* Retained from inline */
+  margin:0; /* Reset margin */
+  line-height: 1.2;
+}
+
+.app-theme-veteran .asset-info-sidebar-component .asset-info-name, /* from inline */
+.app-theme-veteran .asset-info-sidebar-component p { /* Assuming p is asset name */
+  color: var(--text-color-secondary-veteran); /* Subdued color for name */
+  font-size: 1em; /* Retained from inline */
+  margin: 4px 0 0 0; /* Space above, reset other margins */
+  line-height: 1.3;
+}
+
+.app-theme-veteran .asset-quick-stats-component { /* Container for stat items */
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between stat items */
+}
+
+.app-theme-veteran .asset-quick-stats-component .stat-item { /* from inline */
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Align label and value vertically */
+  padding: 6px 0; /* Adjusted padding */
+  border-bottom: none; /* Remove individual borders if using a container approach or if not desired */
+}
+.app-theme-veteran .asset-quick-stats-component .stat-item:last-child {
+  border-bottom: none;
+}
+
+.app-theme-veteran .asset-quick-stats-component .stat-label { /* from inline */
+  color: var(--text-color-secondary-veteran);
+  font-size: 0.9em;
+}
+
+.app-theme-veteran .asset-quick-stats-component .stat-value { /* from inline */
+  color: var(--text-color-primary-veteran);
+  font-weight: 500; /* Medium weight */
+  font-size: 0.95em; /* Slightly larger for better readability */
+  text-align: right; /* Align value to the right */
+}
+
+.app-theme-veteran .asset-info-sidebar-component .error-state {
+    text-align: left; /* Align error text left */
+    padding: 10px 0; /* Padding for error state */
+}
+.app-theme-veteran .asset-info-sidebar-component .error-state p {
+  color: var(--text-color-secondary-veteran);
+  font-size: 0.9em;
+}
+.app-theme-veteran .asset-info-sidebar-component .error-state .error-icon {
+  color: var(--button-danger-text-veteran); /* Or a more muted red for dark theme */
+  font-size: 1.5rem; /* Adjust icon size */
+  margin-right: 8px; /* Space next to icon */
+  vertical-align: middle; /* Align icon with text */
+}
+
+.app-theme-veteran .chat-nav-button.home-button { /* from inline */
+  background-color: #2C2C2E; /* Consistent dark element color */
+  color: var(--text-color-primary-veteran);
+  border: 1px solid #3A3A3C;
+  padding: 12px 15px; /* Adjusted padding */
+  border-radius: 8px; /* Rounded corners */
+  margin-top: auto; /* Push to bottom of sidebar */
+  width: 100%;
+  font-size: 0.95em; /* Adjusted font size */
+  font-weight: 500; /* Medium weight */
+  gap: 10px; /* Space between icon and text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app-theme-veteran .chat-nav-button.home-button:hover {
+  background-color: #3A3A3C;
+  color: var(--text-color-primary-veteran);
+  border-color: #4A4A4C; /* Slightly lighter border on hover */
+}
+
+.app-theme-veteran .asset-chat-main-component {
+  background-color: var(--page-bg-veteran); /* Main chat area background */
+}
+
+.app-theme-veteran .chat-header { /* from inline */
+  padding: 15px 20px;
+  border-bottom: 1px solid #2D2D2D; /* Subtle separator */
+}
+.app-theme-veteran .chat-header .chat-title { /* from inline */
+  color: var(--text-color-primary-veteran);
+  font-size: 1.1em; /* Slightly smaller, more like iMessage title */
+  font-weight: 600; /* Bolder */
+}
+
+.app-theme-veteran .chat-messages-component {
+    padding: 20px; /* Ample padding around messages */
+    gap: 12px; /* Space between bubbles */
+}
+
+.app-theme-veteran .chat-messages-component .message-bubble-component {
+    border-radius: 18px; /* iMessage-like rounded corners */
+    padding: 10px 15px; /* Standard padding */
+    max-width: 75%; /* Max width for bubbles */
+    line-height: 1.45;
+}
+
+.app-theme-veteran .chat-messages-component .message-bubble-component.user {
+  background-color: #0B84FE; /* iMessage blue for dark mode */
+  color: #FFFFFF;
+  /* Consider adding a tail if possible with CSS only, or skip for simplicity */
+}
+.app-theme-veteran .chat-messages-component .message-bubble-component.user .message-timestamp {
+  color: rgba(255, 255, 255, 0.7); /* Lighter timestamp for blue bubble */
+}
+
+.app-theme-veteran .chat-messages-component .message-bubble-component.bot {
+  background-color: #2C2C2E; /* iMessage grey for recipient/bot */
+  color: var(--text-color-primary-veteran);
+  border: 1px solid #3A3A3C; /* Subtle border for definition */
+}
+.app-theme-veteran .chat-messages-component .message-bubble-component.bot .message-timestamp {
+  color: var(--text-color-secondary-veteran);
+}
+
+.app-theme-veteran .chat-messages-component .message-bubble-component.bot.error-message {
+  background-color: #5E2E31; /* Use var from root if preferred */
+  color: #F5C6CB;
+  border-color: #72383B;
+}
+
+.app-theme-veteran .quick-actions-component {
+    padding: 10px 20px;
+    border-top: 1px solid #2D2D2D; /* Separator from messages */
+    background-color: var(--page-bg-veteran); /* Match main chat background */
+}
+.app-theme-veteran .quick-actions-component .quick-action-button-component {
+  background-color: #2C2C2E; /* Dark grey, similar to bot messages */
+  color: var(--link-color-veteran); /* Blue text for action */
+  border: 1px solid #3A3A3C;
+  border-radius: 16px; /* Rounded tappable look */
+  padding: 8px 15px;
+  font-size: 0.85em;
+}
+.app-theme-veteran .quick-actions-component .quick-action-button-component:hover:not(:disabled) {
+  background-color: #3A3A3C; /* Slightly lighter on hover */
+  color: var(--link-hover-color-veteran);
+}
+
+.app-theme-veteran .chat-input-area-component { /* from inline */
+    padding: 10px 20px; /* Standard padding */
+    border-top: 1px solid #2D2D2D; /* Subtle separator */
+    background-color: var(--page-bg-veteran); /* Consistent background */
+    min-height: 70px; /* Consistent height */
+    display: flex; /* Ensure alignment */
+    align-items: center; /* Ensure alignment */
+}
+.app-theme-veteran .chat-input-area-component .input-wrapper { /* from inline */
+  background-color: #2C2C2E; /* Dark input field background */
+  border: 1px solid #3A3A3C;
+  border-radius: 24px; /* Well-rounded input field */
+  display: flex;
+  flex-grow: 1;
+  height: 48px; /* Consistent height */
+  overflow: hidden; /* To contain children within rounded corners */
+}
+.app-theme-veteran .chat-input-area-component .chat-input { /* from inline */
+  color: var(--text-color-primary-veteran);
+  background-color: transparent; /* Input itself is transparent */
+  padding: 0 15px; /* Padding within the input field */
+  font-size: 1em;
+  border: none; /* Border is on wrapper */
+  outline: none; /* Border is on wrapper */
+  flex-grow: 1;
+  height: 100%;
+}
+.app-theme-veteran .chat-input-area-component .chat-input::placeholder {
+  color: var(--text-color-secondary-veteran);
+}
+/* No specific focus style for input itself, wrapper can handle it if needed */
+
+.app-theme-veteran .chat-input-area-component .send-button { /* from inline */
+  background-color: var(--button-primary-bg-veteran); /* iMessage blue */
+  color: var(--button-primary-text-veteran);
+  border: none;
+  border-radius: 0 24px 24px 0; /* Align with input wrapper if part of it */
+  /* If standalone, make it circular: border-radius: 50%; width: 44px; height: 44px; padding: 0; */
+  padding: 0 15px; /* Padding for text/icon */
+  min-width: auto; /* Allow natural width or set fixed if circular */
+  height: 100%; /* Match wrapper height */
+  font-size: 1em; /* Ensure icon/text size is appropriate */
+}
+.app-theme-veteran .chat-input-area-component .send-button:hover:not(:disabled) {
+  background-color: var(--link-hover-color-veteran);
+}
+.app-theme-veteran .chat-input-area-component .send-button:disabled {
+  background-color: #3A3A3C !important; /* Darker grey when disabled */
+  color: var(--text-color-secondary-veteran);
+}
+.app-theme-veteran .chat-input-area-component .send-button span {
+  color: var(--button-primary-text-veteran);
+}
+.app-theme-veteran .chat-input-area-component .send-button:disabled span {
+  color: var(--text-color-secondary-veteran);
+}
+
+.app-theme-veteran .chat-nav-button.home-button { /* from inline */
+  background-color: #2C2C2E; /* Consistent dark element color */
+  color: var(--text-color-primary-veteran);
+  border: 1px solid #3A3A3C;
+  padding: 10px 15px; /* Standard padding */
+  border-radius: 8px; /* Rounded corners */
+  margin-top: auto; /* Push to bottom of sidebar */
+  width: 100%;
+  font-size: 1em;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.app-theme-veteran .chat-nav-button.home-button:hover {
+  background-color: #3A3A3C;
+  color: var(--text-color-primary-veteran);
+}
+
+/* Markdown specific styles for veteran theme (iMessage look) */
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content h1,
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content h2,
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content h3,
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content h4,
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content h5,
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content h6 {
+  color: inherit; /* Inherit from bubble text color */
+  margin-top: 0.8em;
+  margin-bottom: 0.4em;
+  font-weight: 600; /* Slightly bolder headings */
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content p {
+  color: inherit;
+  margin-bottom: 0.5em;
+  line-height: 1.5; /* Adjusted line height for readability */
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content a {
+  color: var(--link-color-veteran); /* Use theme link color */
+  text-decoration: underline;
+}
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content a:hover {
+  color: var(--link-hover-color-veteran);
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content code {
+  background-color: rgba(0,0,0,0.2); /* Darker inset for inline code */
+  color: var(--text-color-secondary-veteran); /* Lighter text for contrast */
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em; /* Slightly smaller */
+  font-family: var(--finsight-font-mono, monospace);
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content pre {
+  background-color: #1A1A1A; /* Even darker inset for code blocks */
+  color: var(--text-color-primary-veteran);
+  padding: 0.8em 1em; /* Adjusted padding */
+  border-radius: 8px; /* More rounded code blocks */
+  overflow-x: auto;
+  margin: 0.5em 0 1em 0;
+  border: 1px solid #2D2D2D; /* Subtle border */
+}
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 0.9em; /* Slightly larger code block text */
+  font-family: var(--finsight-font-mono, monospace);
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content ul,
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content ol {
+  margin-left: 0; /* Remove default margin for custom padding */
+  margin-bottom: 1em;
+  padding-left: 1.8em; /* Indent lists */
+}
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content li {
+  margin-bottom: 0.4em; /* Space between list items */
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot .message-text-content blockquote {
+  border-left: 3px solid var(--link-color-veteran); /* Use link color for quote border */
+  padding-left: 1em;
+  margin-left: 0;
+  color: var(--text-color-secondary-veteran);
+  font-style: italic;
+}
+
+.app-theme-veteran .asset-chat-main-component .loading-spinner-animation {
+  color: var(--accent-color-primary-veteran);
+}
+.app-theme-veteran .asset-chat-main-component .loading-text {
+  color: var(--text-color-secondary-veteran);
+}
+
+/* Ensure main container fills height correctly if not already */
+.app-theme-veteran .asset-chat-container {
+    min-height: calc(100vh - 60px); /* Adjust if navbar height is different */
+    height: calc(100vh - 60px); /* Adjust if navbar height is different */
+}
+
+
 /* Landing Page Styles */
 .landing-page {
   width: 100%;
+  max-width: 100vw; /* Ensure it doesn't exceed viewport width */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -199,6 +551,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   background-attachment: fixed;
   min-height: 100vh; /* Ensure .App covers viewport height */
   width: 100%;
+  max-width: 100vw; /* Ensure it doesn't exceed viewport width */
   padding: 0px 40px 60px 40px; /* Reduced top padding from 100px to 60px */
   display: flex;
   align-items: center;
@@ -317,13 +670,38 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   font-weight: 600;
   font-size: 1.05em; /* Slightly larger */
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; /* Added box-shadow to transition */
   border: 2px solid transparent; /* Base border */
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: auto; /* Remove min-width for natural sizing */
-  box-shadow: none; /* Remove default box shadow */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle base shadow */
+  position: relative; /* For pseudo-element positioning */
+  overflow: hidden;   /* To contain the fill animation */
+  z-index: 0; /* Establishes a stacking context for the pseudo-element */
+}
+
+.cta-button::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: white;
+  transition: height 0.3s ease-in-out;
+  z-index: -1; /* Place it behind the button's content */
+}
+
+.cta-button:hover::before {
+  height: 100%;
+}
+
+/* Text color change on hover for ALL CTA buttons, and keep other hover effects */
+.cta-button:hover {
+  color: #000000 !important; /* Black text for visibility */
+  /* transform and box-shadow are already set in primary/secondary hover rules below */
 }
 
 .cta-button.primary {
@@ -333,9 +711,11 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .cta-button.primary:hover {
-  background-color: var(--cta-primary-bg-hover);
-  border-color: var(--cta-primary-bg-hover);
-  transform: translateY(-1px); /* Subtle lift */
+  background-color: var(--cta-primary-bg-hover); /* Original bg, will be overlaid by ::before */
+  border-color: var(--cta-primary-bg-hover); /* Keeps border consistent with theme hover */
+  transform: translateY(-2px) scale(1.03); /* Enhanced lift and scale */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Enhanced shadow on hover */
+  /* Text color is handled by the general .cta-button:hover rule */
 }
 
 .cta-button.secondary {
@@ -345,10 +725,12 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .cta-button.secondary:hover {
-  background-color: var(--cta-secondary-bg-hover);
-  border-color: var(--cta-secondary-border-hover);
-  color: var(--cta-secondary-text-hover);
-  transform: translateY(-1px); /* Subtle lift */
+  background-color: var(--cta-secondary-bg-hover); /* Original bg, will be overlaid by ::before */
+  border-color: var(--cta-secondary-border-hover); /* Keeps border consistent with theme hover */
+  /* color: var(--cta-secondary-text-hover); This would be overridden by the general rule */
+  transform: translateY(-2px) scale(1.03); /* Enhanced lift and scale */
+  box-shadow: 0 4px 12px var(--cta-secondary-border, rgba(0,0,0,0.1)); /* Enhanced shadow, using border color for subtle theming */
+  /* Text color is handled by the general .cta-button:hover rule */
 }
 
 .cta-button:active {
@@ -417,7 +799,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 
 /* Features Section */
 .features-section {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh; /* Minimum full viewport height */
   padding: 80px 40px; /* Increased padding for better spacing */
   background-color: var(--features-section-bg); /* Theme variable */
@@ -426,6 +808,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   flex-direction: column;
   align-items: center;
   justify-content: center; /* Center content vertically */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 /* Theme-specific variables for Features Section */
@@ -608,7 +991,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .feature-description {
   font-family: var(--apple-font-family);
   font-size: 1em; /* Restore readable size */
-  line-height: 1.6; /* Comfortable line height */
+  line-height: 1.6;
   color: var(--feature-card-text-color);
   margin-bottom: 0; /* Remove margin since we're using gap */
   max-width: 95%; /* Good width utilization */
@@ -1311,7 +1694,133 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   --chat-input-field-bg: var(--chat-input-field-bg-newtimer);
   --chat-input-focus: var(--chat-input-focus-newtimer);
   --chat-input-focus-ring: var(--chat-input-focus-ring-newtimer);
-}
+  /* Tracker Page Specific Styles - Newtimer Theme */
+  .tracker-page .asset-card {
+    background-color: var(--card-bg-newtimer);
+    border: 1px solid var(--card-border-newtimer);
+    box-shadow: var(--card-shadow-newtimer);
+    color: var(--text-color-primary-newtimer);
+  }
+
+  .tracker-page .asset-card .asset-title h3 {
+    color: var(--text-color-primary-newtimer);
+  }
+  .tracker-page .asset-card .asset-name {
+    color: var(--text-color-secondary-newtimer);
+  }
+  .tracker-page .asset-card .price {
+     color: var(--text-color-primary-newtimer);
+  }
+  .tracker-page .asset-card .movement.positive {
+    color: #4CAF50; /* Keep for financial clarity */
+  }
+  .tracker-page .asset-card .movement.negative {
+    color: #f44336; /* Keep for financial clarity */
+  }
+   .tracker-page .asset-chart .chartjs-render-monitor { /* Target chart itself */
+    border-radius: var(--finsight-radius-md);
+  }
+  .tracker-page .asset-chart svg, .tracker-page .asset-chart canvas { /* For scales, grids */
+    color: var(--text-color-secondary-newtimer); /* Affects text of scales */
+  }
+  .tracker-page .asset-info .info-row .label {
+    color: var(--text-color-secondary-newtimer);
+  }
+  .tracker-page .asset-info .info-row .value {
+    color: var(--text-color-primary-newtimer);
+  }
+
+  .tracker-page .add-asset-button,
+  .tracker-page .ask-about-button,
+  .tracker-page .retry-button,
+  .tracker-page .modal-buttons .primary-button {
+    /* For Newtimer Theme: White button, dark text */
+    background-color: #FFFFFF;
+    color: #000000 !important; /* Hardcoded black text for the button itself */
+    border: 1px solid var(--input-border-newtimer);
+  }
+
+  .page-theme-newtimer .tracker-page .add-asset-button span {
+    color: #000000 !important; /* Hardcoded black text for any span inside */
+  }
+
+  .page-theme-newtimer .tracker-page .add-asset-button .button-icon svg, /* Target SVG within .button-icon */
+  .page-theme-newtimer .tracker-page .add-asset-button > svg { /* Target direct SVG child */
+    fill: #000000 !important; /* Hardcoded black fill for SVG */
+    stroke: #000000 !important; /* Hardcoded black stroke for SVG */
+  }
+
+  .tracker-page .delete-button {
+    background-color: var(--button-danger-bg-newtimer);
+    color: var(--button-danger-text-newtimer);
+    border: 1px solid transparent;
+  }
+   .tracker-page .delete-button:hover {
+    background-color: var(--button-danger-hover-bg-newtimer);
+  }
+
+  .tracker-page .modal-buttons .secondary-button {
+    background-color: var(--button-secondary-bg-newtimer);
+    color: var(--button-secondary-text-newtimer);
+    border: 1px solid var(--input-border-newtimer);
+  }
+  .tracker-page .modal-buttons .secondary-button:hover {
+     background-color: var(--button-secondary-hover-bg-newtimer);
+  }
+  
+  .tracker-page .search-input {
+    background-color: var(--input-bg-newtimer);
+    color: var(--text-color-primary-newtimer);
+    border: 1px solid var(--input-border-newtimer);
+  }
+  .tracker-page .search-input:focus {
+    border-color: var(--input-focus-border-newtimer);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1); 
+  }
+  .tracker-page .search-input::placeholder {
+    color: var(--text-color-secondary-newtimer);
+  }
+
+  .tracker-page .modal-overlay {
+    background-color: rgba(0,0,0,0.4); /* Standard overlay */
+  }
+  .tracker-page .modal-content {
+    background-color: var(--card-bg-newtimer);
+    color: var(--text-color-primary-newtimer);
+    border-radius: var(--finsight-radius-lg);
+    box-shadow: var(--card-shadow-newtimer);
+  }
+   .tracker-page .modal-content h3 {
+     color: var(--text-color-primary-newtimer);
+   }
+  .tracker-page .modal-content .input-group label {
+    color: var(--text-color-secondary-newtimer);
+  }
+  .tracker-page .modal-content .input-group input {
+    background-color: var(--input-bg-newtimer);
+    color: var(--text-color-primary-newtimer);
+    border: 1px solid var(--input-border-newtimer);
+  }
+  .tracker-page .modal-content .input-group input:focus {
+    border-color: var(--input-focus-border-newtimer);
+  }
+  .tracker-page .loading-container p, .tracker-page .error-container p, .tracker-page .no-assets p {
+    color: var(--text-color-secondary-newtimer);
+  }
+  .tracker-page .loading-spinner {
+    border-top-color: var(--accent-color-primary-newtimer);
+  }
+
+  .tracker-page .asset-card-inner-content {
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Light grey border for newtimer */
+    border-radius: var(--finsight-radius-md); /* Slightly smaller radius than parent card */
+    padding: var(--finsight-space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--finsight-space-3); /* Adjust gap as needed */
+    height: 100%; /* Fill the parent card padding area */
+  }
+} /* ADDED MISSING CLOSING BRACE FOR .page-theme-newtimer */
 
 .page-theme-veteran {
   --chat-bg: var(--chat-bg-veteran);
@@ -1344,6 +1853,141 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   --chat-input-field-bg: var(--chat-input-field-bg-veteran);
   --chat-input-focus: var(--chat-input-focus-veteran);
   --chat-input-focus-ring: var(--chat-input-focus-ring-veteran);
+  /* Tracker Page Specific Styles - Veteran Theme */
+  .tracker-page .asset-card {
+    background-color: var(--card-bg-veteran);
+    /* border: 1px solid var(--card-border-veteran); */ /* Relying on direct application below */
+    border: 1px solid rgba(255, 255, 255, 0.35) !important; /* DIRECT and IMPORTANT for visibility */
+    box-shadow: var(--card-shadow-veteran);
+    color: var(--text-color-primary-veteran);
+  }
+  
+  .tracker-page .asset-card .asset-title h3 {
+    color: var(--text-color-primary-veteran);
+  }
+  .tracker-page .asset-card .asset-name {
+    color: var(--text-color-secondary-veteran);
+  }
+  .tracker-page .asset-card .price {
+     color: var(--text-color-primary-veteran);
+  }
+  .tracker-page .asset-card .movement.positive {
+    color: #4CAF50; /* Keep for financial clarity */
+  }
+  .tracker-page .asset-card .movement.negative {
+    color: #f44336; /* Keep for financial clarity */
+  }
+  .tracker-page .asset-chart .chartjs-render-monitor {
+    border-radius: var(--finsight-radius-md);
+  }
+   .tracker-page .asset-chart svg, .tracker-page .asset-chart canvas {
+    color: var(--text-color-secondary-veteran); /* Affects text of scales */
+  }
+   .tracker-page .asset-chart .ct-grid { /* Chartist specific, adjust if using Chart.js grid lines */
+    stroke: rgba(255, 255, 255, 0.1);
+  }
+  .tracker-page .asset-chart .ct-label { /* Chartist specific */
+    fill: var(--text-color-secondary-veteran);
+  }
+
+
+  .tracker-page .asset-info .info-row .label {
+    color: var(--text-color-secondary-veteran);
+  }
+  .tracker-page .asset-info .info-row .value {
+    color: var(--text-color-primary-veteran);
+  }
+
+  .tracker-page .add-asset-button,
+  .tracker-page .ask-about-button,
+  .tracker-page .retry-button,
+  .tracker-page .modal-buttons .primary-button {
+    /* For Veteran Theme: White button, dark text (from newtimer primary text for good contrast) */
+    background-color: #FFFFFF;
+    color: #000000 !important; /* Hardcoded black text for the button itself */
+    border: 1px solid #D1D1D1; /* Light grey border */
+  }
+
+  .page-theme-veteran .tracker-page .add-asset-button span {
+    color: #000000 !important; /* Hardcoded black text for any span inside */
+  }
+
+  .page-theme-veteran .tracker-page .add-asset-button .button-icon svg, /* Target SVG within .button-icon */
+  .page-theme-veteran .tracker-page .add-asset-button > svg { /* Target direct SVG child */
+    fill: #000000 !important; /* Hardcoded black fill for SVG */
+    stroke: #000000 !important; /* Hardcoded black stroke for SVG */
+  }
+
+  .tracker-page .delete-button {
+    background-color: var(--button-danger-bg-veteran);
+    color: var(--button-danger-text-veteran);
+    border: 1px solid transparent;
+  }
+  .tracker-page .delete-button:hover {
+    background-color: var(--button-danger-hover-bg-veteran);
+  }
+  
+  .tracker-page .modal-buttons .secondary-button {
+    background-color: var(--button-secondary-bg-veteran);
+    color: var(--button-secondary-text-veteran);
+    border: 1px solid var(--input-border-veteran);
+  }
+   .tracker-page .modal-buttons .secondary-button:hover {
+     background-color: var(--button-secondary-hover-bg-veteran);
+  }
+
+  .tracker-page .search-input {
+    background-color: var(--input-bg-veteran);
+    color: var(--text-color-primary-veteran);
+    border: 1px solid var(--input-border-veteran);
+  }
+  .tracker-page .search-input:focus {
+    border-color: var(--input-focus-border-veteran);
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+  }
+  .tracker-page .search-input::placeholder {
+    color: var(--text-color-secondary-veteran);
+  }
+  
+  .tracker-page .modal-overlay {
+    background-color: rgba(0,0,0,0.6); /* Darker overlay for veteran */
+  }
+  .tracker-page .modal-content {
+    background-color: var(--card-bg-veteran);
+    color: var(--text-color-primary-veteran);
+    border-radius: var(--finsight-radius-lg);
+    box-shadow: var(--card-shadow-veteran);
+  }
+  .tracker-page .modal-content h3 {
+     color: var(--text-color-primary-veteran);
+   }
+  .tracker-page .modal-content .input-group label {
+    color: var(--text-color-secondary-veteran);
+  }
+  .tracker-page .modal-content .input-group input {
+    background-color: var(--input-bg-veteran);
+    color: var(--text-color-primary-veteran);
+    border: 1px solid var(--input-border-veteran);
+  }
+  .tracker-page .modal-content .input-group input:focus {
+    border-color: var(--input-focus-border-veteran);
+  }
+   .tracker-page .loading-container p, .tracker-page .error-container p, .tracker-page .no-assets p {
+    color: var(--text-color-secondary-veteran);
+  }
+  .tracker-page .loading-spinner {
+    border-top-color: var(--accent-color-primary-veteran);
+  }
+
+  .tracker-page .asset-card-inner-content {
+    /* border: 1px solid rgba(255, 255, 255, 0.1); */ /* REMOVED - outer card has the main border */
+    border-radius: var(--finsight-radius-md);
+    padding: var(--finsight-space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--finsight-space-3);
+    height: 100%;
+  }
 }
 
 /* Animations */
@@ -1370,6 +2014,41 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   100% {
     opacity: 0;
     transform: scale(1.05);
+  }
+}
+
+/* Animation for "Perplexity is thinking..." bubble */
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span,
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span {
+  animation: pulsingDots 1.4s infinite;
+  opacity: 0;
+  display: inline-block; /* Ensure spans behave correctly for animation */
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(1),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(2),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.app-theme-veteran .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(3),
+.app-theme-newtimer .asset-chat-main-component .message-bubble-component.bot.thinking-bubble .thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulsingDots {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -1733,13 +2412,14 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .search-input {
   padding: 8px 16px;
   padding-left: 36px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle white border */
   border-radius: 8px;
   font-size: 0.9rem;
   width: 240px;
   background: var(--input-bg);
   color: var(--text-primary);
   transition: all 0.3s ease;
+  height: 45px; /* Added to make height uniform with add-asset-button */
 }
 
 .search-input:focus {
@@ -1759,11 +2439,11 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .add-asset-button {
-  background: linear-gradient(135deg, #2196F3, #4CAF50);
-  color: white;
+  /* background: linear-gradient(135deg, #2196F3, #4CAF50); */ /* REMOVED - Will use theme variables */
+ /* Will be overridden by theme text color variable */
   padding: 12px 24px;
   border-radius: 12px;
-  border: none;
+  border: none; /* Will be overridden by theme border if any */
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
@@ -1771,7 +2451,7 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+  /* box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3); */ /* REMOVED - Will use theme shadow or button style */
   position: relative;
   overflow: hidden;
 }
@@ -1783,19 +2463,19 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #4CAF50, #2196F3);
+  /* background: linear-gradient(135deg, #4CAF50, #2196F3); */ /* REMOVED */
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .add-asset-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+  /* transform: translateY(-2px); */ /* Theme can handle hover transform */
+  /* box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4); */ /* REMOVED - Theme will handle hover shadow/bg */
   /* The background-color and other hover styles from the previous edit will be overridden here */
 }
 
 .add-asset-button:hover::before {
-  opacity: 1;
+  /* opacity: 1; */ /* REMOVED - Theme will handle hover effect, ::before might not be needed */
 }
 
 .button-icon {
@@ -1812,10 +2492,10 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .asset-card {
-  background: rgba(255, 255, 255, 0.15); /* Slightly increased opacity */
-  backdrop-filter: blur(12px);
+  background-color: var(--card-bg); 
+  backdrop-filter: blur(12px); 
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--card-border); 
   border-radius: 16px;
   padding: 24px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1824,7 +2504,8 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   display: flex; 
   flex-direction: column; 
   gap: 16px; 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Added default subtle shadow */
+  box-shadow: var(--card-shadow); /* ENSURE THIS IS APPLIED */
+  color: var(--text-primary); /* ENSURE THIS IS APPLIED */
 }
 
 .asset-card::before {
@@ -1834,20 +2515,19 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #2196F3, #4CAF50);
+  background: var(--accent-color-primary); /* ENSURE THIS IS APPLIED */
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
 }
 
 .asset-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px); /* This generic hover effect can remain */
+  /* Specific themed hover for shadow or border should be in theme blocks if needed */
 }
 
 .asset-card:hover::before {
-  transform: scaleX(1);
+  transform: scaleX(1); /* This generic hover accent can remain */
 }
 
 .asset-header {
@@ -1865,9 +2545,10 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 .asset-title h3 {
   font-size: 1.8rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #2196F3, #4CAF50);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* background: linear-gradient(90deg, #2196F3, #4CAF50); */ /* REMOVED GRADIENT */
+  /* -webkit-background-clip: text; */ /* REMOVED GRADIENT */
+  /* -webkit-text-fill-color: transparent; */ /* REMOVED GRADIENT */
+  color: var(--text-primary); /* ADDED - Use theme's primary text color */
   margin-bottom: 4px;
 }
 
@@ -1936,22 +2617,23 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 .asset-chart {
-  height: 150px; /* Increased from 120px */
-  margin: 24px 0;
+  height: 150px; 
+  margin: 16px 0; /* Adjusted margin */
   padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--page-bg-veteran); /* CHANGED to darkest background */
+  border-radius: 12px; /* Adjusted radius */
+  border: none; /* REMOVED border for clean inset */
 }
 
 .asset-info {
-  display: flex; /* from original */
-  flex-direction: column; /* from original */
-  gap: 12px; /* from original, or adjust as needed */
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+  background-color: var(--page-bg-veteran); /* CHANGED to darkest background */
+  border-radius: 12px; /* Adjusted radius */
   padding: 16px;
   margin-top: 16px;
+  border: none; /* Ensured no border for clean inset */
 }
 
 .info-row {
@@ -2975,3 +3657,187 @@ h6 { font-size: 0.9em; font-weight: 600; line-height: 1.4; text-transform: upper
 }
 
 /* --- End of AssetChatPage Enhancements & Bug Fixes --- */
+
+/* --- END OF GuidePage.css specific imports --- */
+
+/* --- Contact Us Section --- */
+.contact-us-section {
+  width: 100%;
+  padding: 0rem 2rem 3rem 2rem; /* Top padding set to 0 */
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Keep ::before and ::after as display: none; */
+.contact-us-section::before,
+.contact-us-section::after {
+  display: none;
+}
+
+.app-theme-newtimer .contact-us-section,
+.app-theme-veteran .contact-us-section {
+  background: rgba(10, 10, 15, 0.75);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.contact-us-content {
+  max-width: 800px; /* Slightly reduced max-width for a tighter feel */
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-us-title {
+  font-size: 2.5rem; /* Slightly smaller title */
+  font-weight: 700;
+  margin-bottom: 1.5rem; /* Reduced margin */
+  background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.contact-us-intro {
+  font-size: 1.1rem; /* Slightly smaller intro */
+  line-height: 1.7;
+  color: #cdd5e0;
+  margin-bottom: 2.5rem; /* Reduced margin */
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 400;
+}
+
+.contact-methods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem; /* Reduced gap */
+  margin-top: 1.5rem; /* Reduced margin */
+}
+
+@media (min-width: 768px) {
+  .contact-methods {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem; /* Reduced gap for desktop */
+  }
+}
+
+.contact-method {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 14px; /* Slightly smaller radius */
+  padding: 1.5rem; /* Reduced padding */
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-method:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.contact-method h3 {
+  font-size: 1.3rem; /* Reduced name size */
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.5rem; /* Reduced margin */
+  letter-spacing: -0.01em;
+}
+
+.contact-method p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #abb8c3;
+  margin-bottom: 1rem; /* Reduced margin */
+}
+
+.email-button {
+  display: inline-block;
+  text-align: center;
+  padding: 0.8rem 1.2rem; /* Reduced padding */
+  font-size: 0.95rem; /* Reduced font size */
+  font-weight: 500;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px; /* Smaller radius */
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.email-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.4s ease;
+}
+
+.email-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(37, 99, 235, 0.2);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.email-button:hover::before {
+  left: 100%;
+}
+
+.email-button:active {
+  transform: translateY(0);
+}
+
+/* Styles for old .contact-email-link are still commented out */
+
+@media (max-width: 768px) {
+  .contact-us-section {
+    padding: 0rem 1rem 2rem 1rem; /* Top padding set to 0 for mobile */
+  }
+  
+  .contact-us-title {
+    font-size: 2rem;
+  }
+  
+  .contact-us-intro {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+  
+  .contact-method {
+    padding: 1.25rem;
+  }
+
+  .contact-method h3 {
+    font-size: 1.2rem;
+  }
+
+  .contact-method p {
+    font-size: 0.85rem;
+  }
+
+  .email-button {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+}

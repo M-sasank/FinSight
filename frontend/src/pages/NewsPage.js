@@ -1,349 +1,322 @@
-import React, { useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import { 
-  FiExternalLink, 
-  FiClock, 
-  FiFileText, 
-  FiRefreshCw, 
-  FiTrendingUp,
-  FiBarChart2,
-  FiDollarSign,
-  FiGlobe,
-  FiZap,
-  FiArrowUpRight
-} from 'react-icons/fi';
+import React, { useEffect, useState } from 'react';
 import './NewsPage.css';
+import { useAuth } from '../contexts/AuthContext';
+// import NewsPageLoader from '../components/NewsPageLoader'; // No longer using this
+import MarketTrendsAnimation from '../components/MarketTrendsAnimation'; // Use this instead
 
-const NewsPage = ({ currentTheme }) => {
-  const [newsData, setNewsData] = useState(null);
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80';
+
+// Define loading phrases
+const newsLoadingPhrases = [
+  "Fetching the latest headlines...",
+  "Scanning top financial news sources...",
+  "Analyzing market-moving stories...",
+  "Compiling your news digest...",
+  "Getting real-time updates..."
+];
+
+const NewsPage = () => {
+  const { authFetch } = useAuth();
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [featuredStory, setFeaturedStory] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [activeArticleIndex, setActiveArticleIndex] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeSearchTopics, setActiveSearchTopics] = useState('');
 
-  const categories = [
-    { id: 'all', label: 'All News', icon: <FiGlobe /> },
-    { id: 'markets', label: 'Markets', icon: <FiBarChart2 /> },
-    { id: 'economy', label: 'Economy', icon: <FiDollarSign /> },
-    { id: 'tech', label: 'Technology', icon: <FiZap /> },
-    { id: 'trending', label: 'Trending', icon: <FiTrendingUp /> }
-  ];
+  // State for dynamic loading text
+  const [currentLoadingPhraseIndex, setCurrentLoadingPhraseIndex] = useState(0);
 
-  const fetchNewsData = async () => {
+  // Effect for cycling through loading phrases
+  useEffect(() => {
+    let phraseInterval;
+    if (loading) {
+      setCurrentLoadingPhraseIndex(0); // Start from the first phrase each time loading starts
+      phraseInterval = setInterval(() => {
+        setCurrentLoadingPhraseIndex(prevIndex => 
+          (prevIndex + 1) % newsLoadingPhrases.length
+        );
+      }, 2500); // Change phrase every 2.5 seconds
+    } else {
+      clearInterval(phraseInterval);
+    }
+    return () => clearInterval(phraseInterval); // Cleanup on unmount or when loading changes
+  }, [loading]);
+
+  const handleEffectClick = (index) => {
+    setActiveArticleIndex(index);
+    setPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+    setActiveArticleIndex(null);
+  };
+
+  const fetchNews = async ({ topics = '', forceReload = false } = {}) => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      const mockData = {
-        news_items: [
-          {
-            id: 1,
-            title: "Moody's Downgrades U.S. Sovereign Credit Rating, Bond Yields Spike",
-            summary: "Moody's Investor Services downgraded the U.S. sovereign credit rating by one notch to Aa1 from Aaa, citing the federal government's large and growing deficit and rising interest costs. This follows earlier downgrades from S&P and Fitch. The downgrade drove the 30-year U.S. Treasury yield above 5%, and the 10-year to 4.5%.",
-            source: "Nasdaq",
-            url: "https://www.nasdaq.com/articles/stock-market-news-may-21-2025",
-            published_date: "2025-05-21",
-            category: "markets",
-            importance: "high",
-            sentiment: "negative",
-            image_url: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=1200&q=80"
-          },
-          {
-            id: 2,
-            title: "Tech Giants Announce Major AI Investment Plans",
-            summary: "Leading technology companies have unveiled ambitious AI investment strategies, with combined commitments exceeding $100 billion over the next five years. The investments aim to accelerate AI research and development, focusing on generative AI, machine learning infrastructure, and ethical AI frameworks.",
-            source: "Bloomberg",
-            url: "https://www.bloomberg.com/tech-news",
-            published_date: "2025-05-20",
-            category: "tech",
-            importance: "high",
-            sentiment: "positive",
-            image_url: "https://images.unsplash.com/photo-1676299081847-3a8f2d1b5e5d?auto=format&fit=crop&w=1200&q=80"
-          },
-          {
-            id: 3,
-            title: "Federal Reserve Signals Potential Rate Cut in Q3",
-            summary: "The Federal Reserve has indicated a possible interest rate reduction in the third quarter, citing improved inflation metrics and economic stability. Market analysts predict a 25-basis-point cut, which could impact mortgage rates and consumer borrowing costs.",
-            source: "Financial Times",
-            url: "https://www.ft.com/markets",
-            published_date: "2025-05-19",
-            category: "economy",
-            importance: "high",
-            sentiment: "positive",
-            image_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
-          },
-          {
-            id: 4,
-            title: "Global Markets React to Emerging Market Currency Volatility",
-            summary: "Major emerging market currencies experienced significant volatility following the U.S. credit rating downgrade. The Brazilian Real, Indian Rupee, and South African Rand showed notable movements, prompting central bank interventions in several countries.",
-            source: "Reuters",
-            url: "https://www.reuters.com/markets",
-            published_date: "2025-05-18",
-            category: "markets",
-            importance: "medium",
-            sentiment: "neutral",
-            image_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80"
-          },
-          {
-            id: 5,
-            title: "Renewable Energy Stocks Surge on New Climate Policy",
-            summary: "Shares of renewable energy companies jumped following the announcement of new climate policies and increased government subsidies. Solar and wind energy stocks led the gains, with several companies hitting new 52-week highs.",
-            source: "CNBC",
-            url: "https://www.cnbc.com/markets",
-            published_date: "2025-05-17",
-            category: "trending",
-            importance: "medium",
-            sentiment: "positive",
-            image_url: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80"
-          },
-          {
-            id: 6,
-            title: "Major Bank Announces Blockchain Integration for Cross-Border Payments",
-            summary: "A leading global bank has revealed plans to integrate blockchain technology into its cross-border payment systems, promising faster transactions and reduced costs. The move is expected to revolutionize international money transfers and could save billions in transaction fees.",
-            source: "Wall Street Journal",
-            url: "https://www.wsj.com/finance",
-            published_date: "2025-05-16",
-            category: "tech",
-            importance: "medium",
-            sentiment: "positive",
-            image_url: "https://images.unsplash.com/photo-1639762681057-408e52192e55?auto=format&fit=crop&w=1200&q=80"
-          }
-        ],
-        total_items: 6,
-        last_updated: new Date().toISOString()
-      };
-
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const params = new URLSearchParams();
+      if (forceReload) {
+        params.append('force_reload', 'true');
+      }
+      if (topics) {
+        params.append('topics', topics);
+      }
       
-      setNewsData(mockData);
-      setLastUpdated(new Date(mockData.last_updated));
-      // Set the first high-importance story as featured
-      const featured = mockData.news_items.find(item => item.importance === 'high');
-      setFeaturedStory(featured || mockData.news_items[0]);
-      setError(null);
+      let apiUrl = '/api/v1/news/';
+      const paramString = params.toString();
+      if (paramString) {
+        apiUrl += `?${paramString}`;
+      }
+
+      const response = await authFetch(apiUrl, { method: 'POST' });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("API Error Response Text:", errorText);
+        throw new Error(`Failed to fetch news. Status: ${response.status}`);
+      }
+      
+      const responseData = await response.json();
+      console.log('Fetched raw responseData type:', typeof responseData);
+      console.log('Fetched raw responseData content:', responseData);
+
+      if (responseData && responseData.news_data) {
+        const actualNewsPayload = responseData.news_data;
+        console.log('Actual news payload type:', typeof actualNewsPayload);
+        console.log('Actual news payload content:', actualNewsPayload);
+
+        let parsedDataForArticles;
+        if (typeof actualNewsPayload === 'string') {
+          try {
+            parsedDataForArticles = JSON.parse(actualNewsPayload);
+          } catch (e) {
+            console.error('Failed to parse JSON string from actualNewsPayload:', e);
+            throw new Error('Received malformed news data string within news_data.');
+          }
+        } else {
+          parsedDataForArticles = actualNewsPayload;
+        }
+        
+        console.log('Data used for setting articles (from parsedDataForArticles):', parsedDataForArticles);
+
+        if (parsedDataForArticles && parsedDataForArticles.news_items) {
+          setArticles(parsedDataForArticles.news_items);
+        } else {
+          setArticles([]);
+          console.warn('news_items not found in parsed data or parsed data is null.');
+        }
+
+        if (responseData.retrieved_from_cache) {
+          console.log("Fetched news from cache.");
+        } else {
+          console.log("Fetched fresh news from API.");
+        }
+
+      } else {
+        console.error('Unexpected responseData structure:', responseData);
+        setArticles([]);
+        throw new Error('Received unexpected news data structure from server.');
+      }
+
     } catch (err) {
-      setError('Failed to fetch news data. Please try again later.');
-      console.error('Error fetching news:', err);
+      console.error("Error in fetchNews process:", err);
+      setError(err.message || 'Failed to load news. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchNewsData();
-  }, []);
+    fetchNews();
+  }, [authFetch]);
 
-  const formatDate = (dateString) => {
-    try {
-      const date = new Date(dateString);
-      return format(date, 'MMMM d, yyyy');
-    } catch (err) {
-      console.error('Error formatting date:', err);
-      return dateString;
-    }
+  const handleReload = () => {
+    fetchNews({ topics: activeSearchTopics, forceReload: true });
   };
 
-  const formatTimeAgo = (date) => {
-    try {
-      const now = new Date();
-      const diffInSeconds = Math.floor((now - date) / 1000);
-      
-      if (diffInSeconds < 60) return 'just now';
-      
-      const diffInMinutes = Math.floor(diffInSeconds / 60);
-      if (diffInMinutes < 60) {
-        return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
-      }
-      
-      const diffInHours = Math.floor(diffInMinutes / 60);
-      if (diffInHours < 24) {
-        return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-      }
-      
-      const diffInDays = Math.floor(diffInHours / 24);
-      if (diffInDays < 7) {
-        return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
-      }
-      
-      return format(date, 'MMM d, yyyy');
-    } catch (err) {
-      console.error('Error formatting time ago:', err);
-      return formatDate(date);
-    }
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
 
-  const handleRefresh = () => {
-    fetchNewsData();
-  };
-
-  const getSentimentColor = (sentiment) => {
-    switch (sentiment) {
-      case 'positive': return 'var(--finsight-success)';
-      case 'negative': return 'var(--finsight-error)';
-      default: return 'var(--finsight-text-secondary)';
-    }
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    const formattedTopics = searchQuery.trim().split(/\s+/).filter(Boolean).join(',');
+    setActiveSearchTopics(formattedTopics);
+    fetchNews({ topics: formattedTopics, forceReload: true });
   };
 
   if (loading) {
     return (
-      <div className={`news-page-container page-theme-${currentTheme}`}>
-        <div className="news-page-header">
-          <div className="news-header-content">
-            <h1>Trending Financial News</h1>
-          </div>
-        </div>
-        <div className="news-loading-container">
-          <div className="news-loading-spinner">
-            <FiRefreshCw className="spinning" />
-          </div>
-          <p>Loading latest market insights...</p>
-        </div>
+      <div className="news-page-container news-loading-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 60px)', paddingTop: '0' }}>
+        {/* <NewsPageLoader />  -- No longer using this */}
+        <MarketTrendsAnimation /> {/* Using this for loading state */}
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '20px' }}>
+          {newsLoadingPhrases[currentLoadingPhraseIndex]}<span className="thinking-dots"><span>.</span><span>.</span><span>.</span></span>
+        </p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className={`news-page-container page-theme-${currentTheme}`}>
-        <div className="news-page-header">
-          <div className="news-header-content">
-            <h1>Trending Financial News</h1>
-          </div>
-        </div>
-        <div className="news-error-container">
-          <p className="news-error-message">{error}</p>
-          <button className="news-retry-button" onClick={handleRefresh}>
-            <FiRefreshCw /> Retry
-          </button>
-        </div>
+      <div className="news-page-container" style={{ maxWidth: 900, margin: '0 auto', paddingTop: 40 }}>
+        <div style={{ textAlign: 'center', color: 'red', padding: 40, fontSize: 20 }}>{error}</div>
+        <button onClick={handleClosePopup}>Close</button>
       </div>
     );
   }
 
-  const filteredNews = activeCategory === 'all' 
-    ? newsData.news_items 
-    : newsData.news_items.filter(item => item.category === activeCategory);
-
-  const renderNewsCard = (item, isFeatured = false) => {
-    const CardComponent = isFeatured ? 'article' : 'article';
-    const cardClassName = isFeatured ? 'news-featured-card' : 'news-card';
-    const contentClassName = isFeatured ? 'news-featured-content' : 'news-card-content';
-    const titleClassName = isFeatured ? 'news-featured-title' : 'news-title';
-    const summaryClassName = isFeatured ? 'news-featured-summary' : 'news-summary';
-    const metaClassName = isFeatured ? 'news-featured-meta' : 'news-meta';
-
-    return (
-      <CardComponent 
-        key={item.id} 
-        className={`${cardClassName} ${item.importance === 'high' ? 'highlight' : ''} ${item.image_url ? 'has-image' : ''}`}
-      >
-        {item.image_url && (
-          <div className="news-card-image">
-            <img 
-              src={item.image_url} 
-              alt={item.title}
-              loading={isFeatured ? "eager" : "lazy"}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = `https://source.unsplash.com/1200x800/?${item.category},finance&auto=format&fit=crop&q=80`;
-              }}
-            />
-            <div className="news-card-image-overlay">
-              <span className="news-category-badge">
-                {categories.find(cat => cat.id === item.category)?.label || item.category}
-              </span>
+  return (
+    <div className="news-page-container" style={{ maxWidth: 900, margin: '0 auto', paddingTop: 40, position: 'relative' }}>
+      <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <form onSubmit={handleSearchSubmit} style={{ display: 'flex', flexGrow: 1, marginRight: 10 }}>
+          <input
+            type="text"
+            placeholder="Search news topics (e.g., tech earnings, market trends)"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+            style={{ 
+              padding: '10px 15px', 
+              fontSize: '16px', 
+              border: '1px solid #ccc', 
+              borderRadius: '4px 0 0 4px', 
+              flexGrow: 1 
+            }}
+          />
+          <button 
+            type="submit" 
+            style={{ 
+              padding: '10px 20px', 
+              fontSize: '16px', 
+              backgroundColor: '#007bff', 
+              color: 'white', 
+              border: '1px solid #007bff', 
+              borderRadius: '0 4px 4px 0', 
+              cursor: 'pointer' 
+            }}
+          >
+            Search
+          </button>
+        </form>
+        <button 
+          onClick={handleReload} 
+          style={{
+            padding: '8px 12px',
+            cursor: 'pointer',
+            fontSize: '20px',
+            backgroundColor: '#f0f0f0',
+            border: '1px solid #ccc',
+            borderRadius: '50%',
+            lineHeight: '1',
+          }}
+          title="Reload News"
+        >
+          &#x21BB;
+        </button>
+      </div>
+      {articles.length > 0 ? (
+        articles.map((article, idx) => (
+          <div key={idx} className="medium-article-card" style={{ display: 'flex', alignItems: 'center', gap: 24, borderBottom: '1px solid #eee', padding: '32px 0' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                {/* <img src={DEFAULT_IMAGE} alt="source icon" style={{ width: 24, height: 24, borderRadius: '50%', marginRight: 8 }} /> */}
+                <span style={{ fontSize: 14, color: '#555', fontWeight: 500 }}>{article.source || 'Unknown Source'}</span>
+              </div>
+              <h2 style={{ fontSize: 28, fontWeight: 700, margin: 0, marginBottom: 8 }}>
+                {article.title || 'Untitled Article'}
+              </h2>
+              <div style={{ fontSize: 18, color: '#555', marginBottom: 18 }}>{article.summary || 'No summary available.'}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 15, color: '#888' }}>
+                <span>{article.published_date || 'Unknown Date'}</span>
+                <button 
+                  onClick={() => handleEffectClick(idx)}
+                  className="effect-on-you-button"
+                >
+                  How does this affect me?
+                </button>
+              </div>
+            </div>
+            <div style={{ minWidth: 180, maxWidth: 220, height: 150, borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <img 
+                src={article.image_url || DEFAULT_IMAGE} 
+                alt={article.title || 'Article image'} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                onError={(e) => { e.target.onerror = null; e.target.src=DEFAULT_IMAGE; }} // Fallback to default if image_url fails
+              />
             </div>
           </div>
-        )}
-        <div className={contentClassName}>
-          <div className={isFeatured ? 'news-featured-header' : 'news-card-header'}>
-            {isFeatured && <span className="news-featured-badge">Featured Story</span>}
-            <span 
-              className="news-sentiment-badge"
-              style={{ backgroundColor: getSentimentColor(item.sentiment) }}
+        ))
+      ) : (
+        !loading && !error && <div style={{ textAlign: 'center', padding: '50px 20px', fontSize: 18, color: '#777' }}>No news articles found.</div>
+      )}
+
+      {popupVisible && activeArticleIndex !== null && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1001
+          }}
+          onClick={handleClosePopup}
+        >
+          <div 
+            style={{
+              backgroundColor: '#fff',
+              padding: 40,
+              borderRadius: 12,
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              width: '80%',
+              maxWidth: 700,
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              cursor: 'default'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={handleClosePopup} 
+              style={{
+                position: 'absolute',
+                top: 15,
+                right: 15,
+                background: 'transparent',
+                border: 'none',
+                fontSize: 24,
+                cursor: 'pointer',
+                color: '#555'
+              }}
             >
-              {item.sentiment}
-            </span>
-            {item.importance === 'high' && (
-              <span className="news-importance-badge">Important</span>
+              &times;
+            </button>
+            <h3 style={{ color: '#333', marginTop: 0, marginBottom: 16 }}>How does this news affect you?</h3>
+            <p style={{ color: '#555', marginBottom: 12, fontSize: 16, lineHeight: 1.6 }}>{articles[activeArticleIndex].effect_on_you || 'No specific effect information available.'}</p>
+            
+            {articles[activeArticleIndex].affected_asset_symbol && articles[activeArticleIndex].impact_on_asset ? (
+              <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
+                <h4 style={{ color: '#2c3e50', marginBottom: 8 }}>Impact on Tracked Asset</h4>
+                <p style={{ color: '#34495e', fontSize: 16, lineHeight: 1.6 }}>
+                  <strong>Asset:</strong> {articles[activeArticleIndex].affected_asset_symbol}<br />
+                  <strong>Impact:</strong> {articles[activeArticleIndex].impact_on_asset}
+                </p>
+              </div>
+            ) : (
+              <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee' }}>
+                <p style={{ color: '#7f8c8d', fontSize: 15, fontStyle: 'italic' }}>None of your tracked assets are effected by this news item.</p>
+              </div>
             )}
           </div>
-          <h2 className={titleClassName}>
-            <a href={item.url} target="_blank" rel="noopener noreferrer">
-              {item.title}
-              <FiArrowUpRight className="external-link-icon" />
-            </a>
-          </h2>
-          <p className={summaryClassName}>{item.summary}</p>
-          <div className={metaClassName}>
-            <span className="news-source">
-              <FiFileText />
-              {item.source}
-            </span>
-            <span className="news-date">
-              <FiClock />
-              {formatDate(item.published_date)}
-            </span>
-          </div>
         </div>
-      </CardComponent>
-    );
-  };
-
-  return (
-    <div className={`news-page-container page-theme-${currentTheme}`}>
-      <div className="news-page-header">
-        <div className="news-header-content">
-          <div className="news-header-main">
-            <h1>Trending Financial News</h1>
-            <p className="news-header-subtitle">
-              Stay ahead with real-time market insights and breaking financial news
-            </p>
-          </div>
-          {lastUpdated && (
-            <div className="news-last-updated">
-              <FiClock />
-              <span>Last updated {formatTimeAgo(lastUpdated)}</span>
-              <button 
-                className="news-refresh-button" 
-                onClick={handleRefresh} 
-                title="Refresh news"
-                aria-label="Refresh news"
-              >
-                <FiRefreshCw />
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="news-categories">
-        {categories.map(category => (
-          <button
-            key={category.id}
-            className={`news-category-button ${activeCategory === category.id ? 'active' : ''}`}
-            onClick={() => setActiveCategory(category.id)}
-          >
-            {category.icon}
-            <span>{category.label}</span>
-          </button>
-        ))}
-      </div>
-
-      <div className="news-content">
-        {featuredStory && activeCategory === 'all' && renderNewsCard(featuredStory, true)}
-
-        {filteredNews.length === 0 ? (
-          <div className="news-empty-state">
-            <p>No news available in this category.</p>
-            <p>Please check back later or try another category.</p>
-          </div>
-        ) : (
-          <div className="news-grid">
-            {filteredNews.map(item => renderNewsCard(item))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

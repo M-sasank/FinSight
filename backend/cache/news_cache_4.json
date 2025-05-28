@@ -1,0 +1,70 @@
+{
+    "cached_at_iso": "2025-05-28T01:06:17.171365+00:00",
+    "topics_cached_for": "",
+    "news_data": {
+        "news_items": [
+            {
+                "title": "U.S. Stocks Rally to Record Highs as Inflation Data Eases Rate Fears",
+                "summary": "Wall Street surged Tuesday with the S&P 500 and Nasdaq hitting fresh all-time highs after inflation data showed consumer prices in April increased less than expected. This bolstered hopes that the Federal Reserve could cut interest rates within 2024.",
+                "source": "Reuters",
+                "url": "https://www.reuters.com/markets/us/wall-street-sp-500-hits-record-high-inflation-data-2025-05-27/",
+                "published_date": "2025-05-27",
+                "effect_on_you": "A broad market rally boosts portfolio values and increases optimism about the economic outlook, making it easier to achieve investment goals.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Microsoft and Apple Extend Tech Rally With Record Closes",
+                "summary": "Big tech led the recent stock market surge as Microsoft and Apple both closed at record highs on Tuesday, aided by strong investor confidence in their AI strategies and continued revenue growth.",
+                "source": "CNBC",
+                "url": "https://www.cnbc.com/2025/05/27/apple-and-microsoft-close-at-record-highs.html",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Large-cap tech stocks' performance can influence index funds and ETFs, impacting many investors' portfolios even if they don't own individual shares.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Consumer Confidence in U.S. Improves More Than Expected in May",
+                "summary": "The Conference Board\u2019s Consumer Confidence Index jumped to 108.5 in May, up from 101.3 in April, signaling greater consumer optimism and potential for increased spending that could boost the economy.",
+                "source": "Bloomberg",
+                "url": "https://www.bloomberg.com/news/articles/2025-05-27/us-consumer-confidence-climbs-to-five-month-high",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Higher consumer confidence tends to support economic growth and corporate earnings, which is bullish for equity investors.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Oil Prices Edge Higher on Hopes for Demand Recovery",
+                "summary": "Brent crude futures rose above $86 per barrel following signs of improving global demand and expectations that OPEC+ will maintain supply cuts when it meets next week.",
+                "source": "Financial Times",
+                "url": "https://www.ft.com/content/8bca61c7-48d4-4f1a-9e6d-17b542fbb191",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Energy prices affect inflation and consumer costs. Rising oil prices may benefit energy investments but could raise overall inflation risks.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "European Stocks Rise as ECB Signals Potential July Rate Cut",
+                "summary": "European markets climbed after the European Central Bank hinted at a likely interest rate cut in July, boosting growth-sensitive sectors and lifting the eurozone\u2019s main stock indices.",
+                "source": "Reuters",
+                "url": "https://www.reuters.com/markets/europe/european-stocks-rise-ecb-rate-cut-2025-05-27/",
+                "published_date": "2025-05-27",
+                "effect_on_you": "ECB rate cuts can stimulate European economies, support corporate earnings, and make eurozone equities more attractive to global investors.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "U.S. Home Prices Hit Record High in March, Outpacing Income Growth",
+                "summary": "The S&P CoreLogic Case-Shiller Home Price Index reported a 6.5% year-over-year gain in March, with U.S. home prices hitting new records despite high mortgage rates, sparking concern about affordability.",
+                "source": "The Wall Street Journal",
+                "url": "https://www.wsj.com/real-estate/us-home-prices-case-shiller-record-high-2025-05-27",
+                "published_date": "2025-05-27",
+                "effect_on_you": "Rising home prices may benefit homeowners and REIT investors but could challenge affordability for prospective buyers and slow future housing demand.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            }
+        ],
+        "total_items": 6,
+        "last_updated": "2025-05-28T01:06:10Z"
+    }
+}

@@ -3,12 +3,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import logging
 
+# Import create_db_and_tables
+from database import create_db_and_tables, engine # Added engine
+from models.user import Base as UserBase # Import Base from where User model is defined
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Create database table
+# This should ideally be called once, perhaps managed by Alembic for migrations in production
+UserBase.metadata.create_all(bind=engine) # Create tables defined in User model
+# If you have other Bases for other models (like from chat.py if they become SQLAlchemy models),
+# you'd call create_all on them too or ensure all models use the same Base.
+# create_db_and_tables() # Call the function to create tables
 
 # Load environment variables
 load_dotenv()

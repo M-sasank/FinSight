@@ -3,8 +3,23 @@ import { FiSend, FiPlus, FiClock } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './ChatPage.css';
+import { useAuth } from '../contexts/AuthContext';
+
+const LOADING_MESSAGES = [
+  "Perplexity is thinking...",
+  "Analyzing your query...",
+  "Accessing knowledge base...",
+  "Perplexity is searching for information...",
+  "Gathering relevant data points...",
+  "Compiling insights...",
+  "Perplexity is crafting your response...",
+  "Formatting the details...",
+  "Almost ready..."
+];
 
 function ChatPage({ currentTheme }) {
+  const { authFetch, token } = useAuth();
+
   const initialChatMessages = useCallback(() => [ 
     {
       id: 'chatmsg-initial-1',
@@ -21,6 +36,9 @@ function ChatPage({ currentTheme }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [chatMode, setChatMode] = useState('newbie');
+  const [currentLoadingText, setCurrentLoadingText] = useState(LOADING_MESSAGES[0]);
+  const loadingMessageIndexRef = useRef(0);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -54,24 +72,26 @@ function ChatPage({ currentTheme }) {
     }
   ];
 
-  useEffect(() => {
-    fetchChatHistory();
-    // Initialize with a new chat on first load
-    setMessages(initialChatMessages());
-  }, [initialChatMessages]);
-
-  const fetchChatHistory = async () => {
+  const fetchChatHistory = useCallback(async () => {
+    if (!token) return;
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/history`);
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/history`);
       if (response.ok) {
         const data = await response.json();
         setChatHistory(data.history || []);
         setSelectedChat(null);
+      } else {
+        console.error('Failed to fetch chat history:', response.statusText);
       }
     } catch (error) {
       console.error('Error fetching chat history:', error);
     }
-  };
+  }, [authFetch, token]);
+
+  useEffect(() => {
+    fetchChatHistory();
+    setMessages(initialChatMessages());
+  }, [fetchChatHistory, initialChatMessages]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -80,6 +100,28 @@ function ChatPage({ currentTheme }) {
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
+
+  useEffect(() => {
+    let loadingInterval;
+    if (isLoading) {
+      loadingMessageIndexRef.current = 0; // Reset index when loading starts
+      setCurrentLoadingText(LOADING_MESSAGES[loadingMessageIndexRef.current]);
+      
+      loadingInterval = setInterval(() => {
+        if (loadingMessageIndexRef.current < LOADING_MESSAGES.length - 1) {
+          loadingMessageIndexRef.current += 1;
+          setCurrentLoadingText(LOADING_MESSAGES[loadingMessageIndexRef.current]);
+        } else {
+          // Optionally, clear interval if you want it to stop on the last message
+          // clearInterval(loadingInterval);
+          // Or just let it stay on the last message
+        }
+      }, 1800); // Change message every 1.8 seconds (adjust as needed)
+    } else {
+      clearInterval(loadingInterval);
+    }
+    return () => clearInterval(loadingInterval); // Cleanup on unmount or when isLoading changes
+  }, [isLoading]);
 
   const processAndAddMessage = async (text, sender) => {
     const newMessage = {
@@ -94,10 +136,9 @@ function ChatPage({ currentTheme }) {
     if (sender === 'user') {
       setIsLoading(true);
       try {
-        // Always use 'chat' backend type since we're using veteran theme
-        const backendType = 'chat';
+        const backendType = chatMode === 'newbie' ? 'newbie' : 'chat';
         
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -110,7 +151,12 @@ function ChatPage({ currentTheme }) {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to get response from server');
+          let errorDetail = 'Failed to get response from server';
+          try {
+            const errorData = await response.json();
+            errorDetail = errorData.detail || errorDetail;
+          } catch (e) { /* ignore if response is not json */ }
+          throw new Error(errorDetail);
         }
 
         const data = await response.json();
@@ -169,12 +215,22 @@ function ChatPage({ currentTheme }) {
   const handleChatSelect = async (chatId) => {
     if (chatId !== selectedChat) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/${chatId}`);
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/${chatId}`);
         if (response.ok) {
           const data = await response.json();
           setMessages(data.messages);
           setConversationId(chatId);
           setSelectedChat(chatId);
+          setShowSuggestions(false);
+          
+          // Set chat mode based on the selected chat's type
+          const selectedChatData = chatHistory.find(chat => chat.id === chatId);
+          if (selectedChatData) {
+            const mode = selectedChatData.type === 'newbie' ? 'newbie' : 'veteran';
+            setChatMode(mode);
+          }
+        } else {
+          console.error('Failed to load chat:', response.statusText);
         }
       } catch (error) {
         console.error('Error loading chat:', error);
@@ -187,7 +243,12 @@ function ChatPage({ currentTheme }) {
     setConversationId(null);
     setSelectedChat(null);
     setShowSuggestions(true);
+    setChatMode('newbie');
     inputRef.current?.focus();
+  };
+
+  const handleModeChange = (mode) => {
+    setChatMode(mode);
   };
 
   const renderMessageContent = (message) => {
@@ -236,6 +297,20 @@ function ChatPage({ currentTheme }) {
               New Chat
             </button>
           </div>
+          <div className="mode-selector">
+            <button 
+              className={`mode-button ${chatMode === 'newbie' ? 'active' : ''}`}
+              onClick={() => handleModeChange('newbie')}
+            >
+              Newbie
+            </button>
+            <button 
+              className={`mode-button ${chatMode === 'veteran' ? 'active' : ''}`}
+              onClick={() => handleModeChange('veteran')}
+            >
+              Veteran
+            </button>
+          </div>
           <div className="chat-history-list">
             {chatHistory.map((chat) => (
               <div
@@ -270,6 +345,15 @@ function ChatPage({ currentTheme }) {
                 {renderMessageContent(message)}
               </div>
             ))}
+            {isLoading && (
+              <div className="message bot typing-indicator">
+                <div className="message-content">
+                  <div className="message-text">
+                    <em>{currentLoadingText}</em>
+                  </div>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 

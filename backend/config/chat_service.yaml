@@ -94,3 +94,140 @@ chat_service:
 
     **Overall Goal:** Transform dense information into an output that is easy to scan, digest, and visually appealing.
     Be extra clear and explain financial concepts simply.
+
+  system_message_guide: >
+    You are an expert financial guide helping users understand investment concepts and strategies.
+    The following content is provided as a comprehensive guide to help users learn about investing.
+    When users ask questions, respond based on the guide content provided below.
+    If a question is not directly covered in the guide content, use your expertise to provide
+    relevant and helpful information while staying within the context of the guide.
+
+    Guide Content:
+    {guide_text}
+
+  guide_content: >
+      prerequisites:
+        age: "18+ with valid government ID"
+        nationality: "Indian citizens; foreign investors have separate processes"
+        financial:
+          - "Active Indian bank account"
+          - "Sufficient funds; no strict minimum"
+        documentation:
+          - "PAN card (mandatory)"
+          - "Aadhaar card (address proof)"
+          - "Photograph"
+          - "Bank proof"
+          - "Income proof (for derivatives)"
+        knowledge: "Basic understanding of stock market risks and mechanics"
+
+      account_opening:
+        steps:
+          - choose_broker:
+              description: "Select based on fees, services, and platform experience"
+              top_brokers:
+                - Zerodha: { rating: 9.80, charges: "₹0 delivery, ₹20 intraday" }
+                - Groww: { rating: 9.61, charges: "₹20 all orders" }
+                - Angel One: { rating: 9.60, charges: "₹0 delivery, ₹20 others" }
+                - Upstox: { rating: 9.50, charges: "₹20 all orders" }
+          - complete_kyc:
+              documents:
+                - PAN card
+                - Address proof
+                - Photograph
+                - Signature
+                - Bank proof
+          - activate_account:
+              steps:
+                - register
+                - verify
+                - upload_documents
+                - e_sign_and_nominee
+              post_activation:
+                - receive_credentials
+                - install_platform
+                - link_bank_account
+                - configure_funding
+
+      market_basics:
+        stock_definition: "Ownership in a company"
+        return_types: ["Capital appreciation", "Dividends"]
+        pricing: "Demand and supply driven"
+        example: "Buy at ₹5, sell at ₹10 → ₹50 profit; fall to ₹3 → ₹20 loss"
+        participants:
+          - long_term
+          - short_term
+          - day_traders
+          - swing_traders
+
+      investment_planning:
+        strategies:
+          - "100 Minus Age"
+          - "X/3 investment split"
+        risk_and_capital:
+          evaluation_criteria:
+            - emergency_fund
+            - no_high_interest_debt
+            - income_stability
+            - defined_goals
+          planning_steps:
+            - calculate_budget
+            - assess_risk
+            - define_timeline
+        diversification:
+          tips:
+            - 8–15 stocks across sectors
+            - mix of market caps
+            - balance of growth and value
+            - sector exposure limits
+            - periodic rebalancing
+
+      broker_and_platform:
+        types:
+          - discount: "Low cost, DIY research"
+          - full_service: "Higher fees, advisory support"
+        top_brokers:
+          - Zerodha
+          - Groww
+          - Angel One
+          - Upstox
+        platform_features:
+          - real_time_data
+          - charting_tools
+          - research_reports
+          - mobile_apps
+          - order_variety
+          - performance_tracking
+        fund_transfer_methods:
+          - UPI
+          - Net banking
+          - NEFT/RTGS
+          - Cheques
+
+      getting_started:
+        first_stock:
+          selection_criteria:
+            - strong_fundamentals
+            - known_sector
+            - stable_growth
+            - good_management
+            - fair_valuation
+        execution:
+          - log_in
+          - research
+          - allocate_funds
+          - place_order
+        order_types:
+          - market
+          - limit
+          - stop_loss
+          - GTC
+        portfolio_management:
+          activities:
+            - weekly_review
+            - monthly_rebalancing
+            - quarterly_analysis
+            - annual_strategy_update
+            - news_tracking
+    
+
+    

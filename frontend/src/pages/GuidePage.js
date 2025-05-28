@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/GuidePage.css';
+import { useAuth } from '../contexts/AuthContext';
 
 function GuidePage({ currentTheme }) {
+  const { authFetch, token } = useAuth();
   const [selectedCountry, setSelectedCountry] = useState('IN');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -54,32 +56,45 @@ function GuidePage({ currentTheme }) {
     const observerOptions = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5, // Trigger when 50% of the section is visible
+      threshold: 0.5
     };
 
     const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (entry.target === prerequisitesRef.current) {
-            setCurrentSectionName('Prerequisites');
-          } else if (entry.target === accountOpeningRef.current) {
-            setCurrentSectionName('Account Opening');
-          } else if (entry.target === stockFundamentalsRef.current) {
-            setCurrentSectionName('Stock Fundamentals');
-          } else if (entry.target === investmentPlanningRef.current) {
-            setCurrentSectionName('Investment Planning');
-          } else if (entry.target === brokerSelectionRef.current) {
-            setCurrentSectionName('Broker Selection');
-          } else if (entry.target === investmentJourneyRef.current) {
-            setCurrentSectionName('Investment Journey');
-          }
-        }
-      });
+      // Filter only intersecting entries
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      if (visibleEntries.length === 0) return;
+
+      // Pick the entry with the highest intersectionRatio
+      const mostVisible = visibleEntries.reduce((max, entry) =>
+        entry.intersectionRatio > max.intersectionRatio ? entry : max,
+        visibleEntries[0]
+      );
+
+      let newSectionName = '';
+      const section = mostVisible.target;
+      if (section === prerequisitesRef.current) {
+        newSectionName = 'Prerequisites';
+      } else if (section === accountOpeningRef.current) {
+        newSectionName = 'Account Opening';
+      } else if (section === stockFundamentalsRef.current) {
+        newSectionName = 'Stock Fundamentals';
+      } else if (section === investmentPlanningRef.current) {
+        newSectionName = 'Investment Planning';
+      } else if (section === brokerSelectionRef.current) {
+        newSectionName = 'Broker Selection';
+      } else if (section === investmentJourneyRef.current) {
+        newSectionName = 'Investment Journey';
+      }
+
+      if (newSectionName && newSectionName !== currentSectionName) {
+        console.log('Setting new section name:', newSectionName);
+        setCurrentSectionName(newSectionName);
+      }
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    const sectionsToObserve = [
+    const sections = [
       prerequisitesRef,
       accountOpeningRef,
       stockFundamentalsRef,
@@ -88,20 +103,27 @@ function GuidePage({ currentTheme }) {
       investmentJourneyRef
     ];
 
-    sectionsToObserve.forEach(ref => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
+    setTimeout(() => {
+      sections.forEach(ref => {
+        if (ref.current) {
+          observer.observe(ref.current);
+        }
+      });
+    }, 100);
 
     return () => {
-      sectionsToObserve.forEach(ref => {
+      sections.forEach(ref => {
         if (ref.current) {
           observer.unobserve(ref.current);
         }
       });
     };
-  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+  }, [currentSectionName]);
+
+  // Add effect to log currentSectionName changes
+  useEffect(() => {
+    console.log('currentSectionName updated:', currentSectionName);
+  }, [currentSectionName]);
 
   const handleGetStockRecommendation = async () => {
     setIsRecommendingStock(true);
@@ -110,18 +132,13 @@ function GuidePage({ currentTheme }) {
 
     // Simulate API call / deep research
     setTimeout(() => {
-      // Simulate success
       const stockData = {
         name: "INFOSYS (INFY)",
         reason: "Strong fundamentals, consistent growth in the IT sector, and positive future outlook based on recent analyst reports."
       };
       setRecommendedStock(stockData);
       setIsRecommendingStock(false);
-
-      // To simulate an error, you could do something like:
-      // setRecommendationError("Failed to fetch stock recommendation. Please try again later.");
-      // setIsRecommendingStock(false);
-    }, 3000); // Simulate 3 seconds of research
+    }, 3000);
   };
 
   const toggleDrawer = () => {
@@ -130,6 +147,16 @@ function GuidePage({ currentTheme }) {
 
   const handleSendMessage = async () => {
     if (input.trim() && !isLoading) {
+      if (!token) {
+        setMessages(prev => [...prev, {
+          id: `chatmsg-error-${Date.now()}`,
+          sender: 'bot',
+          text: "Please log in to use the chat feature.",
+          type: 'error'
+        }]);
+        return;
+      }
+
       const userMessage = {
         id: `chatmsg-${Date.now()}`,
         text: input,
@@ -140,7 +167,7 @@ function GuidePage({ currentTheme }) {
       setIsLoading(true);
 
       try {
-        const response = await fetch('http://localhost:8000/api/v1/chat', {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -148,12 +175,12 @@ function GuidePage({ currentTheme }) {
           body: JSON.stringify({
             type: 'guide',
             user_query: input,
-            country: selectedCountry
           })
         });
 
         if (!response.ok) {
-          throw new Error('Failed to get response from server');
+          const errorData = await response.json().catch(() => ({ detail: 'Failed to get response from server' }));
+          throw new Error(errorData.detail || 'Failed to get response from server');
         }
 
         const data = await response.json();
@@ -169,7 +196,8 @@ function GuidePage({ currentTheme }) {
         const errorMessage = {
           id: `chatmsg-${Date.now() + 1}`,
           sender: 'bot',
-          text: 'Sorry, I encountered an error while processing your request. Please try again.'
+          text: 'Sorry, I encountered an error while processing your request. Please try again.',
+          type: 'error'
         };
         setMessages(prev => [...prev, errorMessage]);
       } finally {
@@ -757,15 +785,7 @@ function GuidePage({ currentTheme }) {
       <div className="floating-bubble">
         <button className="help-button" onClick={toggleDrawer}>
           {
-            currentSectionName &&
-            ((
-              currentSectionName === 'Prerequisites' && !isPrerequisitesCollapsed) ||
-              (currentSectionName === 'Account Opening' && !isAccountOpeningCollapsed) ||
-              (currentSectionName === 'Stock Fundamentals' && !isStockFundamentalsCollapsed) ||
-              (currentSectionName === 'Investment Planning' && !isInvestmentPlanningCollapsed) ||
-              (currentSectionName === 'Broker Selection' && !isBrokerSelectionCollapsed) ||
-              (currentSectionName === 'Investment Journey' && !isInvestmentJourneyCollapsed)
-            )
+            currentSectionName
             ? `Stuck in ${currentSectionName}?` 
             : 'Need Help?'
           }
@@ -824,4 +844,4 @@ function GuidePage({ currentTheme }) {
   );
 }
 
-export default GuidePage; 
+export default GuidePage;

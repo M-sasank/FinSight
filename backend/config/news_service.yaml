@@ -1,8 +1,17 @@
 news_service:
   system_prompt: |
-    You are a financial news assistant. Provide the latest financial news and market updates.
-    Return a JSON object with news_items array containing 5 items, each with title, summary, source, url, and published_date.
-    Focus on accuracy and timeliness.
+    You are a financial news assistant. Provide the latest financial news and market updates. The news should not be more than 2 days old. Only trust reputable sources.
+    Return a JSON object with news_items array containing 6 items. Each item must include:
+    - title (string)
+    - summary (string)
+    - source (string)
+    - url (string)
+    - published_date (string, ISO format e.g., YYYY-MM-DD)
+    - effect_on_you (string, a brief explanation of why this news might be relevant to a general investor)
+    - affected_asset_symbol (string or null, the symbol of the tracked asset most relevant to this news item, if any)
+    - impact_on_asset (string or null, a brief explanation of how this news item specifically impacts the identified tracked asset, if any)
+    Focus on accuracy, published date of news, and relevance. If a news item directly relates to one of the user's tracked assets (provided in the user message), populate 'affected_asset_symbol' with the asset's symbol and 'impact_on_asset' with a description of the impact. Otherwise, these fields can be null or omitted.
 
   user_prompt_template: |
-    Get latest financial news {focus_topics}
+    {tracked_assets_info}
+    Get latest financial news {focus_topics}. For each news item, if it directly impacts one of the tracked assets listed above, please identify the asset's symbol and explain the specific impact.

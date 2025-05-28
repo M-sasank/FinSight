@@ -8,6 +8,10 @@ import AssetChatPage from './pages/AssetChatPage';
 import NewsPage from './pages/NewsPage';
 import GuidePage from './pages/GuidePage';
 import HeroAnimation from './components/HeroAnimation';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 // Import ALL animation components
 import ChatAssistAnimation from './components/ChatAssistAnimation';
@@ -31,6 +35,10 @@ function App() {
         <main className="App-main-content">
           <Routes>
             <Route path="/" element={<LandingPage currentTheme={currentTheme} />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/terms" element={<TermsOfServicePage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
             <Route path="/chat" element={<ChatPage currentTheme={currentTheme} />} />
             <Route path="/news" element={<NewsPage currentTheme={currentTheme} />} />
             <Route path="/tracker" element={<TrackerPage currentTheme={currentTheme} />} />
@@ -224,6 +232,31 @@ function LandingPage({ currentTheme }) {
         <h2>Ready to Transform Your Investment Journey?</h2>
         <p>Join thousands of investors who trust FinSight for smarter financial decisions</p>
         <button onClick={() => navigate('/chat')} className="cta-button primary large">Get Started Now</button>
+      </section>
+
+      <section className="contact-us-section">
+        <div className="contact-us-content">
+          <h2 className="contact-us-title">Get in Touch</h2>
+          <div className="contact-us-intro">
+            We're here to help and answer any question you might have. We look forward to hearing from you!
+          </div>
+          <div className="contact-methods">
+            <div className="contact-method">
+              <div>
+                <h3>Sasank Madati</h3>
+                <p>For direct inquiries or project discussions, please reach out to Sasank.</p>
+              </div>
+              <a href="mailto:sasankmadati@gmail.com" className="email-button">sasankmadati@gmail.com</a>
+            </div>
+            <div className="contact-method">
+              <div>
+                <h3>Hruthik Madati</h3>
+                <p>For alternative contact or specific queries, you can connect with Hruthik.</p>
+              </div>
+              <a href="mailto:hruthikmadati@gmail.com" className="email-button">hruthikmadati@gmail.com</a>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
