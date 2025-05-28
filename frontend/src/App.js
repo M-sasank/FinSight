@@ -238,7 +238,7 @@ function LandingPage({ currentTheme }) {
         <div className="contact-us-content">
           <h2 className="contact-us-title">Get in Touch</h2>
           <div className="contact-us-intro">
-            We're here to help and answer any question you might have. We look forward to hearing from you!
+            We're here to help and answer any question you might have. For collaborations contact us
           </div>
           <div className="contact-methods">
             <div className="contact-method">

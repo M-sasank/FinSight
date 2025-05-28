@@ -1,70 +1,70 @@
 {
-    "cached_at_iso": "2025-05-28T10:42:39.892835+00:00",
+    "cached_at_iso": "2025-05-28T12:15:11.863569+00:00",
     "topics_cached_for": "",
     "news_data": {
         "news_items": [
             {
-                "title": "Amazon Announces New AI-Powered Supply Chain Tools",
-                "summary": "Amazon has unveiled a suite of new AI-driven tools aimed at improving supply chain efficiency for its e-commerce and AWS clients. The tools leverage machine learning to optimize inventory and reduce delivery times.",
-                "source": "CNBC",
-                "url": "https://www.cnbc.com/2025/05/28/amazon-launches-ai-supply-chain-tools.html",
-                "published_date": "2025-05-28",
-                "effect_on_you": "As an investor, innovations in supply chain operation can drive cost reduction and revenue growth for Amazon, benefiting shareholders' value.",
-                "affected_asset_symbol": "AWS",
-                "impact_on_asset": "The announcement signals potential increased adoption of AWS and enhanced operational efficiency, which could lead to higher profitability and strengthen AWS's market position."
-            },
-            {
-                "title": "US Markets Close Higher on Tech Rally Ahead of Fed Policy Decision",
-                "summary": "Major US indices climbed, led by tech giants, as investors await clarity on interest rates from the Federal Reserve. The S&P 500 and Nasdaq posted gains on renewed optimism for the tech sector.",
+                "title": "Amazon Web Services Launches Generative AI Assistant for Contact Centers",
+                "summary": "Amazon Web Services (AWS) has officially rolled out its generative AI assistant, Amazon Q, for contact centers, aiming to automate customer service operations and boost productivity. The tool's integration can help enterprises streamline workflows and improve customer interactions, aligning with AWS's ongoing efforts to enhance its AI offerings.",
                 "source": "Reuters",
-                "url": "https://www.reuters.com/markets/us/us-stocks-rise-fed-policy-decision-nears-2025-05-27/",
-                "published_date": "2025-05-27",
-                "effect_on_you": "Positive tech sector momentum can boost portfolio returns, especially if you hold technology-related assets such as Amazon or AWS shares.",
-                "affected_asset_symbol": "AWS",
-                "impact_on_asset": "General tech optimism and strong sector performance can lift AWS's share price, reflecting broader industry trends."
-            },
-            {
-                "title": "Amazon\u2019s AWS Partners with European Governments on Cloud Security",
-                "summary": "AWS has announced strategic collaborations with several European governments to enhance cloud computing security and compliance, addressing growing regulatory scrutiny in the region.",
-                "source": "Financial Times",
-                "url": "https://www.ft.com/content/amazon-aws-europe-cloud-security-2025",
+                "url": "https://www.reuters.com/technology/amazon-web-services-launches-generative-ai-assistant-contact-centers-2025-05-28/",
                 "published_date": "2025-05-28",
-                "effect_on_you": "Increased government partnerships can drive sustained revenue growth for AWS and open new markets, supporting long-term stock performance.",
+                "effect_on_you": "AWS's focus on AI could drive revenue growth and strengthen Amazon's leadership in cloud services, potentially benefiting investors.",
                 "affected_asset_symbol": "AWS",
-                "impact_on_asset": "Positive impact from enhanced market credibility and potential for new government contracts, which could spur AWS's European expansion."
+                "impact_on_asset": "The launch of an advanced AI assistant positions AWS as a leader in enterprise AI solutions, potentially driving adoption and revenue growth for AWS."
             },
             {
-                "title": "US Consumer Confidence Rises to 18-Month High",
-                "summary": "The Conference Board reported that US consumer confidence jumped in May, marking the highest reading in 18 months. Strong job growth and moderating inflation contributed to the increased sentiment.",
+                "title": "S&P 500 and Nasdaq Hit Record Highs on Tech Rally",
+                "summary": "U.S. markets climbed to new records, led by gains in major technology companies. Strong performances from AI and cloud computing sectors fueled optimism, with investors anticipating continued growth in tech earnings.",
                 "source": "Bloomberg",
-                "url": "https://www.bloomberg.com/news/articles/2025-05-28/us-consumer-confidence-reaches-18-month-high",
+                "url": "https://www.bloomberg.com/news/articles/2025-05-28/s-p-500-nasdaq-hit-records-on-tech-rally",
                 "published_date": "2025-05-28",
-                "effect_on_you": "Higher consumer confidence can lead to increased consumer spending, benefitting e-commerce and cloud providers like Amazon and AWS.",
+                "effect_on_you": "Broad tech rallies can lift related stocks and ETFs, offering portfolio growth opportunities if you are exposed to technology giants.",
                 "affected_asset_symbol": "AWS",
-                "impact_on_asset": "Rising consumer and business spending could drive more demand for AWS cloud services, positively impacting AWS's growth prospects."
+                "impact_on_asset": "As AWS is a leading cloud provider, positive sentiment toward tech and AI stocks supports its valuation and growth outlook."
             },
             {
-                "title": "Global Oil Prices Fall as Supply Concerns Ease",
-                "summary": "Oil prices declined sharply after reports of improved supply chains and increased production. Lower energy costs may alleviate inflationary pressures worldwide.",
+                "title": "U.S. Consumer Confidence Edges Higher in May as Inflation Eases",
+                "summary": "Consumer confidence in the U.S. rose more than expected in May, according to new data from the Conference Board. Eased inflation pressures and strong labor markets contributed to improved sentiment.",
+                "source": "CNBC",
+                "url": "https://www.cnbc.com/2025/05/28/consumer-confidence-may-2025.html",
+                "published_date": "2025-05-28",
+                "effect_on_you": "Rising consumer confidence can signal ongoing economic strength, potentially supporting stock market performance and consumer-driven sectors.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
+            },
+            {
+                "title": "Federal Reserve Minutes Show Cautious Approach to Rate Cuts",
+                "summary": "Minutes from the latest FOMC meeting reveal that Fed officials favor a patient stance on interest rate reductions. There is concern about inflation persistence, suggesting that rates could remain elevated longer than previously anticipated.",
                 "source": "Wall Street Journal",
-                "url": "https://www.wsj.com/market-data/commodities/oil-news-2025-05-28",
+                "url": "https://www.wsj.com/economy/fed-minutes-may-2025-2025-05-28",
                 "published_date": "2025-05-28",
-                "effect_on_you": "Lower energy costs can benefit consumer spending and reduce operational expenses for data-heavy companies like Amazon and AWS.",
-                "affected_asset_symbol": "AWS",
-                "impact_on_asset": "Falling oil prices could lower operational expenses for AWS's data centers, enhancing profit margins."
+                "effect_on_you": "A cautious Fed may result in higher borrowing costs and impact growth stocks and market sentiment in the short term.",
+                "affected_asset_symbol": null,
+                "impact_on_asset": null
             },
             {
-                "title": "Fed Officials Signal Patience on Rate Cuts Despite Strong Economic Data",
-                "summary": "Federal Reserve officials indicated they would hold off on rate cuts, citing persistent inflation, even as economic data exceeded expectations. Markets remain watchful for future policy changes.",
-                "source": "Yahoo Finance",
-                "url": "https://finance.yahoo.com/news/fed-officials-signal-patience-rate-cuts-2025-05-27",
+                "title": "Amazon Expands Partnership with Nvidia to Accelerate AI Adoption",
+                "summary": "Amazon and Nvidia are deepening their collaboration to accelerate enterprise adoption of generative AI through AWS infrastructure. This move is expected to provide customers better access to powerful AI hardware and cloud tools, increasing AWS's competitive edge.",
+                "source": "TechCrunch",
+                "url": "https://techcrunch.com/2025/05/28/amazon-nvidia-aws-ai-collaboration/",
+                "published_date": "2025-05-28",
+                "effect_on_you": "Strategic partnerships in AI may drive new customers to AWS and boost Amazon's cloud revenues, which could benefit shareholders.",
+                "affected_asset_symbol": "AWS",
+                "impact_on_asset": "The partnership enhances AWS's AI capabilities, strengthening its position in the cloud and AI infrastructure market, likely supporting future growth."
+            },
+            {
+                "title": "Global Oil Prices Retreat Amid Lower Demand Forecasts",
+                "summary": "Oil prices have softened as the International Energy Agency revised global demand forecasts downward. The weaker outlook may dampen inflation concerns and impact energy sector performance.",
+                "source": "Financial Times",
+                "url": "https://www.ft.com/content/global-oil-prices-forecast-2025-05-27",
                 "published_date": "2025-05-27",
-                "effect_on_you": "Interest rate policies influence borrowing costs and investment sentiment, which can affect equity valuations and overall market direction.",
+                "effect_on_you": "Lower oil prices may ease inflation, benefiting consumers and technology companies whose costs are sensitive to energy input.",
                 "affected_asset_symbol": null,
                 "impact_on_asset": null
             }
         ],
         "total_items": 6,
-        "last_updated": "2025-05-28T10:42:27Z"
+        "last_updated": "2025-05-28T12:14:48Z"
     }
 }

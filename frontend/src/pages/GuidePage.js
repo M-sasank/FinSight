@@ -1,6 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import '../styles/GuidePage.css';
 import { useAuth } from '../contexts/AuthContext';
+
+// Define loading phrases for the guide chat
+const GUIDE_LOADING_PHRASES = [
+  "Consulting the investment scrolls...",
+  "Gathering financial wisdom...",
+  "Crafting your guidance...",
+  "Simplifying complex concepts...",
+  "Almost ready with your answer..."
+];
 
 function GuidePage({ currentTheme }) {
   const { authFetch, token } = useAuth();
@@ -24,6 +35,11 @@ function GuidePage({ currentTheme }) {
   const [isInvestmentJourneyCollapsed, setIsInvestmentJourneyCollapsed] = useState(false);
   const [currentSectionName, setCurrentSectionName] = useState('');
   const messagesEndRef = useRef(null);
+
+  // State for loading text animation
+  const [currentLoadingText, setCurrentLoadingText] = useState(GUIDE_LOADING_PHRASES[0]);
+  const loadingTextIndexRef = useRef(0);
+  const loadingTextIntervalRef = useRef(null);
 
   // State for stock recommendation feature
   const [isRecommendingStock, setIsRecommendingStock] = useState(false);
@@ -124,6 +140,21 @@ function GuidePage({ currentTheme }) {
   useEffect(() => {
     console.log('currentSectionName updated:', currentSectionName);
   }, [currentSectionName]);
+
+  // Effect for cycling loading text
+  useEffect(() => {
+    if (isLoading) {
+      loadingTextIndexRef.current = 0;
+      setCurrentLoadingText(GUIDE_LOADING_PHRASES[0]);
+      loadingTextIntervalRef.current = setInterval(() => {
+        loadingTextIndexRef.current = (loadingTextIndexRef.current + 1) % GUIDE_LOADING_PHRASES.length;
+        setCurrentLoadingText(GUIDE_LOADING_PHRASES[loadingTextIndexRef.current]);
+      }, 2000); // Change text every 2 seconds
+    } else {
+      clearInterval(loadingTextIntervalRef.current);
+    }
+    return () => clearInterval(loadingTextIntervalRef.current);
+  }, [isLoading]);
 
   const handleGetStockRecommendation = async () => {
     setIsRecommendingStock(true);
@@ -801,14 +832,23 @@ function GuidePage({ currentTheme }) {
         <div className="chat-container">
           <div className="chat-messages">
             {messages.map((message) => (
-              <div key={message.id} className={`message ${message.sender}`}>
-                {message.text}
+              <div key={message.id} className={`message ${message.sender} ${message.type === 'error' ? 'error-message' : ''}`}>
+                {message.sender === 'bot' ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
+                ) : (
+                  message.text
+                )}
               </div>
             ))}
+            {isLoading && (
+              <div className="message bot typing-indicator">
+                <em>{currentLoadingText}<span className="thinking-dots"><span>.</span><span>.</span><span>.</span></span></em>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
-          {messages.length <= 2 && (
+          {messages.length <= 2 && !isLoading && (
             <div className="suggestion-area">
               <p className="suggestion-area-title">Try asking:</p>
               <div className="suggestion-chips-container">
