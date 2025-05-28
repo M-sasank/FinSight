@@ -1,37 +1,86 @@
-# FinSight - Your Intelligent Personal Finance Advisor
+# FinSight
+**AI-Powered Personal Finance & Investing Assistant with Risk Intelligence**
 
-## Project Description
+FinSight is an all-in-one personal finance and investing assistant designed to make first-time investing less intimidating and a lot more insightful. Combining real-time data, intuitive design, and explainable AI, FinSight turns financial curiosity into confident action — no jargon, no black boxes.
 
-FinSight is an internet-enabled project built for the Perplexity Devpost Hackathon, designed to empower individuals with intelligent insights and tools for managing their personal finances. Leveraging the power of the Sonar API, FinSight goes beyond basic budgeting and tracking by providing real-time, reasoning-backed analysis and recommendations. Our goal is to create a "Perplexity for Finance," offering users a deeper understanding of their financial situation and the factors influencing it.
+---
+## How to run
 
-**Target Audience:** First-time investors and young professionals (millennials and Gen Z) seeking to build a strong financial foundation and navigate the complexities of the market with confidence.
+---
 
-## Key Features
+## Features
 
-FinSight integrates several powerful features powered by the Sonar API to provide a unique and insightful personal finance experience:
+### 1. Real-Time Market News
+Stay updated with an AI-curated news feed tailored to your watchlist. Powered by Perplexity’s Sonar API, the feed pulls citation-backed stories and ties them contextually to the stocks you track.
 
-* **Real-time Stock Analysis with Sonar Deep Research:**
-    * Get in-depth analysis of individual stocks, powered by Sonar Deep Research.
-    * Understand the key drivers behind stock movements with clear reasoning chains provided by Sonar.
-    * Access relevant news and research reports cited by Sonar, directly within the stock analysis.
+### 2. Visual Asset Tracker
+An interactive dashboard that displays:
 
-* **Financial News & Insights:**
-    * Receive curated summaries of financial news from all over the world.
-    * Understand the *why* behind the news with reasoning provided by Sonar, explaining its potential impact on your investments.
-    * Stay informed about broader economic trends and their potential implications for your financial strategy.
+- Live price movements and daily/weekly change indicators  
+- Mini trend graphs for quick insights  
+- Latest stock-specific news  
+- Industry classification  
+- Expandable **Risk Insight** panel for deeper analysis  
 
-* **Market Sentiment Analysis:**
-    * Gauge the overall market sentiment (bullish, bearish, neutral) using Sonar's analysis of news, social media, and other relevant data sources.
-    * Understand the prevailing sentiment around specific assets in your portfolio or those you are considering.
-    * Gain a broader context for your investment decisions by understanding the market mood.
+Everything you need to understand your assets — at a glance.
 
+### 3. Conversational Chat Assistant
+Your 24/7 investing companion. Ask questions, get explanations, or explore strategies — all in plain, friendly language. Perfect for demystifying complex terms or brainstorming investment ideas.
 
-* **Myabe: Visual Charts and Graphs:**
-    * Visualize your portfolio performance, budget allocations, and spending trends through intuitive charts and graphs.
-    * Gain a clear overview of your financial health and track progress towards your goals.
+### 4. Guide to the Curious
+A beginner-first educational space featuring:
 
-* **Must: Simple, Clean Interface:**
-    * Enjoy a user-friendly and intuitive interface designed for easy navigation and understanding of complex financial information.
+- Country-specific onboarding (India/US)  
+- Walkthroughs for account setup, taxes, and regulations  
+- Step-by-step investing guides  
+- AI assistant support while reading  
+
+No guesswork — just guidance that adapts to your context.
+
+### 5. AI Risk Analysis Engine (New in v2)
+Go beyond price tracking. The risk engine offers real-time, explainable insights across:
+
+- **Volatility Trends**: Historical and implied volatility metrics  
+- **Sector Stability**: Resilience of the broader industry  
+- **Sentiment Signals**: AI-powered read on market mood via options activity and analyst chatter  
+
+Risk levels are color-coded, educational, and fully transparent — no black-box ratings.
+
+---
+## What Makes FinSight Different
+
+- **Beginner-Friendly** from the ground up — no assumptions, no intimidating charts  
+- **Country-Sensitive** with tailored onboarding for Indian and US users  
+- **Self-Contained Learning Loop**: Track → Read → Understand Risk → Act → Learn  
+- **Explainable AI** that teaches, not just tells  
+- **Relaxed, Visual UI** designed to encourage curiosity, not overwhelm  
+
+---
+
+## Who It’s For
+
+- New investors unsure where to start  
+- Indian or US users navigating unique investing hurdles (KYC, tax, brokers)  
+- Side learners who want to understand **why** a stock moves — not just that it does  
+- Curious explorers who learn best by doing, not by memorizing theory  
+
+---
+
+## What’s Coming Next
+
+FinSight is built with scalability in mind. Future plans include:
+
+- Portfolio performance tracking  
+- Paper trading/simulated investments  
+- Personalized, AI-driven alerts  
+- Social and community features  
+
+---
+
+## Core Belief
+
+**FinSight doesn’t just track stocks — it teaches, explains, and grows with you.**  
+From anxiety to insight, from confusion to clarity — it’s your confidence engine.
 
 ## Technical Stack
 
