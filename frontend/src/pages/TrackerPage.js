@@ -152,7 +152,7 @@ function TrackerPage({ currentTheme }) {
     }
     try {
       setError(null);
-      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete?asset_id=${assetId}/`, {
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete/?asset_id=${assetId}`, {
         method: 'DELETE',
       });
 
