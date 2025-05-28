@@ -530,7 +530,7 @@ function TrackerPage({ currentTheme }) {
                   {/* Risk Analysis Section */}
                   <div className="risk-analysis-section">
                     <div className="info-row risk-header" onClick={() => openRiskModal(asset)}>
-                      <span className="label">AI Risk Insights</span>
+                      <span className="label">Risk Insights</span>
                       <span className="value">
                         {riskData ? (
                           <span className={`risk-level ${riskData.risk_level.toLowerCase()}`}>

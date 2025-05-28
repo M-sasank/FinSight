@@ -197,19 +197,12 @@ const NewsPage = () => {
               <div style={{ fontSize: 18, color: '#555', marginBottom: 18 }}>{article.summary || 'No summary available.'}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 15, color: '#888' }}>
                 <span>{article.published_date || 'Unknown Date'}</span>
-                <span 
+                <button 
                   onClick={() => handleEffectClick(idx)}
-                  style={{ 
-                    padding: '4px 8px', 
-                    fontSize: '13px', 
-                    backgroundColor: '#f0f0f0',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
+                  className="effect-on-you-button"
                 >
-                  Effect on You
-                </span>
+                  How does this affect me?
+                </button>
               </div>
             </div>
             <div style={{ minWidth: 180, maxWidth: 220, height: 150, borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
