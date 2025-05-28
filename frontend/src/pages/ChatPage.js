@@ -36,6 +36,7 @@ function ChatPage({ currentTheme }) {
   const [chatHistory, setChatHistory] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [chatMode, setChatMode] = useState('newbie');
   const [currentLoadingText, setCurrentLoadingText] = useState(LOADING_MESSAGES[0]);
   const loadingMessageIndexRef = useRef(0);
   const messagesEndRef = useRef(null);
@@ -135,7 +136,7 @@ function ChatPage({ currentTheme }) {
     if (sender === 'user') {
       setIsLoading(true);
       try {
-        const backendType = 'chat';
+        const backendType = chatMode === 'newbie' ? 'newbie' : 'chat';
         
         const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/chat/send`, {
           method: 'POST',
@@ -221,6 +222,13 @@ function ChatPage({ currentTheme }) {
           setConversationId(chatId);
           setSelectedChat(chatId);
           setShowSuggestions(false);
+          
+          // Set chat mode based on the selected chat's type
+          const selectedChatData = chatHistory.find(chat => chat.id === chatId);
+          if (selectedChatData) {
+            const mode = selectedChatData.type === 'newbie' ? 'newbie' : 'veteran';
+            setChatMode(mode);
+          }
         } else {
           console.error('Failed to load chat:', response.statusText);
         }
@@ -235,7 +243,12 @@ function ChatPage({ currentTheme }) {
     setConversationId(null);
     setSelectedChat(null);
     setShowSuggestions(true);
+    setChatMode('newbie');
     inputRef.current?.focus();
+  };
+
+  const handleModeChange = (mode) => {
+    setChatMode(mode);
   };
 
   const renderMessageContent = (message) => {
@@ -282,6 +295,20 @@ function ChatPage({ currentTheme }) {
             >
               <FiPlus className="button-icon" />
               New Chat
+            </button>
+          </div>
+          <div className="mode-selector">
+            <button 
+              className={`mode-button ${chatMode === 'newbie' ? 'active' : ''}`}
+              onClick={() => handleModeChange('newbie')}
+            >
+              Newbie
+            </button>
+            <button 
+              className={`mode-button ${chatMode === 'veteran' ? 'active' : ''}`}
+              onClick={() => handleModeChange('veteran')}
+            >
+              Veteran
             </button>
           </div>
           <div className="chat-history-list">

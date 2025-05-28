@@ -350,6 +350,7 @@ class ChatService:
         """
         messages: list = []
         try:
+            print(f"Processing chat request for type: {type}")
             if type == "chat":
                 messages = await self._create_messages_chat(user_content, conversation_id, user_id)
             elif type == "newbie":
