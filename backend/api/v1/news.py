@@ -29,7 +29,7 @@ async def news_completion(topics: str = "", model: str = "sonar-pro", force_relo
 
     logger.info(f"Processing news request for User ID: {user_id}, topics: {topics}, model: {model}, force_reload: {force_reload}")
     try:
-        response = news_service.process_news_request(user_id=user_id, topics=topics, model=model, force_reload=force_reload)
+        response = await news_service.process_news_request(user_id=user_id, topics=topics, model=model, force_reload=force_reload)
         logger.info(f"Successfully processed news request for User ID: {user_id}")
         return response
     except Exception as e:
