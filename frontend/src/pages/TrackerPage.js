@@ -49,7 +49,7 @@ function TrackerPage({ currentTheme }) {
     try {
       setLoading(true);
       setError(null);
-      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/get`);
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/get/`);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.detail || 'Failed to fetch assets');
@@ -59,7 +59,7 @@ function TrackerPage({ currentTheme }) {
 
       // Fetch risk analysis for all assets
       const riskAnalysisPromises = data.map(asset => 
-        authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/analyze-risk/${asset.symbol}`)
+        authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/analyze-risk/${asset.symbol}/`)
           .then(response => {
             if (!response.ok) {
               console.error(`Failed to fetch risk analysis for ${asset.symbol}`);
@@ -108,7 +108,7 @@ function TrackerPage({ currentTheme }) {
       }
       try {
         setError(null);
-        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/create`, {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/create/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ function TrackerPage({ currentTheme }) {
 
         // Fetch risk analysis for the new asset
         try {
-          const riskResponse = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/analyze-risk/${createdAsset.symbol}`);
+          const riskResponse = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/analyze-risk/${createdAsset.symbol}/`);
           if (riskResponse.ok) {
             const riskData = await riskResponse.json();
             setRiskAnalysisData(prev => ({
@@ -152,7 +152,7 @@ function TrackerPage({ currentTheme }) {
     }
     try {
       setError(null);
-      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete?asset_id=${assetId}`, {
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/delete?asset_id=${assetId}/`, {
         method: 'DELETE',
       });
 
@@ -175,7 +175,7 @@ function TrackerPage({ currentTheme }) {
   const fetchRiskAnalysis = async (symbol) => {
     if (!token) return;
     try {
-      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/analyze-risk/${symbol}`);
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/analyze-risk/${symbol}/`);
       if (!response.ok) {
         throw new Error('Failed to fetch risk analysis');
       }
