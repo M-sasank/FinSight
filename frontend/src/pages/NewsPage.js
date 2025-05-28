@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './NewsPage.css';
 import { useAuth } from '../contexts/AuthContext';
+// import NewsPageLoader from '../components/NewsPageLoader'; // No longer using this
+import MarketTrendsAnimation from '../components/MarketTrendsAnimation'; // Use this instead
 
 const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80';
+
+// Define loading phrases
+const newsLoadingPhrases = [
+  "Fetching the latest headlines...",
+  "Scanning top financial news sources...",
+  "Analyzing market-moving stories...",
+  "Compiling your news digest...",
+  "Getting real-time updates..."
+];
 
 const NewsPage = () => {
   const { authFetch } = useAuth();
@@ -13,6 +24,25 @@ const NewsPage = () => {
   const [activeArticleIndex, setActiveArticleIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSearchTopics, setActiveSearchTopics] = useState('');
+
+  // State for dynamic loading text
+  const [currentLoadingPhraseIndex, setCurrentLoadingPhraseIndex] = useState(0);
+
+  // Effect for cycling through loading phrases
+  useEffect(() => {
+    let phraseInterval;
+    if (loading) {
+      setCurrentLoadingPhraseIndex(0); // Start from the first phrase each time loading starts
+      phraseInterval = setInterval(() => {
+        setCurrentLoadingPhraseIndex(prevIndex => 
+          (prevIndex + 1) % newsLoadingPhrases.length
+        );
+      }, 2500); // Change phrase every 2.5 seconds
+    } else {
+      clearInterval(phraseInterval);
+    }
+    return () => clearInterval(phraseInterval); // Cleanup on unmount or when loading changes
+  }, [loading]);
 
   const handleEffectClick = (index) => {
     setActiveArticleIndex(index);
@@ -120,8 +150,12 @@ const NewsPage = () => {
 
   if (loading) {
     return (
-      <div className="news-page-container" style={{ maxWidth: 900, margin: '0 auto', paddingTop: 40 }}>
-        <div style={{ textAlign: 'center', padding: 40, fontSize: 20 }}>Loading news...</div>
+      <div className="news-page-container news-loading-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 60px)', paddingTop: '0' }}>
+        {/* <NewsPageLoader />  -- No longer using this */}
+        <MarketTrendsAnimation /> {/* Using this for loading state */}
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '20px' }}>
+          {newsLoadingPhrases[currentLoadingPhraseIndex]}<span className="thinking-dots"><span>.</span><span>.</span><span>.</span></span>
+        </p>
       </div>
     );
   }
@@ -206,7 +240,12 @@ const NewsPage = () => {
               </div>
             </div>
             <div style={{ minWidth: 180, maxWidth: 220, height: 150, borderRadius: 8, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-              <img src={DEFAULT_IMAGE} alt={article.title || 'Article image'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img 
+                src={article.image_url || DEFAULT_IMAGE} 
+                alt={article.title || 'Article image'} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                onError={(e) => { e.target.onerror = null; e.target.src=DEFAULT_IMAGE; }} // Fallback to default if image_url fails
+              />
             </div>
           </div>
         ))
