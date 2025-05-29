@@ -7,7 +7,7 @@ function PrivacyPolicyPage() {
             <div className="info-page-card">
                 <h1 className="info-page-title">Privacy Policy</h1>
                 <div className="info-page-content">
-                    <p><strong>Last Updated: [Insert Date]</strong></p>
+                    <p><strong>Last Updated: May 21, 2025</strong></p>
 
                     <p>The FinSight Team ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our FinSight application and services ("Service"). Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the service.</p>
 

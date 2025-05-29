@@ -8,7 +8,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #333;
+    color: #1a1a1a;
     line-height: 1.6;
 }
 
@@ -19,7 +19,7 @@
 .info-page-title {
     font-size: 28px;
     font-weight: 600;
-    color: #1c1c1e;
+    color: #000000;
     margin-bottom: 30px;
     padding-bottom: 15px;
     border-bottom: 1px solid #e5e7eb;
@@ -28,7 +28,7 @@
 .info-page-content h2 {
     font-size: 22px;
     font-weight: 600;
-    color: #111827;
+    color: #000000;
     margin-top: 30px;
     margin-bottom: 15px;
 }
@@ -38,12 +38,12 @@
 .info-page-content ol {
     margin-bottom: 15px;
     font-size: 16px;
-    color: #374151;
+    color: #1a1a1a;
 }
 
 .info-page-content strong {
     font-weight: 600;
-    color: #111827;
+    color: #000000;
 }
 
 .info-page-content ul,
@@ -54,13 +54,51 @@
 .info-page-content ul li,
 .info-page-content ol li {
     margin-bottom: 8px;
+    color: #1a1a1a;
 }
 
 .info-page-content a {
-    color: #007aff;
+    color: #0066cc;
     text-decoration: none;
+    font-weight: 500;
 }
 
 .info-page-content a:hover {
     text-decoration: underline;
+    color: #004499;
+}
+
+/* Dark theme support for veteran theme */
+.app-theme-veteran .info-page-container {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.app-theme-veteran .info-page-title {
+    color: #ffffff;
+    border-bottom-color: #333333;
+}
+
+.app-theme-veteran .info-page-content h2 {
+    color: #ffffff;
+}
+
+.app-theme-veteran .info-page-content p,
+.app-theme-veteran .info-page-content ul,
+.app-theme-veteran .info-page-content ol,
+.app-theme-veteran .info-page-content ul li,
+.app-theme-veteran .info-page-content ol li {
+    color: #ffffff;
+}
+
+.app-theme-veteran .info-page-content strong {
+    color: #ffffff;
+}
+
+.app-theme-veteran .info-page-content a {
+    color: #66b3ff;
+}
+
+.app-theme-veteran .info-page-content a:hover {
+    color: #99ccff;
 } 

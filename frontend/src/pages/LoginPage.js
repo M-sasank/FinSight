@@ -42,10 +42,7 @@ function LoginPage() {
                         />
                     </div>
                     <div className="form-group">
-                        <div className="label-container">
-                            <label htmlFor="password">Password</label>
-                            <Link to="/forgot-password" className="forgot-password-link">Forgot your password?</Link>
-                        </div>
+                        <label htmlFor="password">Password</label>
                         <input
                             type="password"
                             id="password"

@@ -7,7 +7,7 @@ function TermsOfServicePage() {
             <div className="info-page-card">
                 <h1 className="info-page-title">Terms of Service</h1>
                 <div className="info-page-content">
-                    <p><strong>Last Updated: [Insert Date]</strong></p>
+                    <p><strong>Last Updated: May 21, 2025</strong></p>
 
                     <p>Welcome to FinSight! These Terms of Service ("Terms") govern your access to and use of the FinSight application and services ("Service"), provided by the FinSight Team ("we," "us," or "our"). By accessing or using our Service, you agree to be bound by these Terms.</p>
 
