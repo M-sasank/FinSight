@@ -20,6 +20,8 @@ services:
       - "8000:8000"
     volumes:
       - ./data:/data
+      - ./backend/finsight.db:/app/finsight.db
+      - ./backend/cache:/app/cache
     env_file:
       - .env
 
