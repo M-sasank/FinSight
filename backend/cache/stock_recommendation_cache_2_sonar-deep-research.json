@@ -1,0 +1,14 @@
+{
+    "cached_at_iso": "2025-05-29T23:52:28.935432+00:00",
+    "model": "sonar-deep-research",
+    "recommendation_data": {
+        "stock_name": "Johnson & Johnson",
+        "ticker_symbol": "JNJ",
+        "current_price": 153.58,
+        "price_change_percent_24h": 0.87,
+        "sector": "Healthcare",
+        "risk_label": "Low",
+        "risk_reasoning": "Johnson & Johnson exhibits exceptionally low volatility with a 5-year beta of 0.48, indicating 52% less movement than the broader market. The company maintains AAA credit rating - higher than the U.S. government - supported by $11B quarterly net income and 61 consecutive years of dividend growth. Its diversified healthcare operations across pharmaceuticals, medical devices, and consumer health products provide recession-resistant cash flows.",
+        "recommendation_reason": "As a Dividend Aristocrat with uninterrupted dividend increases since 1963, JNJ offers beginners stable income (3.41% yield) and capital preservation. The stock's 0.08 beta demonstrates minimal price swings compared to the S&P 500, while its $366B market cap and 5.3% revenue growth ensure enterprise stability. Institutional ownership exceeds 70%, providing liquidity and analyst coverage ideal for new investors."
+    }
+}

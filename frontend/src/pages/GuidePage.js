@@ -29,6 +29,7 @@ function GuidePage({ currentTheme }) {
   const [isRecommendingStock, setIsRecommendingStock] = useState(false);
   const [recommendedStock, setRecommendedStock] = useState(null);
   const [recommendationError, setRecommendationError] = useState(null);
+  const [selectedModel, setSelectedModel] = useState('sonar-pro');
 
   // Define individual refs for each section for stability
   const prerequisitesRef = useRef(null);
@@ -125,20 +126,45 @@ function GuidePage({ currentTheme }) {
     console.log('currentSectionName updated:', currentSectionName);
   }, [currentSectionName]);
 
+  // Clear previous recommendation when model changes
+  useEffect(() => {
+    if (recommendedStock) {
+      setRecommendedStock(null);
+      setRecommendationError(null);
+    }
+  }, [selectedModel]);
+
   const handleGetStockRecommendation = async () => {
+    if (!token) {
+      setRecommendationError("Please log in to get stock recommendations.");
+      return;
+    }
+
     setIsRecommendingStock(true);
     setRecommendedStock(null);
     setRecommendationError(null);
 
-    // Simulate API call / deep research
-    setTimeout(() => {
-      const stockData = {
-        name: "INFOSYS (INFY)",
-        reason: "Strong fundamentals, consistent growth in the IT sector, and positive future outlook based on recent analyst reports."
-      };
+    try {
+      const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/stock_recommendation/?model=${selectedModel}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: 'Failed to get stock recommendation' }));
+        throw new Error(errorData.detail || 'Failed to get stock recommendation');
+      }
+
+      const stockData = await response.json();
       setRecommendedStock(stockData);
+    } catch (error) {
+      console.error('Error fetching stock recommendation:', error);
+      setRecommendationError(error.message || 'Failed to get stock recommendation. Please try again.');
+    } finally {
       setIsRecommendingStock(false);
-    }, 3000);
+    }
   };
 
   const toggleDrawer = () => {
@@ -745,37 +771,123 @@ function GuidePage({ currentTheme }) {
 
         {/* New Feeling Confident Section */}
         <section className="guide-section feeling-confident-section">
-          <h2>Feeling confident?</h2>
-          <p>Ready to take the next step? Based on current market analysis and our simulated deep research, here's a stock pick to consider for your initial investment research.</p>
+          <div className="section-header-with-model">
+            <h2>Feeling confident?</h2>
+            <div className="model-selector-compact">
+              <label className={`model-option-compact ${selectedModel === 'sonar-pro' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="model"
+                  value="sonar-pro"
+                  checked={selectedModel === 'sonar-pro'}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                />
+                <span>Pro</span>
+              </label>
+              <label className={`model-option-compact ${selectedModel === 'sonar-deep-research' ? 'selected' : ''}`}>
+                <input
+                  type="radio"
+                  name="model"
+                  value="sonar-deep-research"
+                  checked={selectedModel === 'sonar-deep-research'}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                />
+                <span>Deep</span>
+              </label>
+            </div>
+          </div>
+          
+          <p>Ready to take the next step? Based on current market analysis and our AI-powered deep research, here's a beginner-friendly low-risk stock recommendation to consider for your initial investment research.</p>
+          
+          <div className="recommendation-warning">
+            <p><strong>⚠️ Note:</strong> {selectedModel === 'sonar-deep-research' 
+              ? 'Deep Research mode provides more comprehensive analysis but may take 1-2 minutes to complete. Please be patient while we perform thorough market research.'
+              : 'This recommendation uses advanced AI research which may take 15-30 seconds to complete. Please be patient while we analyze current market data.'
+            }</p>
+          </div>
           
           <button 
             onClick={handleGetStockRecommendation} 
             disabled={isRecommendingStock}
             className="recommendation-button"
           >
-            {isRecommendingStock ? "Researching Your Stock..." : "Get Stock Recommendation"}
+            {isRecommendingStock 
+              ? (selectedModel === 'sonar-deep-research' ? "Deep Research in Progress..." : "Analyzing Market Data...") 
+              : "Get Beginner Stock Recommendation"
+            }
           </button>
 
           {isRecommendingStock && (
             <div className="loading-recommendation">
-              <p>Performing sonar deep research... please wait.</p>
-              {/* You can add a spinner icon here if you have one */}
+              <div className="loading-spinner"></div>
+              <p>{selectedModel === 'sonar-deep-research' 
+                ? 'Performing comprehensive deep market research using AI... This may take up to 2 minutes.'
+                : 'Performing market research using AI... This may take up to 30 seconds.'
+              }</p>
+              <p className="loading-subtext">
+                {selectedModel === 'sonar-deep-research'
+                  ? 'Conducting thorough fundamental analysis, risk assessment, and market condition evaluation...'
+                  : 'Analyzing fundamentals, risk factors, and current market conditions...'
+                }
+              </p>
             </div>
           )}
 
           {recommendationError && (
             <div className="recommendation-error">
-              <p>Error: {recommendationError}</p>
+              <h4>❌ Error</h4>
+              <p>{recommendationError}</p>
             </div>
           )}
 
           {recommendedStock && !isRecommendingStock && (
             <div className="recommendation-result">
-              <h3>Recommended Stock:</h3>
-              <p className="stock-name">{recommendedStock.name}</p>
-              <h4>Reason:</h4>
-              <p className="stock-reason">{recommendedStock.reason}</p>
-              <p className="disclaimer"><em>Disclaimer: This is a simulated recommendation for educational purposes only. Always conduct your own thorough research before investing.</em></p>
+              <h3>🎯 Recommended Stock for Beginners</h3>
+              
+              <div className="model-badge">
+                <span className="badge-label">Analysis by:</span>
+                <span className={`badge-value ${selectedModel === 'sonar-deep-research' ? 'deep-research' : 'pro'}`}>
+                  {selectedModel === 'sonar-deep-research' ? 'Sonar Deep Research' : 'Sonar Pro'}
+                </span>
+              </div>
+              
+              <div className="stock-header">
+                <h4 className="stock-name">{recommendedStock.stock_name}</h4>
+                <div className="stock-ticker">({recommendedStock.ticker_symbol})</div>
+              </div>
+
+              <div className="stock-metrics">
+                <div className="metric-item">
+                  <span className="metric-label">Current Price:</span>
+                  <span className="metric-value">${recommendedStock.current_price?.toFixed(2)}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">24h Change:</span>
+                  <span className={`metric-value ${recommendedStock.price_change_percent_24h >= 0 ? 'positive' : 'negative'}`}>
+                    {recommendedStock.price_change_percent_24h >= 0 ? '+' : ''}{recommendedStock.price_change_percent_24h?.toFixed(2)}%
+                  </span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Sector:</span>
+                  <span className="metric-value">{recommendedStock.sector}</span>
+                </div>
+                <div className="metric-item">
+                  <span className="metric-label">Risk Level:</span>
+                  <span className="metric-value risk-low">{recommendedStock.risk_label}</span>
+                </div>
+              </div>
+
+              <div className="recommendation-details">
+                <h4>💡 Why This Stock is Recommended for Beginners:</h4>
+                <p className="recommendation-reason">{recommendedStock.recommendation_reason}</p>
+
+                <h4>🛡️ Risk Analysis:</h4>
+                <p className="risk-reasoning">{recommendedStock.risk_reasoning}</p>
+              </div>
+
+              <div className="disclaimer">
+                <p><strong>⚠️ Important Disclaimer:</strong> This recommendation is for educational purposes only and should not be considered as financial advice. Always conduct your own thorough research, consider your financial situation, and consult with a qualified financial advisor before making any investment decisions. Past performance does not guarantee future results.</p>
+              </div>
             </div>
           )}
         </section>

@@ -1,0 +1,14 @@
+{
+    "cached_at_iso": "2025-05-29T23:52:43.583458+00:00",
+    "model": "sonar-pro",
+    "recommendation_data": {
+        "stock_name": "Johnson & Johnson",
+        "ticker_symbol": "JNJ",
+        "current_price": 146.32,
+        "price_change_percent_24h": -0.8,
+        "sector": "Healthcare",
+        "risk_label": "Low",
+        "risk_reasoning": "Johnson & Johnson is a globally diversified healthcare conglomerate known for its strong balance sheet, consistent dividend payments, and stable earnings. It operates across pharmaceuticals, medical devices, and consumer health, reducing risk from any single segment. The company has a long history of weathering economic downturns thanks to its necessity-driven products and wide institutional support. Its stock is widely regarded as low-volatility, making it a preferred choice in turbulent markets.",
+        "recommendation_reason": "JNJ offers beginners exposure to the resilient healthcare sector with historically low price volatility and reliable dividends. Its status as a 'Dividend Aristocrat,' excellent global brand, and proven defensive characteristics make it a safe starting point for conservative, long-term investors seeking stability and steady returns.[3][5]"
+    }
+}
