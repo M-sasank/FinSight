@@ -38,6 +38,7 @@ function TrackerPage({ currentTheme }) {
   const [riskAnalysisData, setRiskAnalysisData] = useState({});
   const [selectedRiskAsset, setSelectedRiskAsset] = useState(null);
   const [activeRiskTab, setActiveRiskTab] = useState('overview');
+  const [addingAsset, setAddingAsset] = useState(false);
 
   const fetchAssets = useCallback(async () => {
     if (!token) {
@@ -107,6 +108,7 @@ function TrackerPage({ currentTheme }) {
         return;
       }
       try {
+        setAddingAsset(true);
         setError(null);
         const response = await authFetch(`${process.env.REACT_APP_API_URL}/api/v1/tracker/assets/create`, {
           method: 'POST',
@@ -141,6 +143,8 @@ function TrackerPage({ currentTheme }) {
         }
       } catch (err) {
         setError(err.message);
+      } finally {
+        setAddingAsset(false);
       }
     }
   };
@@ -401,10 +405,25 @@ function TrackerPage({ currentTheme }) {
               />
             </div>
             <div className="modal-buttons">
-              <button onClick={handleAddAsset} className="primary-button">
-                Add Asset
+              <button 
+                onClick={handleAddAsset} 
+                className="primary-button"
+                disabled={addingAsset || !newAsset.symbol || !newAsset.name}
+              >
+                {addingAsset ? (
+                  <>
+                    <div className="button-spinner"></div>
+                    Adding...
+                  </>
+                ) : (
+                  'Add Asset'
+                )}
               </button>
-              <button onClick={() => setShowAddAssetModal(false)} className="secondary-button">
+              <button 
+                onClick={() => setShowAddAssetModal(false)} 
+                className="secondary-button"
+                disabled={addingAsset}
+              >
                 Cancel
               </button>
             </div>

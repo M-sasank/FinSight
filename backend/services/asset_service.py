@@ -150,6 +150,11 @@ class AssetService:
             ]
 
             response = self.client.chat.completions.create(
+                extra_body={
+                        "search_domain_filter": [
+                            "tradingview.com",
+                        ]
+                    },
                 model=self.model,
                 messages=messages,
                 response_format={

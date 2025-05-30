@@ -288,8 +288,13 @@ class NewsService:
                             "bloomberg.com",
                             "barrons.com",
                             "fortuneindia.com",
-                            "financialexpress.com"
-                            
+                            "financialexpress.com",
+                            "tradingview.com",
+                            "seekingalpha.com",
+                            "marketwatch.com",
+                            "cnbc.com",
+                            "reuters.com",
+                            "wsj.com",
                         ]
                     },
                     model=self.model,
