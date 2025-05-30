@@ -17,6 +17,62 @@ const LOADING_MESSAGES = [
   "Almost ready..."
 ];
 
+const newbieSuggestionPrompts = [
+  { 
+    text: "What is a stock?", 
+    query: "Can you explain what a stock is in simple terms?",
+    description: "Understand the basics of stock ownership"
+  },
+  { 
+    text: "How to start investing?", 
+    query: "What are the first steps to start investing in the stock market?",
+    description: "Get a beginner-friendly guide to investing"
+  },
+  { 
+    text: "Explain P/E ratio", 
+    query: "What does the P/E ratio mean for a stock?",
+    description: "Learn about a common valuation metric"
+  },
+  { 
+    text: "Risks of investing", 
+    query: "What are the common risks involved in stock market investing?",
+    description: "Understand potential downsides before you start"
+  },
+  { 
+    text: "What is a mutual fund?", 
+    query: "Can you explain what a mutual fund is and how it works?",
+    description: "Learn about diversified investment options"
+  }
+];
+
+const veteranSuggestionPrompts = [
+  { 
+    text: "Technical Analysis", 
+    query: "Show me the technical analysis for AAPL including RSI and MACD.",
+    description: "Deep dive into technical indicators and patterns"
+  },
+  { 
+    text: "Compare P/E Ratios", 
+    query: "Compare the P/E ratios and forward P/E of AAPL, MSFT, and GOOGL.",
+    description: "Analyze valuation metrics across tech giants"
+  },
+  { 
+    text: "Market Sentiment Analysis", 
+    query: "What is the current market sentiment based on VIX and put/call ratio?",
+    description: "Evaluate market mood and momentum with key indicators"
+  },
+  { 
+    text: "Sector Rotation Strategy", 
+    query: "Explain sector rotation strategy and its current applicability.",
+    description: "Examine advanced portfolio management techniques"
+  },
+  { 
+    text: "Impact of Interest Rates", 
+    query: "How do changes in federal interest rates typically impact stock market sectors?",
+    description: "Understand macroeconomic influences on stocks"
+  }
+];
+
 function ChatPage({ currentTheme }) {
   const { authFetch, token } = useAuth();
 
@@ -37,41 +93,13 @@ function ChatPage({ currentTheme }) {
   const [selectedChat, setSelectedChat] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [chatMode, setChatMode] = useState('newbie');
+  const [currentDisplayedPrompts, setCurrentDisplayedPrompts] = useState(newbieSuggestionPrompts);
   const [currentLoadingText, setCurrentLoadingText] = useState(LOADING_MESSAGES[0]);
   const [expandedCitations, setExpandedCitations] = useState({});
   const loadingMessageIndexRef = useRef(0);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
-
-  // Veteran mode suggestion prompts (since we're using dark theme by default)
-  const suggestionPrompts = [
-    { 
-      text: "Technical Analysis", 
-      query: "Show me the technical analysis for AAPL",
-      description: "Deep dive into technical indicators and patterns"
-    },
-    { 
-      text: "Compare P/E Ratios", 
-      query: "Compare the P/E ratios of AAPL, MSFT, and GOOGL",
-      description: "Analyze valuation metrics across tech giants"
-    },
-    { 
-      text: "Market Sentiment", 
-      query: "What's the current market sentiment and key indicators?",
-      description: "Evaluate market mood and momentum"
-    },
-    { 
-      text: "Sector Analysis", 
-      query: "Analyze the tech sector's performance and outlook",
-      description: "Examine sector trends and opportunities"
-    },
-    { 
-      text: "Options Strategy", 
-      query: "What are some effective options strategies for the current market?",
-      description: "Explore advanced trading strategies"
-    }
-  ];
 
   const fetchChatHistory = useCallback(async () => {
     if (!token) return;
@@ -92,7 +120,8 @@ function ChatPage({ currentTheme }) {
   useEffect(() => {
     fetchChatHistory();
     setMessages(initialChatMessages());
-  }, [fetchChatHistory, initialChatMessages]);
+    setCurrentDisplayedPrompts(chatMode === 'newbie' ? newbieSuggestionPrompts : veteranSuggestionPrompts);
+  }, [fetchChatHistory, initialChatMessages, chatMode]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -123,6 +152,14 @@ function ChatPage({ currentTheme }) {
     }
     return () => clearInterval(loadingInterval); // Cleanup on unmount or when isLoading changes
   }, [isLoading]);
+
+  useEffect(() => {
+    if (chatMode === 'newbie') {
+      setCurrentDisplayedPrompts(newbieSuggestionPrompts);
+    } else {
+      setCurrentDisplayedPrompts(veteranSuggestionPrompts);
+    }
+  }, [chatMode]);
 
   const processAndAddMessage = async (text, sender) => {
     const newMessage = {
@@ -356,7 +393,7 @@ function ChatPage({ currentTheme }) {
               New Chat
             </button>
           </div>
-          <div className="mode-selector">
+          <div className={`mode-selector ${chatMode}-active`}>
             <button 
               className={`mode-button ${chatMode === 'newbie' ? 'active' : ''}`}
               onClick={() => handleModeChange('newbie')}
@@ -420,7 +457,7 @@ function ChatPage({ currentTheme }) {
             <div className="suggestion-area">
               <p className="suggestion-area-title">Try asking:</p>
               <div className="suggestion-chips-container">
-                {suggestionPrompts.map((prompt, index) => (
+                {currentDisplayedPrompts.map((prompt, index) => (
                   <button
                     key={index}
                     className="suggestion-chip"

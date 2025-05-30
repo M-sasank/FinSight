@@ -90,84 +90,75 @@
   flex: 1;
 }
 
-/* Mode Selector */
+/* Mode Selector - Sliding Pill Effect */
 .mode-selector {
   display: flex;
-  gap: var(--finsight-space-2);
-  padding: var(--finsight-space-3) var(--finsight-space-4) var(--finsight-space-2);
-  border-bottom: 1px solid transparent;
+  position: relative; 
+  margin-bottom: var(--chat-space-3);
+  background-color: var(--chat-secondary-bg); /* e.g., a slightly darker grey or a theme color */
+  border-radius: var(--chat-radius-full);
+  padding: 4px; 
+  border: 1px solid var(--chat-border-color);
+  overflow: hidden; 
+}
+
+.mode-selector::before { /* This is the sliding pill */
+  content: '';
+  position: absolute;
+  top: 2px; 
+  bottom: 2px; 
+  width: 45%; 
+  background-color: var(--chat-pill-background, #FFFFFF); /* --- White pill background --- */
+  border-radius: var(--chat-radius-md, 6px); 
+  transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+  z-index: 1; 
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow for the pill */
+}
+
+.mode-selector.newbie-active::before {
+  left: 4px; 
+}
+
+.mode-selector.veteran-active::before {
+  left: 51%; 
 }
 
 .mode-button {
   flex: 1;
-  padding: var(--finsight-space-2) var(--finsight-space-3);
-  border: 2px solid transparent;
-  background: none;
+  padding: var(--chat-space-2, 8px) var(--chat-space-3, 12px);
+  border: none; 
+  background-color: transparent !important; 
+  color: var(--chat-text-secondary, #555555); /* Medium grey for non-active text */
   cursor: pointer;
-  border-radius: var(--finsight-radius-md);
-  font-size: 0.9rem;
-  font-family: var(--apple-font-family);
+  text-align: center;
   font-weight: 500;
-  position: relative;
-  overflow: hidden;
-  transition: background-color var(--finsight-transition-fast), color var(--finsight-transition-fast), transform var(--finsight-transition-fast), box-shadow var(--finsight-transition-fast);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-
-.mode-button::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #007aff, #5ac8fa, #34c759, #ff9500, #ff2d92, #af52de, #007aff);
-  background-size: 300% 300%;
-  border-radius: inherit;
-  z-index: -2;
-  opacity: 0;
-  animation: siriGradient 3s ease-in-out infinite;
-  transition: opacity var(--finsight-transition-fast);
-}
-
-.mode-button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: calc(var(--finsight-radius-md) - 2px);
-  z-index: -1;
-  transition: background-color var(--finsight-transition-fast);
-}
-
-.mode-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
-}
-
-.mode-button:hover::before {
-  opacity: 0.3;
+  font-size: 0.9rem;
+  transition: color 0.3s ease; 
+  position: relative; 
+  z-index: 2; 
+  border-bottom: none; 
 }
 
 .mode-button.active {
-  font-weight: 600;
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3), 0 4px 16px rgba(0, 122, 255, 0.25);
+  color: #000000 !important; /* --- FORCED BLACK text for active --- */
+  font-weight: 600 !important; /* Ensure bold font weight */
 }
 
-.mode-button.active::before {
-  opacity: 1;
+/* Theme-specific overrides also force black active text */
+.page-theme-newtimer .mode-button.active {
+  color: #000000 !important; 
+  font-weight: 600 !important;
 }
 
-@keyframes siriGradient {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+.page-theme-veteran .mode-button.active {
+  color: #000000 !important; 
+  font-weight: 600 !important;
+}
+
+/* Ensure pseudo-elements ::after are not interfering */
+.page-theme-newtimer .mode-button.active::after,
+.page-theme-veteran .mode-button.active::after {
+  display: none; 
 }
 
 .chat-history-item {
