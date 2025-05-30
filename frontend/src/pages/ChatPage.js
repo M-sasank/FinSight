@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { FiSend, FiPlus, FiClock } from 'react-icons/fi';
+import { FiSend, FiPlus, FiClock, FiExternalLink, FiChevronDown } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './ChatPage.css';
@@ -38,6 +38,7 @@ function ChatPage({ currentTheme }) {
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [chatMode, setChatMode] = useState('newbie');
   const [currentLoadingText, setCurrentLoadingText] = useState(LOADING_MESSAGES[0]);
+  const [expandedCitations, setExpandedCitations] = useState({});
   const loadingMessageIndexRef = useRef(0);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -172,15 +173,23 @@ function ChatPage({ currentTheme }) {
         }
 
         let botResponseText = 'Sorry, I could not generate a response.';
+        let citations = [];
+        
         if (data.response?.type === 'completion' && 
             data.response?.data?.choices?.[0]?.message) {
           botResponseText = data.response.data.choices[0].message.content;
+          
+          // Extract citations if available
+          if (data.response.citations) {
+            citations = data.response.citations;
+          }
         }
 
         const botResponse = {
           id: `chatmsg-${Date.now() + 1}`,
           sender: 'bot',
           text: botResponseText,
+          citations: citations,
           timestamp: new Date().toISOString()
         };
         setMessages(prev => [...prev, botResponse]);
@@ -251,6 +260,55 @@ function ChatPage({ currentTheme }) {
     setChatMode(mode);
   };
 
+  const toggleCitations = (messageId) => {
+    setExpandedCitations(prev => ({
+      ...prev,
+      [messageId]: !prev[messageId]
+    }));
+  };
+
+  const renderCitations = (message) => {
+    if (!message.citations || message.citations.length === 0) {
+      return null;
+    }
+
+    const isExpanded = expandedCitations[message.id];
+    const citationCount = message.citations.length;
+
+    return (
+      <div className="citations-container">
+        <button 
+          className="citations-toggle"
+          onClick={() => toggleCitations(message.id)}
+        >
+          <span className="citations-count">{citationCount} source{citationCount !== 1 ? 's' : ''}</span>
+          <FiChevronDown className={`citations-chevron ${isExpanded ? 'expanded' : ''}`} />
+        </button>
+        
+        {isExpanded && (
+          <div className="citations-list">
+            {message.citations.map((url, index) => (
+              <div key={index} className="citation-item">
+                <span className="citation-number">[{index + 1}]</span>
+                <div className="citation-content">
+                  <a 
+                    href={url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="citation-link"
+                  >
+                    <span className="citation-title">{url}</span>
+                    <FiExternalLink className="citation-external-icon" />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderMessageContent = (message) => {
     if (message.type === 'insight-card') {
       return (
@@ -278,6 +336,7 @@ function ChatPage({ currentTheme }) {
             minute: '2-digit' 
           })}
         </div>
+        {renderCitations(message)}
       </div>
     );
   };

@@ -6,6 +6,7 @@ from models.user import User as UserModel
 import uuid
 import logging
 import asyncio
+import json
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -86,7 +87,7 @@ async def get_chat_messages(chat_id: str, current_user: UserModel = Depends(get_
     try:
         def db_query():
             cursor = chat_service.conn.execute("""
-                SELECT id, role, content, timestamp
+                SELECT id, role, content, timestamp, citations
                 FROM messages
                 WHERE conversation_id = ? AND user_id = ? -- Filter by user_id
                 ORDER BY timestamp ASC
@@ -94,12 +95,21 @@ async def get_chat_messages(chat_id: str, current_user: UserModel = Depends(get_
             
             messages_data = []
             for row in cursor.fetchall():
-                messages_data.append({
+                message_data = {
                     "id": row["id"],
                     "text": row["content"],
                     "sender": "user" if row["role"] == "user" else "bot",
                     "timestamp": row["timestamp"]
-                })
+                }
+                
+                # Add citations if available
+                if row["citations"]:
+                    try:
+                        message_data["citations"] = json.loads(row["citations"])
+                    except (json.JSONDecodeError, TypeError):
+                        message_data["citations"] = []
+                
+                messages_data.append(message_data)
             return messages_data
         
         messages = await loop.run_in_executor(None, db_query)

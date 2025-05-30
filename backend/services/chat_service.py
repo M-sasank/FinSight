@@ -80,6 +80,7 @@ class ChatService:
                 content TEXT NOT NULL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 type TEXT NOT NULL,
+                citations TEXT,
                 FOREIGN KEY (user_id) REFERENCES users (id)
             )
         """)
@@ -170,8 +171,13 @@ class ChatService:
         except sqlite3.OperationalError:
             pass
 
-        self.conn.commit()
+        # Add citations column if it doesn't exist
+        try:
+            self.conn.execute("ALTER TABLE messages ADD COLUMN citations TEXT")
+        except sqlite3.OperationalError:
+            pass  # Column already exists
 
+        self.conn.commit()
 
     async def clear_database(self, user_id: Union[int, None] = None):
         """Clear data from the database. If user_id is provided, clears only for that user."""
@@ -199,6 +205,7 @@ class ChatService:
                             content TEXT NOT NULL,
                             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                             type TEXT NOT NULL,
+                            citations TEXT,
                             FOREIGN KEY (user_id) REFERENCES users (id)
                         )
                     """)
@@ -260,16 +267,18 @@ class ChatService:
         history = await loop.run_in_executor(None, db_query)
         return history
 
-    async def _save_message(self, conversation_id: str, role: str, content: str, type: str, user_id: int):
+    async def _save_message(self, conversation_id: str, role: str, content: str, type: str, user_id: int, citations: list = None):
         """Save a message to the database for a specific user."""
         loop = asyncio.get_event_loop()
         def db_insert():
+            citations_json = json.dumps(citations) if citations else None
+            
             self.conn.execute(
                 """
-                INSERT INTO messages (conversation_id, role, content, type, user_id)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO messages (conversation_id, role, content, type, user_id, citations)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (conversation_id, role, content, type, user_id)
+                (conversation_id, role, content, type, user_id, citations_json)
             )
             self.conn.commit()
         
@@ -310,7 +319,8 @@ class ChatService:
         
         if response["type"] == "completion":
             assistant_content = response["data"].choices[0].message.content
-            await self._save_message(conversation_id, "assistant", assistant_content, type, user_id)
+            citations = response.get("citations", [])
+            await self._save_message(conversation_id, "assistant", assistant_content, type, user_id, citations)
 
     async def _handle_streaming_response(self, messages: list) -> Dict[str, Any]:
         """Handle streaming response from the API."""
@@ -328,7 +338,19 @@ class ChatService:
             response = await self.client.chat.completions.create(
                 model=self.model, messages=messages
             )
-            return {"type": "completion", "data": response}
+            
+            # Extract citations if available
+            citations = []
+            
+            # Check if the response has citations (Perplexity API specific)
+            if hasattr(response, 'citations') and response.citations:
+                citations = response.citations
+            
+            return {
+                "type": "completion", 
+                "data": response,
+                "citations": citations
+            }
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Completion error: {str(e)}")
 

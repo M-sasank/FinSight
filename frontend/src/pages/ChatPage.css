@@ -878,58 +878,173 @@
 
 /* Table Styling for Markdown */
 .message-text table {
+  width: 100%;
   border-collapse: collapse;
-  margin: var(--finsight-space-4) 0;
-  font-size: 0.9rem;
-  width: auto; /* Or 100% if you want full width tables */
-  border: 1px solid var(--chat-border-veteran); /* Default border, can be themed */
+  margin: var(--finsight-space-3) 0;
+  border-radius: var(--finsight-radius-md);
+  overflow: hidden;
 }
 
 .message-text th,
 .message-text td {
-  border: 1px solid var(--chat-border-veteran); /* Default border, can be themed */
   padding: var(--finsight-space-2) var(--finsight-space-3);
   text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .message-text th {
   font-weight: 600;
-  /* background-color: can be themed if needed */
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Theme-specific table overrides if necessary */
+/* Theme-specific table styles */
 .page-theme-newtimer .message-text table,
 .page-theme-newtimer .message-text th,
 .page-theme-newtimer .message-text td {
-  border-color: var(--chat-border-newtimer);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 .page-theme-veteran .message-text table,
 .page-theme-veteran .message-text th,
 .page-theme-veteran .message-text td {
-  border-color: var(--chat-border-veteran); /* Ensure veteran theme uses its border color */
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.page-theme-veteran .mode-selector {
-  border-bottom: 1px solid var(--chat-border-veteran);
+/* Citations Styles */
+.citations-container {
+  margin-top: var(--finsight-space-3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--finsight-space-3);
 }
 
-.page-theme-veteran .mode-button {
-  color: var(--text-color-primary-veteran);
+.citations-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--finsight-space-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--apple-font-family);
+  font-size: 0.85rem;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity var(--finsight-transition-fast);
+  padding: 0;
 }
 
-.page-theme-veteran .mode-button::after {
-  background-color: var(--chat-sidebar-bg-veteran);
+.citations-toggle:hover {
+  opacity: 1;
 }
 
-.page-theme-veteran .mode-button:hover::after {
-  background-color: var(--chat-history-hover-bg-veteran);
+.citations-count {
+  font-weight: 500;
 }
 
-.page-theme-veteran .mode-button.active {
-  color: var(--chat-history-selected-text-veteran);
+.citations-chevron {
+  font-size: 0.9rem;
+  transition: transform var(--finsight-transition-fast);
 }
 
-.page-theme-veteran .mode-button.active::after {
-  background-color: var(--chat-history-selected-bg-veteran);
+.citations-chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.citations-list {
+  margin-top: var(--finsight-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--finsight-space-2);
+}
+
+.citation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--finsight-space-2);
+  padding: var(--finsight-space-2);
+  border-radius: var(--finsight-radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color var(--finsight-transition-fast);
+}
+
+.citation-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.citation-number {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(0, 122, 255, 0.8);
+  min-width: 1.5rem;
+  text-align: center;
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: var(--finsight-radius-sm);
+  padding: 0.2rem 0.3rem;
+  line-height: 1;
+}
+
+.citation-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--finsight-space-1);
+}
+
+.citation-link {
+  display: flex;
+  align-items: center;
+  gap: var(--finsight-space-2);
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--finsight-transition-fast);
+}
+
+.citation-link:hover {
+  color: rgba(0, 122, 255, 0.8);
+}
+
+.citation-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.citation-external-icon {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.citation-date {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Theme-specific citation styles */
+.page-theme-newtimer .citations-container {
+  border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.page-theme-newtimer .citation-item {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.page-theme-newtimer .citation-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.page-theme-veteran .citations-container {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.page-theme-veteran .citation-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.page-theme-veteran .citation-item:hover {
+  background: rgba(255, 255, 255, 0.05);
 } 
