@@ -94,67 +94,64 @@
 .mode-selector {
   display: flex;
   gap: var(--finsight-space-2);
-  padding: var(--finsight-space-3) var(--finsight-space-4) var(--finsight-space-2);
+  padding: var(--finsight-space-3) var(--finsight-space-4);
   border-bottom: 1px solid transparent;
+  justify-content: stretch;
+  align-items: stretch;
 }
 
 .mode-button {
   flex: 1;
   padding: var(--finsight-space-2) var(--finsight-space-3);
-  border: 2px solid transparent;
-  background: none;
+  border: 1px solid rgba(0, 122, 255, 0.3);
+  background: transparent;
   cursor: pointer;
-  border-radius: var(--finsight-radius-md);
+  border-radius: 10px;
   font-size: 0.9rem;
   font-family: var(--apple-font-family);
   font-weight: 500;
-  position: relative;
-  overflow: hidden;
-  transition: background-color var(--finsight-transition-fast), color var(--finsight-transition-fast), transform var(--finsight-transition-fast), box-shadow var(--finsight-transition-fast);
+  text-align: center;
+  transition: all var(--finsight-transition-fast);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mode-button::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #007aff, #5ac8fa, #34c759, #ff9500, #ff2d92, #af52de, #007aff);
-  background-size: 300% 300%;
-  border-radius: inherit;
-  z-index: -2;
-  opacity: 0;
-  animation: siriGradient 3s ease-in-out infinite;
-  transition: opacity var(--finsight-transition-fast);
-}
-
-.mode-button::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: calc(var(--finsight-radius-md) - 2px);
+  background: transparent;
+  opacity: 0;
+  transition: opacity var(--finsight-transition-fast);
   z-index: -1;
-  transition: background-color var(--finsight-transition-fast);
 }
 
 .mode-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+  border-color: rgba(0, 122, 255, 0.5);
+  background: transparent;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.15);
 }
 
 .mode-button:hover::before {
-  opacity: 0.3;
+  opacity: 1;
 }
 
 .mode-button.active {
   font-weight: 600;
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3), 0 4px 16px rgba(0, 122, 255, 0.25);
+  border-color: rgba(0, 122, 255, 0.8);
+  background: white;
+  box-shadow: 0 0 0 1px rgba(0, 122, 255, 0.3), 0 4px 12px rgba(0, 122, 255, 0.2);
+  color: #000000;
 }
 
 .mode-button.active::before {
@@ -641,22 +638,21 @@
 
 .page-theme-newtimer .mode-button {
   color: var(--text-color-primary-newtimer);
+  border-color: rgba(0, 122, 255, 0.4);
+  background: transparent;
 }
 
-.page-theme-newtimer .mode-button::after {
-  background-color: var(--chat-sidebar-bg-newtimer);
-}
-
-.page-theme-newtimer .mode-button:hover::after {
-  background-color: var(--chat-history-hover-bg-newtimer);
+.page-theme-newtimer .mode-button:hover {
+  border-color: rgba(0, 122, 255, 0.6);
+  background: transparent;
+  color: var(--text-color-primary-newtimer);
 }
 
 .page-theme-newtimer .mode-button.active {
-  color: var(--chat-history-selected-text-newtimer);
-}
+  color: #000000;
+  border-color: rgba(0, 122, 255, 0.8);
+  background: white;
 
-.page-theme-newtimer .mode-button.active::after {
-  background-color: var(--chat-history-selected-bg-newtimer);
 }
 
 /* Veteran Theme */
@@ -1047,4 +1043,27 @@
 
 .page-theme-veteran .citation-item:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+/* Add veteran theme mode button styles */
+.page-theme-veteran .mode-selector {
+  border-bottom: 1px solid var(--chat-border-veteran);
+}
+
+.page-theme-veteran .mode-button {
+  color: var(--text-color-primary-veteran);
+  border-color: rgba(0, 122, 255, 0.5);
+  background: transparent;
+}
+
+.page-theme-veteran .mode-button:hover {
+  border-color: rgba(0, 122, 255, 0.7);
+  background: transparent;
+  color: var(--text-color-primary-veteran);
+}
+
+.page-theme-veteran .mode-button.active {
+  color: #000000;
+  border-color: rgba(90, 200, 250, 0.8);
+  background: white;
 } 
