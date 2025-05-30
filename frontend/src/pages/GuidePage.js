@@ -1,6 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../styles/GuidePage.css';
 import { useAuth } from '../contexts/AuthContext';
+import ReactMarkdown from 'react-markdown';
+
+const loadingPrompts = [
+  "Searching the web using AI...",
+  "Hang on, diving deep...",
+  "Almost there, just a moment...",
+  "Consulting the digital sages...",
+  "Crunching the numbers for you...",
+  "Fetching insights..."
+];
 
 function GuidePage({ currentTheme }) {
   const { authFetch, token } = useAuth();
@@ -16,6 +26,7 @@ function GuidePage({ currentTheme }) {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentGuideLoadingText, setCurrentGuideLoadingText] = useState(loadingPrompts[0]);
   const [isPrerequisitesCollapsed, setIsPrerequisitesCollapsed] = useState(false);
   const [isAccountOpeningCollapsed, setIsAccountOpeningCollapsed] = useState(false);
   const [isStockFundamentalsCollapsed, setIsStockFundamentalsCollapsed] = useState(false);
@@ -126,6 +137,26 @@ function GuidePage({ currentTheme }) {
     console.log('currentSectionName updated:', currentSectionName);
   }, [currentSectionName]);
 
+  // Effect for cycling loading prompts
+  useEffect(() => {
+    let promptIntervalId;
+    if (isLoading) {
+      let promptIndex = 0;
+      setCurrentGuideLoadingText(loadingPrompts[promptIndex]);
+      promptIndex = (promptIndex + 1) % loadingPrompts.length;
+
+      promptIntervalId = setInterval(() => {
+        setCurrentGuideLoadingText(loadingPrompts[promptIndex]);
+        promptIndex = (promptIndex + 1) % loadingPrompts.length;
+      }, 2500);
+    }
+    return () => {
+      if (promptIntervalId) {
+        clearInterval(promptIntervalId);
+      }
+    };
+  }, [isLoading]);
+
   // Clear previous recommendation when model changes
   useEffect(() => {
     if (recommendedStock) {
@@ -184,11 +215,12 @@ function GuidePage({ currentTheme }) {
       }
 
       const userMessage = {
-        id: `chatmsg-${Date.now()}`,
+        id: `chatmsg-user-${Date.now()}`,
         text: input,
         sender: 'user',
       };
       setMessages(prev => [...prev, userMessage]);
+      const currentInput = input;
       setInput('');
       setIsLoading(true);
 
@@ -200,9 +232,11 @@ function GuidePage({ currentTheme }) {
           },
           body: JSON.stringify({
             type: 'guide',
-            user_query: input,
+            user_query: currentInput,
           })
         });
+
+        setIsLoading(false);
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ detail: 'Failed to get response from server' }));
@@ -210,24 +244,31 @@ function GuidePage({ currentTheme }) {
         }
 
         const data = await response.json();
+        const pureBotResponseText = data.response.data.choices[0].message.content;
+
+        setMessages(prevMsgs => [
+          ...prevMsgs,
+          {
+            id: `chatmsg-bot-response-${Date.now()}`,
+            sender: 'bot',
+            text: pureBotResponseText,
+            type: 'bot'
+          }
+        ]);
         
-        const botResponse = {
-          id: `chatmsg-${Date.now() + 1}`,
-          sender: 'bot',
-          text: data.response.data.choices[0].message.content
-        };
-        setMessages(prev => [...prev, botResponse]);
       } catch (error) {
         console.error('Error:', error);
-        const errorMessage = {
-          id: `chatmsg-${Date.now() + 1}`,
-          sender: 'bot',
-          text: 'Sorry, I encountered an error while processing your request. Please try again.',
-          type: 'error'
-        };
-        setMessages(prev => [...prev, errorMessage]);
-      } finally {
         setIsLoading(false);
+
+        setMessages(prevMsgs => [
+          ...prevMsgs,
+          {
+            id: `chatmsg-error-${Date.now() + 1}`,
+            sender: 'bot',
+            text: 'Sorry, I encountered an error while processing your request. Please try again.',
+            type: 'error'
+          }
+        ]);
       }
     }
   };
@@ -914,13 +955,18 @@ function GuidePage({ currentTheme }) {
           <div className="chat-messages">
             {messages.map((message) => (
               <div key={message.id} className={`message ${message.sender}`}>
-                {message.text}
+                <ReactMarkdown>{message.text}</ReactMarkdown>
               </div>
             ))}
+            {isLoading && (
+              <div key="loading-indicator" className="message bot loading">
+                <ReactMarkdown>{currentGuideLoadingText}</ReactMarkdown>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
-          {messages.length <= 2 && (
+          {messages.length <= 2 && !isLoading && (
             <div className="suggestion-area">
               <p className="suggestion-area-title">Try asking:</p>
               <div className="suggestion-chips-container">
