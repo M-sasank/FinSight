@@ -90,7 +90,7 @@
   flex: 1;
 }
 
-/* Mode Selector */
+/* Mode Selector - Sliding Pill Effect */
 .mode-selector {
   display: flex;
   gap: var(--finsight-space-2);
@@ -158,13 +158,15 @@
   opacity: 1;
 }
 
-@keyframes siriGradient {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+.page-theme-veteran .mode-button.active {
+  color: #000000 !important; 
+  font-weight: 600 !important;
+}
+
+/* Ensure pseudo-elements ::after are not interfering */
+.page-theme-newtimer .mode-button.active::after,
+.page-theme-veteran .mode-button.active::after {
+  display: none; 
 }
 
 .chat-history-item {
