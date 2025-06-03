@@ -6,6 +6,12 @@ from dotenv import load_dotenv
 
 load_dotenv() # Load environment variables from .env file
 
+# Check if finsight.db exists, create if not
+db_path = "./finsight.db"
+if not os.path.exists(db_path):
+    # Create an empty database file
+    open(db_path, 'a').close()
+
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./finsight.db")
 
 engine = create_engine(
