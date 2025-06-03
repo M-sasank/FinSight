@@ -27,7 +27,7 @@ docker compose up --build -d
 4. Open new terminal, dont close previous one
 5. cd backend
 6. pip install -r requirements.txt
-7. uvicorn api.main:app --reload --env-file ..\.env
+7. uvicorn api.main:app --reload --env-file ../.env
 ---
 
 ## Features
