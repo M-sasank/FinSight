@@ -5,7 +5,29 @@ FinSight is an all-in-one personal finance and investing assistant designed to m
 
 ---
 ## How to run
+### Clone the repo
+please clone the repo before further steps.
 
+### Populate .env
+1. Update .env at the root with perplexity API key
+2. Update .env at frontend with localhost:<port>
+
+### Install Docker
+You can install docker for easier experience. or follow the section mentioning 'Run without docker'.
+
+### Docker command
+make sure to be in the root of repo.
+ 
+docker compose up --build -d
+
+### Run without docker
+1. cd frontend
+2. npm i
+3. npm run start
+4. Open new terminal, dont close previous one
+5. cd backend
+6. pip install -r requirements.txt
+7. uvicorn api.main:app --reload --env-file ..\.env
 ---
 
 ## Features
