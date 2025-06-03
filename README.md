@@ -6,30 +6,55 @@ FinSight is an all-in-one personal finance and investing assistant designed to m
 ---
 ## How to run
 ### Clone the repo
-please clone the repo before further steps.
+1. Please clone the repo before further steps.
+2. Checkout to main branch, if not already on it
 
 ### Populate .env
-1. Update .env at the root with perplexity API key
-2. Update .env at frontend with localhost:<port>
-
+1. Update .env at the root with perplexity API key, like so
+```
+PERPLEXITY_API_KEY=pplx-4khsHA522Lt3AL1tDbZ8gXKdsssFBt12343K78FV5789yas57s1
+# rest of the config can be unchanged
+```
+2. Update .env at ```frontend/``` with localhost:<port>, only if you changed port of backend from the default 8000.
+```
+REACT_APP_API_URL=http://localhost:8000
+```
 ### Install Docker
 You can install docker for easier experience. or follow the section mentioning 'Run without docker'.
 
 ### Docker command
 make sure to be in the root of repo.
  
-docker compose up --build -d
+```docker compose up --build -d```
 
 ### Run without docker
-1. cd frontend
-2. npm i
-3. npm run start
-4. Open new terminal, dont close previous one
-5. cd backend
-6. pip install -r requirements.txt
-7. uvicorn api.main:app --reload --env-file ../.env
+#### Starting frontend
+```
+cd frontend
+npm i
+npm run start
+```
+Open new terminal, dont close previous one
+#### Starting backend
+```
+cd backend
+pip install -r requirements.txt
+uvicorn api.main:app --reload --env-file ../.env
+```
 ---
+### App access
+**We have hosted the same experience on https://perplexity.enduku.life on our own server, as a part of learning and experimenting how to deploy an app.**
+1. Go to http://localhost to access frontend
+2. or you can go to http://localhost:8000/docs for backend's swagger UI
 
+### Getting Started
+1. Only the home page and guide page can be viewed without logging in or an account.
+2. To have full experience please register an account, at this stage to guarantee anonymity we have not added email checks. so feel free to use a random email while signing up.
+3. Once logged in, be sure to remember password and login with it.
+4. Now you can access the entire application, be sure to explore and checkout all the features, especially highlighted features, we are so proud of them.
+5. You will be occasionally logged out, roughly after 30mins from login, for security purposes. You will need to re-login to continue.
+
+_Be sure to write to us for any concerns, issues or clarifications. Thanks!_
 ## Features
 
 ### 1. Real-Time Market News
